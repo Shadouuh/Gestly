@@ -1,0 +1,2 @@
+export { ConfiguracionPage } from './page'
+

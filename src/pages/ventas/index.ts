@@ -1,0 +1,2 @@
+export { VentasPage } from './page'
+

@@ -1,0 +1,1 @@
+export { TemasPage } from './page'

@@ -1,0 +1,725 @@
+{
+  "stock_movements": [
+    {
+      "id": "3f99",
+      "businessId": "fccd",
+      "productId": "71da",
+      "productName": "Harina",
+      "quantity": 4,
+      "costCents": 0,
+      "date": "2026-01-11T00:32:42.107Z",
+      "type": "entry"
+    },
+    {
+      "id": "665a",
+      "businessId": "fccd",
+      "productId": "527a",
+      "productName": "Harina",
+      "quantity": 4,
+      "costCents": 0,
+      "date": "2026-01-11T00:32:43.466Z",
+      "type": "entry"
+    },
+    {
+      "id": "d0e8",
+      "businessId": "fccd",
+      "productId": "1412",
+      "productName": "Pan Francés x Kg",
+      "quantity": 3,
+      "costCents": 60000,
+      "date": "2026-01-11T01:06:52.562Z",
+      "type": "entry"
+    }
+  ],
+  "landing": {
+    "heroBadge": "Dejá de anotar. Trabajá con claridad.",
+    "heroTitle": "Gestión simple para negocios reales.",
+    "heroSubtitle": "Ventas, stock y reportes en un mismo lugar. Sin ruido. Sin complicaciones.",
+    "highlights": [
+      "Sin tarjeta",
+      "Demo gratis",
+      "Soporte humano"
+    ],
+    "stats": {
+      "todaySales": 47230,
+      "soldItems": 156,
+      "activeBusinesses": 1284
+    },
+    "recentSales": [
+      {
+        "id": 1,
+        "name": "Coca Cola 2.25L",
+        "amount": 1500
+      },
+      {
+        "id": 2,
+        "name": "Pan lactal",
+        "amount": 850
+      },
+      {
+        "id": 3,
+        "name": "Cigarrillos Marlboro",
+        "amount": 2100
+      }
+    ],
+    "whatIsCards": [
+      {
+        "id": 1,
+        "title": "Venta en segundos",
+        "description": "Cargás el pedido, confirmás y listo. El sistema hace el resto."
+      },
+      {
+        "id": 2,
+        "title": "Stock controlado",
+        "description": "Sabés exactamente qué tenés y qué falta, con alertas simples."
+      },
+      {
+        "id": 3,
+        "title": "Números claros",
+        "description": "Ver lo importante: ventas, márgenes y productos top. Sin adornos."
+      }
+    ],
+    "steps": [
+      {
+        "id": 1,
+        "title": "Configurás tu negocio",
+        "description": "Cargás tus productos y tus reglas. Toma minutos."
+      },
+      {
+        "id": 2,
+        "title": "Empezás a vender",
+        "description": "Seleccionás productos, cobrás y queda registrado."
+      },
+      {
+        "id": 3,
+        "title": "Controlás el stock",
+        "description": "Actualización automática con cada venta y ajustes manuales cuando lo necesitás."
+      },
+      {
+        "id": 4,
+        "title": "Leés tus reportes",
+        "description": "Resumen diario, semanal y mensual para tomar decisiones."
+      }
+    ],
+    "features": [
+      {
+        "id": 1,
+        "title": "Punto de venta",
+        "description": "Flujo rápido, claro y consistente."
+      },
+      {
+        "id": 2,
+        "title": "Control de stock",
+        "description": "Alertas y ajustes sin fricción."
+      },
+      {
+        "id": 3,
+        "title": "Fiados",
+        "description": "Cuentas claras para clientes habituales."
+      },
+      {
+        "id": 4,
+        "title": "Reportes",
+        "description": "Datos alineados, legibles y accionables."
+      },
+      {
+        "id": 5,
+        "title": "Sucursales",
+        "description": "Separación simple por local y usuarios."
+      },
+      {
+        "id": 6,
+        "title": "Plantillas",
+        "description": "Arranque rápido para rubros comunes."
+      }
+    ],
+    "plans": [
+      {
+        "id": "free",
+        "name": "Free",
+        "price": 0,
+        "period": "mes",
+        "description": "Para probar y arrancar",
+        "cta": "Empezar gratis",
+        "variant": "outline",
+        "items": [
+          "Hasta 100 ventas/mes",
+          "50 productos",
+          "1 usuario",
+          "Reportes básicos",
+          "Soporte por email"
+        ]
+      },
+      {
+        "id": "basic",
+        "name": "Basic",
+        "price": 5,
+        "period": "mes",
+        "description": "Para negocios en crecimiento",
+        "cta": "Comenzar ahora",
+        "variant": "primary",
+        "items": [
+          "Ventas ilimitadas",
+          "Productos ilimitados",
+          "Hasta 3 usuarios",
+          "Reportes avanzados",
+          "Fiados",
+          "Hasta 2 sucursales",
+          "Soporte prioritario"
+        ]
+      },
+      {
+        "id": "pro",
+        "name": "Pro",
+        "price": 15,
+        "period": "mes",
+        "description": "Para equipos y operaciones",
+        "cta": "Activar Pro",
+        "variant": "primary",
+        "badge": "Más elegido",
+        "items": [
+          "Todo lo de Basic",
+          "Usuarios ilimitados",
+          "Sucursales ilimitadas",
+          "Importación de catálogos",
+          "API access",
+          "Soporte 24/7"
+        ]
+      }
+    ],
+    "ctaTitle": "Listo para reemplazar cuadernos y planillas.",
+    "ctaSubtitle": "Probalo gratis. Si te sirve, seguís. Si no, lo dejás.",
+    "footer": {
+      "tagline": "Gestión clara para el día a día.",
+      "links": {
+        "producto": [
+          "Características",
+          "Precios",
+          "Demo"
+        ],
+        "empresa": [
+          "Sobre nosotros",
+          "Contacto"
+        ],
+        "legal": [
+          "Términos",
+          "Privacidad"
+        ]
+      }
+    }
+  },
+  "businesses": [
+    {
+      "id": "1",
+      "nombre": "Mi Negocio",
+      "ubicacion": "Calle Principal 123",
+      "rubro": "general",
+      "region": "argentina",
+      "tieneMultiplesSucursales": false
+    },
+    {
+      "id": "fccd",
+      "nombre": "KioscoJaguel",
+      "ubicacion": "Los Pinos 985",
+      "rubro": "panaderia",
+      "region": "argentina",
+      "tieneMultiplesSucursales": true,
+      "stockMode": "simple"
+    }
+  ],
+  "branches": [
+    {
+      "id": "1",
+      "businessId": 1,
+      "nombre": "Casa Central",
+      "ubicacion": "Calle Principal 123",
+      "activa": true
+    },
+    {
+      "id": "f4e3",
+      "businessId": "fccd",
+      "nombre": "Casa Central",
+      "ubicacion": "Los Pinos 985",
+      "activa": true
+    }
+  ],
+  "accounts": [
+    {
+      "id": "1",
+      "businessId": 1,
+      "nombre": "Demo",
+      "email": "demo@gestly.app",
+      "password": "demo",
+      "documento": "12345678",
+      "rol": "admin",
+      "activo": true
+    },
+    {
+      "id": "3ae6",
+      "businessId": "fccd",
+      "nombre": "Santino Antelo",
+      "email": "santino.antelo@deeptics.com",
+      "password": "Jorge2.0",
+      "documento": "47678109",
+      "rol": "admin",
+      "activo": true
+    }
+  ],
+  "products": [
+    {
+      "id": "1",
+      "businessId": 1,
+      "nombre": "Coca Cola 2.25L",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Coca%20Cola%20bottles.JPG",
+      "priceCents": 150000,
+      "costCents": 110000,
+      "unidad": "u",
+      "categoria": "Bebidas",
+      "disponible": true,
+      "trackStock": true,
+      "stock": 12
+    },
+    {
+      "id": "2",
+      "businessId": 1,
+      "nombre": "Pan lactal",
+      "imageUrl": "https://picsum.photos/seed/gestly-pan-lactal/640/640",
+      "priceCents": 85000,
+      "costCents": 62000,
+      "unidad": "u",
+      "categoria": "Almacén",
+      "disponible": true,
+      "trackStock": true,
+      "stock": 8
+    },
+    {
+      "id": "3",
+      "businessId": 1,
+      "nombre": "Yerba 500g",
+      "imageUrl": "https://picsum.photos/seed/gestly-yerba-500/640/640",
+      "priceCents": 220000,
+      "costCents": 165000,
+      "unidad": "u",
+      "categoria": "Almacén",
+      "disponible": true,
+      "trackStock": true,
+      "stock": 5
+    },
+    {
+      "id": "4",
+      "businessId": 1,
+      "nombre": "Cigarrillos Marlboro",
+      "imageUrl": "https://picsum.photos/seed/gestly-marlboro/640/640",
+      "priceCents": 210000,
+      "costCents": 175000,
+      "unidad": "u",
+      "categoria": "Kiosco",
+      "disponible": true,
+      "trackStock": false,
+      "stock": null
+    },
+    {
+      "id": "5",
+      "businessId": 1,
+      "nombre": "Coca-Cola lata 330ml",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Coca-Cola%20330ml%20can.jpg",
+      "priceCents": 95000,
+      "costCents": 70000,
+      "unidad": "u",
+      "categoria": "Bebidas",
+      "disponible": true,
+      "trackStock": true,
+      "stock": 36
+    },
+    {
+      "id": "6",
+      "businessId": 1,
+      "nombre": "Coca-Cola lata 354ml",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Coca-Cola%20lata.jpg",
+      "priceCents": 110000,
+      "costCents": 80000,
+      "unidad": "u",
+      "categoria": "Bebidas",
+      "disponible": true,
+      "trackStock": true,
+      "stock": 28
+    },
+    {
+      "id": "7",
+      "businessId": 1,
+      "nombre": "Coca-Cola Zero",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/CokeZero.JPG",
+      "priceCents": 110000,
+      "costCents": 82000,
+      "unidad": "u",
+      "categoria": "Bebidas",
+      "disponible": true,
+      "trackStock": true,
+      "stock": 24
+    },
+    {
+      "id": "8",
+      "businessId": 1,
+      "nombre": "Coca-Cola Light",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Diet-Coke-Can.jpg",
+      "priceCents": 110000,
+      "costCents": 82000,
+      "unidad": "u",
+      "categoria": "Bebidas",
+      "disponible": true,
+      "trackStock": true,
+      "stock": 18
+    },
+    {
+      "id": "9",
+      "businessId": 1,
+      "nombre": "Coca-Cola sin cafeína",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/CaffeineFreeCoke.JPG",
+      "priceCents": 110000,
+      "costCents": 82000,
+      "unidad": "u",
+      "categoria": "Bebidas",
+      "disponible": true,
+      "trackStock": true,
+      "stock": 12
+    },
+    {
+      "id": "10",
+      "businessId": 1,
+      "nombre": "Sprite 2.25L",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Evolution_of_Sprite_Bottles.JPG",
+      "priceCents": 145000,
+      "costCents": 105000,
+      "unidad": "u",
+      "categoria": "Bebidas",
+      "disponible": true,
+      "trackStock": true,
+      "stock": 10
+    },
+    {
+      "id": "11",
+      "businessId": 1,
+      "nombre": "Sprite 500ml",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Evolution_of_Sprite_Bottles.JPG",
+      "priceCents": 100000,
+      "costCents": 72000,
+      "unidad": "u",
+      "categoria": "Bebidas",
+      "disponible": true,
+      "trackStock": true,
+      "stock": 22
+    },
+    {
+      "id": "12",
+      "businessId": 1,
+      "nombre": "Coca-Cola vidrio 500ml",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Coca%20Cola%20bottles.JPG",
+      "priceCents": 130000,
+      "costCents": 95000,
+      "unidad": "u",
+      "categoria": "Bebidas",
+      "disponible": true,
+      "trackStock": true,
+      "stock": 14
+    },
+    {
+      "id": "13",
+      "businessId": 1,
+      "nombre": "Coca-Cola retornable 1.5L",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Coca%20Cola%20bottles.JPG",
+      "priceCents": 135000,
+      "costCents": 98000,
+      "unidad": "u",
+      "categoria": "Bebidas",
+      "disponible": true,
+      "trackStock": true,
+      "stock": 9
+    },
+    {
+      "id": "1412",
+      "businessId": "fccd",
+      "nombre": "Pan Francés x Kg",
+      "categoria": "Panadería",
+      "unidad": "kg",
+      "priceCents": 180000,
+      "costCents": 60000,
+      "stock": 3,
+      "trackStock": true,
+      "disponible": true,
+      "imageUrl": null,
+      "recipe": []
+    },
+    {
+      "id": "201f",
+      "businessId": "fccd",
+      "nombre": "Facturas Docena",
+      "categoria": "Panadería",
+      "unidad": "u",
+      "priceCents": 480000,
+      "costCents": 150000,
+      "stock": null,
+      "trackStock": true,
+      "disponible": true,
+      "recipe": [
+        {
+          "ingredientId": "71da",
+          "quantity": 3
+        },
+        {
+          "ingredientId": "527a",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "id": "2e4b",
+      "businessId": "fccd",
+      "nombre": "Pan de Miga x Kg",
+      "categoria": "Panadería",
+      "unidad": "kg",
+      "priceCents": 350000,
+      "costCents": 120000,
+      "stock": null,
+      "trackStock": true,
+      "disponible": true
+    },
+    {
+      "id": "b2cb",
+      "businessId": "fccd",
+      "nombre": "Chipá x 100g",
+      "categoria": "Panadería",
+      "unidad": "u",
+      "priceCents": 150000,
+      "costCents": 50000,
+      "stock": null,
+      "trackStock": true,
+      "disponible": true
+    },
+    {
+      "id": "71da",
+      "businessId": "fccd",
+      "nombre": "Harina",
+      "categoria": "Materia Prima",
+      "unidad": "kg",
+      "priceCents": 20000,
+      "costCents": 0,
+      "stock": 4,
+      "trackStock": true,
+      "disponible": true,
+      "isIngredient": true
+    },
+    {
+      "id": "527a",
+      "businessId": "fccd",
+      "nombre": "Harina",
+      "categoria": "Materia Prima",
+      "unidad": "kg",
+      "priceCents": 20000,
+      "costCents": 0,
+      "stock": 4,
+      "trackStock": true,
+      "disponible": true,
+      "isIngredient": true
+    },
+    {
+      "id": "a97c",
+      "businessId": "fccd",
+      "nombre": "Pan Francés x Kg",
+      "categoria": "Panadería",
+      "unidad": "kg",
+      "priceCents": 180000,
+      "costCents": 60000,
+      "stock": null,
+      "trackStock": false,
+      "disponible": true
+    },
+    {
+      "id": "04a2",
+      "businessId": "fccd",
+      "nombre": "Facturas Docena",
+      "categoria": "Panadería",
+      "unidad": "u",
+      "priceCents": 480000,
+      "costCents": 150000,
+      "stock": null,
+      "trackStock": false,
+      "disponible": true
+    },
+    {
+      "id": "ed73",
+      "businessId": "fccd",
+      "nombre": "Pan de Miga x Kg",
+      "categoria": "Panadería",
+      "unidad": "kg",
+      "priceCents": 350000,
+      "costCents": 120000,
+      "stock": null,
+      "trackStock": false,
+      "disponible": true
+    },
+    {
+      "id": "9a48",
+      "businessId": "fccd",
+      "nombre": "Chipá x 100g",
+      "categoria": "Panadería",
+      "unidad": "u",
+      "priceCents": 150000,
+      "costCents": 50000,
+      "stock": null,
+      "trackStock": false,
+      "disponible": true
+    }
+  ],
+  "sales": [
+    {
+      "id": "3d62",
+      "businessId": "fccd",
+      "date": "2026-01-04T23:31:16.888Z",
+      "items": [
+        {
+          "productId": "3b48",
+          "nombre": "Yerba 500g",
+          "priceCents": 240000,
+          "unidad": "u",
+          "quantity": 5
+        },
+        {
+          "productId": "391c",
+          "nombre": "Azúcar 1kg",
+          "priceCents": 130000,
+          "unidad": "u",
+          "quantity": 2
+        },
+        {
+          "productId": "5544",
+          "nombre": "Bebida",
+          "priceCents": 200000,
+          "unidad": "u",
+          "quantity": 1
+        },
+        {
+          "productId": "b9a7",
+          "nombre": "Pan lactal",
+          "priceCents": 95000,
+          "unidad": "u",
+          "quantity": 1
+        }
+      ],
+      "totalCents": 1755000,
+      "paymentMethod": "efectivo",
+      "customerName": "Juan",
+      "isPending": false
+    },
+    {
+      "id": "ae65",
+      "businessId": "fccd",
+      "date": "2026-01-08T22:23:14.633Z",
+      "items": [
+        {
+          "productId": "3b48",
+          "nombre": "Yerba 500g",
+          "priceCents": 240000,
+          "unidad": "u",
+          "quantity": 1
+        }
+      ],
+      "totalCents": 240000,
+      "paymentMethod": "mp",
+      "customerName": "Javi",
+      "isPending": false
+    },
+    {
+      "id": "ecbd",
+      "businessId": "fccd",
+      "date": "2026-01-10T20:50:41.887Z",
+      "items": [
+        {
+          "productId": "3447",
+          "nombre": "Toallitas Siempre Libre",
+          "priceCents": 180000,
+          "unidad": "u",
+          "quantity": 2
+        },
+        {
+          "productId": "7db1",
+          "nombre": "Guaymallén Simple",
+          "priceCents": 60000,
+          "unidad": "u",
+          "quantity": 1
+        }
+      ],
+      "totalCents": 420000,
+      "paymentMethod": "mp",
+      "isPending": false
+    },
+    {
+      "id": "649f",
+      "businessId": "fccd",
+      "date": "2026-01-10T21:17:37.169Z",
+      "items": [
+        {
+          "productId": "2a97",
+          "nombre": "9 de Oro Saladas",
+          "priceCents": 100000,
+          "unidad": "u",
+          "quantity": 2
+        },
+        {
+          "productId": "bc56",
+          "nombre": "Havanna Chocolate",
+          "priceCents": 180000,
+          "unidad": "u",
+          "quantity": 2
+        },
+        {
+          "productId": "7db1",
+          "nombre": "Guaymallén Simple",
+          "priceCents": 60000,
+          "unidad": "u",
+          "quantity": 2
+        },
+        {
+          "productId": "497c",
+          "nombre": "Don Satur Grasa",
+          "priceCents": 95000,
+          "unidad": "u",
+          "quantity": 1
+        },
+        {
+          "productId": "652f",
+          "nombre": "Fernet Branca",
+          "priceCents": 1100000,
+          "unidad": "u",
+          "quantity": 1
+        },
+        {
+          "productId": "6dfa",
+          "nombre": "Galletitas Agridulces",
+          "priceCents": 110000,
+          "unidad": "u",
+          "quantity": 1
+        }
+      ],
+      "totalCents": 1985000,
+      "paymentMethod": "efectivo",
+      "isPending": false
+    },
+    {
+      "id": "02c1",
+      "businessId": "fccd",
+      "date": "2026-01-10T23:16:25.125Z",
+      "items": [
+        {
+          "productId": "f6ff",
+          "nombre": "Bananita Dolca",
+          "priceCents": 50000,
+          "unidad": "u",
+          "quantity": 1
+        }
+      ],
+      "totalCents": 50000,
+      "paymentMethod": "efectivo",
+      "isPending": false
+    }
+  ]
+}

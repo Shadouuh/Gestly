@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      #app-preload {
+        position: fixed;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        background: #f5f5f7;
+        color: #0b0b0d;
+        z-index: 2147483647;
+        transition:
+          opacity 240ms ease,
+          transform 240ms ease;
+      }
+      #app-preload::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image: radial-gradient(circle at 1px 1px, rgba(0, 0, 0, 0.12) 1px, rgba(0, 0, 0, 0) 1px);
+        background-size: 22px 22px;
+        opacity: 0.35;
+        pointer-events: none;
+      }
+      #app-preload.preload-hide {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+      .preload-card {
+        width: min(92vw, 380px);
+        border-radius: 28px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        background: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 18px 48px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
+        padding: 22px 20px 20px;
+        display: grid;
+        gap: 14px;
+        justify-items: center;
+        position: relative;
+      }
+      .preload-brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        font: 600 14px/1.1 Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+        letter-spacing: -0.01em;
+        opacity: 0.92;
+      }
+      .preload-logo {
+        width: 36px;
+        height: 36px;
+        border-radius: 999px;
+        display: grid;
+        place-items: center;
+        background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0)),
+          linear-gradient(135deg, #0a84ff, #7d5cff);
+        color: #0b0b0d;
+        box-shadow: 0 14px 30px rgba(10, 132, 255, 0.25);
+      }
+      .preload-title {
+        font: 600 15px/1.1 Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+        letter-spacing: -0.02em;
+        opacity: 0.92;
+      }
+      .preload-subtitle {
+        font: 500 12px/1.4 Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+        letter-spacing: -0.01em;
+        color: rgba(0, 0, 0, 0.55);
+        text-align: center;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.03);
+        }
+      }
+      .preload-spinner {
+        width: 46px;
+        height: 46px;
+        border-radius: 999px;
+        background: conic-gradient(from 90deg, rgba(10, 132, 255, 0) 0deg, rgba(10, 132, 255, 0.85) 310deg, rgba(255, 45, 85, 0.8) 360deg);
+        -webkit-mask: radial-gradient(circle, transparent 60%, #000 62%);
+        mask: radial-gradient(circle, transparent 60%, #000 62%);
+        animation: spin 850ms linear infinite;
+        filter: drop-shadow(0 10px 18px rgba(10, 132, 255, 0.16));
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .preload-spinner {
+          animation: none;
+        }
+      }
+    </style>
+    <title>Gestly</title>
+  </head>
+  <body>
+    <div id="app-preload">
+      <div class="preload-card" role="status" aria-live="polite">
+        <div class="preload-brand">
+          <div class="preload-logo">G</div>
+          <div>Gestly</div>
+        </div>
+        <div class="preload-spinner" aria-hidden="true"></div>
+        <div class="preload-title">Cargando…</div>
+        <div class="preload-subtitle">Preparando todo.</div>
+      </div>
+    </div>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
