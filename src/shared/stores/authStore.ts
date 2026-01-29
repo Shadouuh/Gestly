@@ -8,6 +8,7 @@ export type Account = {
   id: number | string
   businessId: number | string
   branchId?: string
+  branchIds?: string[] // Allow multiple branches
   nombre: string
   email: string
   rol: 'admin' | 'vendedor' | 'gerente'

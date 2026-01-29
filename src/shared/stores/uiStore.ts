@@ -10,6 +10,9 @@ type UiState = {
   toggleTheme: () => void
   themeId: ThemeId
   setThemeId: (value: ThemeId) => void
+  isCartOpen: boolean
+  setIsCartOpen: (value: boolean) => void
+  toggleCartOpen: () => void
 }
 
 export type ThemeId =
@@ -36,6 +39,9 @@ export const useUiStore = create<UiState>()(
       toggleTheme: () => set({ theme: get().theme === 'light' ? 'dark' : 'light' }),
       themeId: 'default',
       setThemeId: (value) => set({ themeId: value }),
+      isCartOpen: false,
+      setIsCartOpen: (value) => set({ isCartOpen: value }),
+      toggleCartOpen: () => set({ isCartOpen: !get().isCartOpen }),
     }),
     { name: 'gestly-ui' },
   ),

@@ -3,7 +3,7 @@
     {
       "id": "3f99",
       "businessId": "fccd",
-      "productId": "71da",
+      "productId": null,
       "productName": "Harina",
       "quantity": 4,
       "costCents": 0,
@@ -13,7 +13,7 @@
     {
       "id": "665a",
       "businessId": "fccd",
-      "productId": "527a",
+      "productId": null,
       "productName": "Harina",
       "quantity": 4,
       "costCents": 0,
@@ -23,11 +23,211 @@
     {
       "id": "d0e8",
       "businessId": "fccd",
-      "productId": "1412",
+      "productId": null,
       "productName": "Pan Francés x Kg",
       "quantity": 3,
       "costCents": 60000,
       "date": "2026-01-11T01:06:52.562Z",
+      "type": "entry"
+    },
+    {
+      "id": "8374",
+      "businessId": "fccd",
+      "productId": "fce7",
+      "productName": "Hamburguesa Doble Queso",
+      "quantity": 1,
+      "costCents": 350000,
+      "date": "2026-01-25T01:03:21.998Z",
+      "type": "entry"
+    },
+    {
+      "id": "b51f",
+      "businessId": "fccd",
+      "productId": "fce7",
+      "productName": "Hamburguesa Doble Queso",
+      "quantity": 1,
+      "costCents": 350000,
+      "date": "2026-01-25T01:03:22.517Z",
+      "type": "entry"
+    },
+    {
+      "id": "f3c3",
+      "businessId": "fccd",
+      "productId": "fce7",
+      "productName": "Hamburguesa Doble Queso",
+      "quantity": 1,
+      "costCents": 350000,
+      "date": "2026-01-25T01:03:22.517Z",
+      "type": "entry"
+    },
+    {
+      "id": "89f4",
+      "businessId": "fccd",
+      "productId": "fce7",
+      "productName": "Hamburguesa Doble Queso",
+      "quantity": 1,
+      "costCents": 350000,
+      "date": "2026-01-25T01:03:23.257Z",
+      "type": "entry"
+    },
+    {
+      "id": "4d36",
+      "businessId": "fccd",
+      "productId": "fce7",
+      "productName": "Hamburguesa Doble Queso",
+      "quantity": 1,
+      "costCents": 350000,
+      "date": "2026-01-25T01:03:23.644Z",
+      "type": "entry"
+    },
+    {
+      "id": "bbb8",
+      "businessId": "fccd",
+      "productId": "fce7",
+      "productName": "Hamburguesa Doble Queso",
+      "quantity": 1,
+      "costCents": 350000,
+      "date": "2026-01-25T01:03:23.645Z",
+      "type": "entry"
+    },
+    {
+      "id": "1515",
+      "businessId": "fccd",
+      "productId": "fce7",
+      "productName": "Hamburguesa Doble Queso",
+      "quantity": 1,
+      "costCents": 350000,
+      "date": "2026-01-25T01:03:24.260Z",
+      "type": "entry"
+    },
+    {
+      "id": "0657",
+      "businessId": "fccd",
+      "productId": "fce7",
+      "productName": "Hamburguesa Doble Queso",
+      "quantity": 1,
+      "costCents": 350000,
+      "date": "2026-01-25T01:03:24.605Z",
+      "type": "entry"
+    },
+    {
+      "id": "1551",
+      "businessId": "fccd",
+      "productId": "fce7",
+      "productName": "Hamburguesa Doble Queso",
+      "quantity": 1,
+      "costCents": 350000,
+      "date": "2026-01-25T01:03:25.174Z",
+      "type": "entry"
+    },
+    {
+      "id": "768f",
+      "businessId": "fccd",
+      "productId": "fce7",
+      "productName": "Hamburguesa Doble Queso",
+      "quantity": 1,
+      "costCents": 350000,
+      "date": "2026-01-25T01:03:25.391Z",
+      "type": "entry"
+    },
+    {
+      "id": "dd27",
+      "businessId": "fccd",
+      "productId": "fce7",
+      "productName": "Hamburguesa Doble Queso",
+      "quantity": 1,
+      "costCents": 350000,
+      "date": "2026-01-25T01:03:25.392Z",
+      "type": "entry"
+    },
+    {
+      "id": "d1fd",
+      "businessId": "fccd",
+      "productId": "fce7",
+      "productName": "Hamburguesa Doble Queso",
+      "quantity": 1,
+      "costCents": 350000,
+      "date": "2026-01-25T01:03:26.070Z",
+      "type": "entry"
+    },
+    {
+      "id": "8e30",
+      "businessId": "fccd",
+      "productId": "fce7",
+      "productName": "Hamburguesa Doble Queso",
+      "quantity": 1,
+      "costCents": 350000,
+      "date": "2026-01-25T01:03:26.073Z",
+      "type": "entry"
+    },
+    {
+      "id": "3951",
+      "businessId": "fccd",
+      "productId": "fce7",
+      "productName": "Hamburguesa Doble Queso",
+      "quantity": 1,
+      "costCents": 350000,
+      "date": "2026-01-25T01:03:26.486Z",
+      "type": "entry"
+    },
+    {
+      "id": "9944",
+      "businessId": "fccd",
+      "productId": "fce7",
+      "productName": "Hamburguesa Doble Queso",
+      "quantity": 1,
+      "costCents": 350000,
+      "date": "2026-01-25T01:03:26.487Z",
+      "type": "entry"
+    },
+    {
+      "id": "b2e8",
+      "businessId": "fccd",
+      "productId": "fce7",
+      "productName": "Hamburguesa Doble Queso",
+      "quantity": 1,
+      "costCents": 350000,
+      "date": "2026-01-25T01:03:26.625Z",
+      "type": "entry"
+    },
+    {
+      "id": "373b",
+      "businessId": "fccd",
+      "productId": "fce7",
+      "productName": "Hamburguesa Doble Queso",
+      "quantity": 1,
+      "costCents": 350000,
+      "date": "2026-01-25T01:03:26.624Z",
+      "type": "entry"
+    },
+    {
+      "id": "20dd",
+      "businessId": "fccd",
+      "productId": "fce7",
+      "productName": "Hamburguesa Doble Queso",
+      "quantity": 1,
+      "costCents": 350000,
+      "date": "2026-01-25T01:03:26.623Z",
+      "type": "entry"
+    },
+    {
+      "id": "c413",
+      "businessId": "fccd",
+      "productId": "fce7",
+      "productName": "Hamburguesa Doble Queso",
+      "quantity": 1,
+      "costCents": 350000,
+      "date": "2026-01-25T01:03:27.089Z",
+      "type": "entry"
+    },
+    {
+      "id": "e7cf",
+      "businessId": "fccd",
+      "productId": "511d",
+      "productName": "Sedal",
+      "quantity": 9,
+      "costCents": 0,
+      "date": "2026-01-25T01:04:19.019Z",
       "type": "entry"
     }
   ],
@@ -221,10 +421,22 @@
       "id": "fccd",
       "nombre": "KioscoJaguel",
       "ubicacion": "Los Pinos 985",
-      "rubro": "panaderia",
+      "rubro": "hamburgueseria",
       "region": "argentina",
       "tieneMultiplesSucursales": true,
-      "stockMode": "simple"
+      "stockMode": "complete",
+      "branches": [
+        {
+          "id": "main",
+          "name": "KioscoJaguel",
+          "address": "Los Pinos 985"
+        },
+        {
+          "id": "branch-1768246915348",
+          "name": "Nueva Sucursal 2",
+          "address": ""
+        }
+      ]
     }
   ],
   "branches": [
@@ -262,6 +474,16 @@
       "password": "Jorge2.0",
       "documento": "47678109",
       "rol": "admin",
+      "activo": true
+    },
+    {
+      "id": "e4da",
+      "businessId": "fccd",
+      "nombre": "Soledad",
+      "email": "SOLE.O@HOTMAIL.COM.AR",
+      "password": "Jorge2.0",
+      "rol": "vendedor",
+      "branchId": "branch-1768246915348",
       "activo": true
     }
   ],
@@ -436,138 +658,129 @@
       "stock": 9
     },
     {
-      "id": "1412",
+      "id": "52fc",
       "businessId": "fccd",
-      "nombre": "Pan Francés x Kg",
-      "categoria": "Panadería",
-      "unidad": "kg",
-      "priceCents": 180000,
-      "costCents": 60000,
-      "stock": 3,
+      "nombre": "Hamburguesa Simple",
+      "categoria": "Hamburguesas",
+      "unidad": "u",
+      "priceCents": 450000,
+      "costCents": 200000,
+      "stock": 50,
+      "trackStock": true,
+      "disponible": false
+    },
+    {
+      "id": "ae9c",
+      "businessId": "fccd",
+      "nombre": "Hamburguesa Completa",
+      "categoria": "Hamburguesas",
+      "unidad": "u",
+      "priceCents": 600000,
+      "costCents": 300000,
+      "stock": 50,
+      "trackStock": true,
+      "disponible": true
+    },
+    {
+      "id": "fce7",
+      "businessId": "fccd",
+      "nombre": "Hamburguesa Doble Queso",
+      "categoria": "Hamburguesas",
+      "unidad": "u",
+      "priceCents": 750000,
+      "costCents": 350000,
+      "stock": 46,
+      "trackStock": true,
+      "disponible": true
+    },
+    {
+      "id": "954d",
+      "businessId": "fccd",
+      "nombre": "Papas Fritas Medianas",
+      "categoria": "Guarnición",
+      "unidad": "u",
+      "priceCents": 300000,
+      "costCents": 100000,
+      "stock": 100,
+      "trackStock": true,
+      "disponible": true
+    },
+    {
+      "id": "0b48",
+      "businessId": "fccd",
+      "nombre": "Papas Fritas Grandes",
+      "categoria": "Guarnición",
+      "unidad": "u",
+      "priceCents": 450000,
+      "costCents": 150000,
+      "stock": 100,
+      "trackStock": true,
+      "disponible": true
+    },
+    {
+      "id": "2c91",
+      "businessId": "fccd",
+      "nombre": "Nuggets de Pollo x6",
+      "categoria": "Pollo",
+      "unidad": "u",
+      "priceCents": 400000,
+      "costCents": 180000,
+      "stock": 60,
+      "trackStock": true,
+      "disponible": true
+    },
+    {
+      "id": "152f",
+      "businessId": "fccd",
+      "nombre": "Pancho Clásico",
+      "categoria": "Panchos",
+      "unidad": "u",
+      "priceCents": 250000,
+      "costCents": 100000,
+      "stock": 50,
+      "trackStock": true,
+      "disponible": true
+    },
+    {
+      "id": "fc83",
+      "businessId": "fccd",
+      "nombre": "Gaseosa Cola 500ml",
+      "categoria": "Bebidas",
+      "unidad": "u",
+      "priceCents": 200000,
+      "costCents": 120000,
+      "stock": 48,
+      "trackStock": true,
+      "disponible": true
+    },
+    {
+      "id": "e959",
+      "businessId": "fccd",
+      "nombre": "Cerveza Lata 473ml",
+      "categoria": "Bebidas",
+      "unidad": "g",
+      "priceCents": 400,
+      "costCents": 180000,
+      "stock": 48,
       "trackStock": true,
       "disponible": true,
       "imageUrl": null,
       "recipe": []
     },
     {
-      "id": "201f",
+      "id": "511d",
       "businessId": "fccd",
-      "nombre": "Facturas Docena",
-      "categoria": "Panadería",
-      "unidad": "u",
-      "priceCents": 480000,
-      "costCents": 150000,
-      "stock": null,
-      "trackStock": true,
-      "disponible": true,
-      "recipe": [
-        {
-          "ingredientId": "71da",
-          "quantity": 3
-        },
-        {
-          "ingredientId": "527a",
-          "quantity": 1
-        }
-      ]
-    },
-    {
-      "id": "2e4b",
-      "businessId": "fccd",
-      "nombre": "Pan de Miga x Kg",
-      "categoria": "Panadería",
-      "unidad": "kg",
-      "priceCents": 350000,
-      "costCents": 120000,
-      "stock": null,
-      "trackStock": true,
-      "disponible": true
-    },
-    {
-      "id": "b2cb",
-      "businessId": "fccd",
-      "nombre": "Chipá x 100g",
-      "categoria": "Panadería",
-      "unidad": "u",
-      "priceCents": 150000,
-      "costCents": 50000,
-      "stock": null,
-      "trackStock": true,
-      "disponible": true
-    },
-    {
-      "id": "71da",
-      "businessId": "fccd",
-      "nombre": "Harina",
-      "categoria": "Materia Prima",
-      "unidad": "kg",
-      "priceCents": 20000,
+      "nombre": "Sedal",
+      "categoria": "Shampoo",
+      "unidad": "lt",
+      "priceCents": 1230000,
       "costCents": 0,
-      "stock": 4,
+      "stock": 9,
       "trackStock": true,
       "disponible": true,
-      "isIngredient": true
-    },
-    {
-      "id": "527a",
-      "businessId": "fccd",
-      "nombre": "Harina",
-      "categoria": "Materia Prima",
-      "unidad": "kg",
-      "priceCents": 20000,
-      "costCents": 0,
-      "stock": 4,
-      "trackStock": true,
-      "disponible": true,
-      "isIngredient": true
-    },
-    {
-      "id": "a97c",
-      "businessId": "fccd",
-      "nombre": "Pan Francés x Kg",
-      "categoria": "Panadería",
-      "unidad": "kg",
-      "priceCents": 180000,
-      "costCents": 60000,
-      "stock": null,
-      "trackStock": false,
-      "disponible": true
-    },
-    {
-      "id": "04a2",
-      "businessId": "fccd",
-      "nombre": "Facturas Docena",
-      "categoria": "Panadería",
-      "unidad": "u",
-      "priceCents": 480000,
-      "costCents": 150000,
-      "stock": null,
-      "trackStock": false,
-      "disponible": true
-    },
-    {
-      "id": "ed73",
-      "businessId": "fccd",
-      "nombre": "Pan de Miga x Kg",
-      "categoria": "Panadería",
-      "unidad": "kg",
-      "priceCents": 350000,
-      "costCents": 120000,
-      "stock": null,
-      "trackStock": false,
-      "disponible": true
-    },
-    {
-      "id": "9a48",
-      "businessId": "fccd",
-      "nombre": "Chipá x 100g",
-      "categoria": "Panadería",
-      "unidad": "u",
-      "priceCents": 150000,
-      "costCents": 50000,
-      "stock": null,
-      "trackStock": false,
-      "disponible": true
+      "isIngredient": false,
+      "imageUrl": "data:image/jpeg;base64,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",
+      "recipe": []
     }
   ],
   "sales": [
@@ -720,6 +933,151 @@
       "totalCents": 50000,
       "paymentMethod": "efectivo",
       "isPending": false
+    },
+    {
+      "id": "aed5",
+      "businessId": "fccd",
+      "branchId": "main",
+      "userId": "3ae6",
+      "userName": "Santino Antelo",
+      "date": "2026-01-11T07:46:19.819Z",
+      "items": [
+        {
+          "productId": "b2cb",
+          "nombre": "Chipá x 100g",
+          "priceCents": 150000,
+          "unidad": "u",
+          "quantity": 1
+        },
+        {
+          "productId": "201f",
+          "nombre": "Facturas Docena",
+          "priceCents": 480000,
+          "unidad": "u",
+          "quantity": 1
+        },
+        {
+          "productId": "71da",
+          "nombre": "Harina",
+          "priceCents": 20000,
+          "unidad": "kg",
+          "quantity": 1
+        },
+        {
+          "productId": "04a2",
+          "nombre": "Facturas Docena",
+          "priceCents": 480000,
+          "unidad": "u",
+          "quantity": 1
+        }
+      ],
+      "totalCents": 1130000,
+      "paymentMethod": "efectivo",
+      "isPending": false
+    },
+    {
+      "id": "033f",
+      "businessId": "fccd",
+      "branchId": "main",
+      "userId": "3ae6",
+      "userName": "Santino Antelo",
+      "date": "2026-01-11T07:47:45.954Z",
+      "items": [
+        {
+          "productId": "1412",
+          "nombre": "Pan Francés x Kg",
+          "priceCents": 180000,
+          "unidad": "kg",
+          "quantity": 1
+        }
+      ],
+      "totalCents": 180000,
+      "paymentMethod": "efectivo",
+      "customerName": "Juan",
+      "isPending": false
+    },
+    {
+      "id": "2e23",
+      "businessId": "fccd",
+      "branchId": "main",
+      "userId": "3ae6",
+      "userName": "Santino Antelo",
+      "date": "2026-01-12T19:35:26.217Z",
+      "items": [
+        {
+          "productId": "04a2",
+          "nombre": "Facturas Docena",
+          "priceCents": 480000,
+          "unidad": "u",
+          "quantity": 1
+        },
+        {
+          "productId": "9a48",
+          "nombre": "Chipá x 100g",
+          "priceCents": 150000,
+          "unidad": "u",
+          "quantity": 2
+        }
+      ],
+      "totalCents": 780000,
+      "paymentMethod": "efectivo",
+      "customerName": "Santi",
+      "isPending": true
+    },
+    {
+      "id": "e038",
+      "businessId": "fccd",
+      "branchId": "branch-1768246915348",
+      "userId": "3ae6",
+      "userName": "Santino Antelo",
+      "date": "2026-01-25T01:06:57.712Z",
+      "items": [
+        {
+          "productId": "152f",
+          "nombre": "Pancho Clásico",
+          "priceCents": 250000,
+          "unidad": "u",
+          "quantity": 6,
+          "category": "Panchos"
+        },
+        {
+          "productId": "e959",
+          "nombre": "Cerveza Lata 473ml",
+          "priceCents": 300000,
+          "unidad": "u",
+          "quantity": 13,
+          "category": "Bebidas"
+        },
+        {
+          "productId": "fc83",
+          "nombre": "Gaseosa Cola 500ml",
+          "priceCents": 200000,
+          "unidad": "u",
+          "quantity": 4,
+          "category": "Bebidas"
+        },
+        {
+          "productId": "ae9c",
+          "nombre": "Hamburguesa Completa",
+          "priceCents": 600000,
+          "unidad": "u",
+          "quantity": 2,
+          "category": "Hamburguesas"
+        },
+        {
+          "productId": "511d",
+          "nombre": "Sedal",
+          "priceCents": 1230000,
+          "unidad": "lt",
+          "quantity": 5,
+          "imageUrl": "data:image/jpeg;base64,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",
+          "category": "Shampoo"
+        }
+      ],
+      "totalCents": 13550000,
+      "paymentMethod": "efectivo",
+      "isPending": false,
+      "status": "pending"
     }
   ]
 }

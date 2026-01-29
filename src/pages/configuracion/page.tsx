@@ -4,7 +4,7 @@ import {
   ShoppingBasket, Coffee, Croissant, CakeSlice, BookOpen, Hammer, 
   Clock, Calculator, ChefHat, ScrollText, Search, Plus, Trash2, 
   ArrowRight, ArrowLeft, Loader2, Smile, HelpCircle, BarChart3, CreditCard,
-  Building2, MapPin, UserPlus, Shield
+  Building2, MapPin, UserPlus, Shield, X, Eye
 } from 'lucide-react'
 
 import { Button } from '@shared/components/ui/Button'
@@ -13,7 +13,7 @@ import { Select } from '@shared/components/ui/Select'
 import { useAuthStore } from '@shared/stores/authStore'
 import { useToastStore } from '@shared/stores/toastStore'
 import { patchBusiness, createProduct } from '@shared/services/posService'
-import { listAccounts, type AccountAdminRecord } from '@shared/services/authService'
+import { listAccounts, createEmployeeAccount, updateAccount, type AccountAdminRecord } from '@shared/services/authService'
 import { RUBROS, type Template, type TemplateItem } from '../productos/templates'
 
 const ICON_MAP: Record<string, any> = {
@@ -39,7 +39,8 @@ type TeamMember = {
   email: string
   password?: string
   role: 'admin' | 'vendedor' | 'gerente'
-  branchId: string // 'all' or specific branch ID
+  branchId: string // 'all' or specific branch ID (primary context)
+  branchIds?: string[] // Multi-branch access
 }
 
 export function ConfiguracionPage() {
@@ -60,6 +61,8 @@ export function ConfiguracionPage() {
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([])
   const [showAddUser, setShowAddUser] = useState(false)
   const [newUser, setNewUser] = useState<Partial<TeamMember>>({ role: 'vendedor', branchId: 'all' })
+  const [selectedExistingUser, setSelectedExistingUser] = useState<string>('')
+  const [isAddingExistingUser, setIsAddingExistingUser] = useState(false)
 
   // Accounts State (Real Backend Data)
   const [accountsStatus, setAccountsStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
@@ -82,50 +85,136 @@ export function ConfiguracionPage() {
         setSelectedRubroId(business.rubro)
       }
       setIsMultiBranch(business.tieneMultiplesSucursales ?? false)
-      setBranches(prev => [{ 
-        ...prev[0], 
-        name: business.nombre, 
-        address: business.ubicacion, 
-        stockMode: business.stockMode as any 
-      }])
+      
+      if (business.branches && business.branches.length > 0) {
+        setBranches(business.branches.map(b => ({
+          id: b.id,
+          name: b.name,
+          address: b.address || '',
+          stockMode: (business.stockMode as any) || 'complete',
+          products: []
+        })))
+      } else {
+        setBranches([{ 
+          id: 'main', 
+          name: business.nombre, 
+          address: business.ubicacion, 
+          stockMode: (business.stockMode as any) || 'complete',
+          products: [] 
+        }])
+      }
     }
   }, [business])
 
   // Load accounts
+  const loadAccounts = async () => {
+    if (!business) return
+    setAccountsStatus('loading')
+    try {
+      const accounts = await listAccounts(business.id)
+      setAccounts(accounts)
+      setAccountsStatus('success')
+    } catch (e: unknown) {
+      setAccountsStatus('error')
+      setAccountsError(e instanceof Error ? e.message : 'Error al cargar usuarios')
+    }
+  }
+
   useEffect(() => {
-    let cancelled = false
-    async function run() {
-      if (!business) return
-      setAccountsStatus('loading')
-      try {
-        const accounts = await listAccounts(business.id)
-        if (cancelled) return
-        setAccounts(accounts)
-        setAccountsStatus('success')
-      } catch (e: unknown) {
-        if (cancelled) return
-        setAccountsStatus('error')
-        setAccountsError(e instanceof Error ? e.message : 'Error al cargar usuarios')
-      }
-    }
-    void run()
-    return () => {
-      cancelled = true
-    }
+    void loadAccounts()
   }, [business])
+
+  const handleCreateEmployee = async () => {
+    if (!business || !newUser.name || !newUser.email || !newUser.password) {
+      showToast('Completá todos los campos obligatorios', 'error')
+      return
+    }
+    
+    setIsSaving(true)
+    try {
+      await createEmployeeAccount({
+        businessId: business.id,
+        nombre: newUser.name,
+        email: newUser.email,
+        password: newUser.password,
+        rol: newUser.role || 'vendedor',
+        branchId: newUser.branchId || 'main'
+      })
+      showToast('Usuario creado correctamente', 'success')
+      setShowAddUser(false)
+      setNewUser({ role: 'vendedor', branchId: 'all' })
+      void loadAccounts()
+    } catch (e) {
+      showToast('Error al crear usuario', 'error')
+      console.error(e)
+    } finally {
+      setIsSaving(false)
+    }
+  }
 
   // --- HANDLERS ---
 
-  const handleAddBranch = () => {
-    const newId = `branch-${branches.length + 1}`
-    setBranches([...branches, { 
+  const handleAddBranch = async () => {
+    if (!business) return
+    const newId = `branch-${Date.now()}`
+    const newBranch = { 
       id: newId, 
-      name: `Sucursal ${branches.length + 1}`, 
+      name: `Nueva Sucursal ${branches.length + 1}`, 
       address: '', 
-      stockMode: 'complete',
+      stockMode: (business.stockMode as any) || 'complete',
       products: []
-    }])
-    setActiveBranchId(newId)
+    }
+    const updatedBranches = [...branches, newBranch]
+    setBranches(updatedBranches)
+    
+    // Auto-save if we are not in wizard
+    if (activeTab === 'usuarios') {
+      try {
+        await patchBusiness(business.id, {
+          tieneMultiplesSucursales: true,
+          branches: updatedBranches.map(b => ({ id: b.id, name: b.name, address: b.address }))
+        })
+        setBusiness({ ...business, tieneMultiplesSucursales: true, branches: updatedBranches.map(b => ({ id: b.id, name: b.name, address: b.address })) })
+        showToast('Sucursal creada', 'success')
+      } catch (e) {
+        showToast('Error al guardar sucursal', 'error')
+      }
+    } else {
+      setActiveBranchId(newId)
+    }
+  }
+
+  const handleUpdateBranch = async (branchId: string, data: Partial<Branch>) => {
+    if (!business) return
+    const updatedBranches = branches.map(b => b.id === branchId ? { ...b, ...data } : b)
+    setBranches(updatedBranches)
+    
+    // Debounced save could be better, but direct save for now
+    try {
+      await patchBusiness(business.id, {
+        branches: updatedBranches.map(b => ({ id: b.id, name: b.name, address: b.address }))
+      })
+      setBusiness({ ...business, branches: updatedBranches.map(b => ({ id: b.id, name: b.name, address: b.address })) })
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  const handleDeleteBranch = async (branchId: string) => {
+    if (!business) return
+    const updatedBranches = branches.filter(b => b.id !== branchId)
+    setBranches(updatedBranches)
+    
+    try {
+      await patchBusiness(business.id, {
+        branches: updatedBranches.map(b => ({ id: b.id, name: b.name, address: b.address })),
+        tieneMultiplesSucursales: updatedBranches.length > 1
+      })
+      setBusiness({ ...business, tieneMultiplesSucursales: updatedBranches.length > 1, branches: updatedBranches.map(b => ({ id: b.id, name: b.name, address: b.address })) })
+      showToast('Sucursal eliminada', 'success')
+    } catch (e) {
+      showToast('Error al eliminar', 'error')
+    }
   }
 
   const handleStructureSelect = (multi: boolean) => {
@@ -304,10 +393,89 @@ export function ConfiguracionPage() {
     p.categoria.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
+  const handleAddExistingUserToBranch = async () => {
+    if (!business || !selectedExistingUser) {
+      showToast('Seleccioná un usuario', 'error')
+      return
+    }
+
+    setIsSaving(true)
+    try {
+      // Find the user to update
+      const user = accounts.find(a => String(a.id) === selectedExistingUser)
+      if (!user) throw new Error('Usuario no encontrado')
+
+      const targetBranchId = newUser.branchId || 'main'
+      
+      // Logic for multi-branch assignment
+      // If target is 'all', we set branchId='all' and clear branchIds
+      // If target is specific, we append to branchIds (if not 'all' already)
+      
+      const updateData: Partial<AccountAdminRecord> = {}
+      
+      if (targetBranchId === 'all') {
+        updateData.branchId = 'all'
+        updateData.branchIds = [] 
+      } else {
+        if (user.branchId === 'all') {
+           showToast('Este usuario ya tiene acceso global', 'info')
+           setIsSaving(false)
+           return
+        }
+
+        const currentBranchIds = user.branchIds || []
+        // Ensure current branchId is in the list if it wasn't
+        if (user.branchId && user.branchId !== 'all' && !currentBranchIds.includes(user.branchId)) {
+           currentBranchIds.push(user.branchId)
+        }
+        
+        // Add new branch if not present
+        if (!currentBranchIds.includes(targetBranchId)) {
+           currentBranchIds.push(targetBranchId)
+        }
+        
+        updateData.branchIds = currentBranchIds
+        // Ensure branchId is set to something valid (e.g. the target one if it was null)
+        if (!user.branchId) {
+          updateData.branchId = targetBranchId
+        }
+      }
+
+      await updateAccount(user.id, updateData)
+
+      showToast(`Usuario ${user.nombre} asignado correctamente`, 'success')
+      setShowAddUser(false)
+      setNewUser({ role: 'vendedor', branchId: 'all' })
+      setSelectedExistingUser('')
+      setIsAddingExistingUser(false)
+      void loadAccounts()
+    } catch (e) {
+      showToast('Error al asignar usuario', 'error')
+      console.error(e)
+    } finally {
+      setIsSaving(false)
+    }
+  }
+
+  const handleImpersonateUser = (targetAccount: AccountAdminRecord) => {
+    useAuthStore.setState({ 
+      account: {
+        id: targetAccount.id,
+        businessId: targetAccount.businessId,
+        branchId: targetAccount.branchId,
+        nombre: targetAccount.nombre,
+        email: targetAccount.email,
+        rol: targetAccount.rol as any
+      }
+    })
+    // Force reload or navigation
+    window.location.href = '/app/pedidos'
+  }
+
   // --- RENDER HELPERS ---
   const renderMascot = (message: string, mood: 'happy' | 'excited' | 'thinking' = 'happy') => (
-    <div className="flex items-start gap-4 p-4 rounded-3xl bg-blue-500/10 border border-blue-500/20 mb-8 max-w-3xl mx-auto animate-in slide-in-from-top-4">
-      <div className="flex-shrink-0 bg-blue-500 text-white p-3 rounded-2xl shadow-lg transform -rotate-3">
+    <div className="flex items-start gap-4 p-4 rounded-[var(--radius)] bg-blue-500/10 border border-blue-500/20 mb-8 max-w-3xl mx-auto animate-in slide-in-from-top-4">
+      <div className="flex-shrink-0 bg-blue-500 text-white p-3 rounded-[calc(var(--radius)_-_8px)] shadow-lg transform -rotate-3">
         <Smile className="h-8 w-8" />
       </div>
       <div className="pt-1">
@@ -325,12 +493,12 @@ export function ConfiguracionPage() {
       </div>
 
       <div className="mb-6 overflow-x-auto">
-        <div className="flex w-fit min-w-full gap-2 rounded-2xl border border-[color:var(--border)] bg-[color:var(--card-bg)] p-1 md:min-w-0">
+        <div className="flex w-fit min-w-full gap-2 rounded-[var(--radius)] border border-[color:var(--border)] bg-[color:var(--card-bg)] p-1 md:min-w-0">
           <button
             type="button"
             onClick={() => setActiveTab('asistente')}
             className={[
-              'rounded-xl px-6 py-2 text-sm font-medium tracking-tight',
+              'rounded-[var(--radius)] px-6 py-2 text-sm font-medium tracking-tight',
               activeTab === 'asistente'
                 ? 'bg-[color:var(--outline-bg)] text-[color:var(--text)] shadow-[0_10px_30px_var(--shadow)]'
                 : 'text-[color:var(--muted)] hover:bg-[color:var(--ghost-hover-bg)] hover:text-[color:var(--text)]',
@@ -345,7 +513,7 @@ export function ConfiguracionPage() {
             type="button"
             onClick={() => setActiveTab('negocio')}
             className={[
-              'rounded-xl px-6 py-2 text-sm font-medium tracking-tight',
+              'rounded-[var(--radius)] px-6 py-2 text-sm font-medium tracking-tight',
               activeTab === 'negocio'
                 ? 'bg-[color:var(--outline-bg)] text-[color:var(--text)] shadow-[0_10px_30px_var(--shadow)]'
                 : 'text-[color:var(--muted)] hover:bg-[color:var(--ghost-hover-bg)] hover:text-[color:var(--text)]',
@@ -360,15 +528,15 @@ export function ConfiguracionPage() {
             type="button"
             onClick={() => setActiveTab('usuarios')}
             className={[
-              'rounded-xl px-6 py-2 text-sm font-medium tracking-tight',
+              'rounded-[var(--radius)] px-6 py-2 text-sm font-medium tracking-tight',
               activeTab === 'usuarios'
                 ? 'bg-[color:var(--outline-bg)] text-[color:var(--text)] shadow-[0_10px_30px_var(--shadow)]'
                 : 'text-[color:var(--muted)] hover:bg-[color:var(--ghost-hover-bg)] hover:text-[color:var(--text)]',
             ].join(' ')}
           >
             <span className="inline-flex items-center gap-2">
-              <Users className="h-4 w-4" strokeWidth={1.5} />
-              Usuarios
+              <Building2 className="h-4 w-4" strokeWidth={1.5} />
+              Equipo y Sucursales
             </span>
           </button>
         </div>
@@ -384,7 +552,7 @@ export function ConfiguracionPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <button 
                   onClick={() => { setActiveMission('SETUP'); setStep('STRUCTURE'); }}
-                  className="group relative overflow-hidden rounded-3xl bg-[color:var(--card-bg)] border border-[color:var(--border)] p-6 text-left transition-all hover:shadow-lg hover:scale-[1.01]"
+                  className="group relative overflow-hidden rounded-[var(--radius)] bg-[color:var(--card-bg)] border border-[color:var(--border)] p-6 text-left transition-all hover:shadow-lg hover:scale-[1.01]"
                 >
                   <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
                     <Store className="h-24 w-24 text-[color:var(--primary-bg)]" />
@@ -474,9 +642,9 @@ export function ConfiguracionPage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
                     <button
                       onClick={() => handleStructureSelect(false)}
-                      className={`relative p-8 rounded-3xl border text-left transition-all ${!isMultiBranch ? 'border-[color:var(--primary-bg)] bg-[color:var(--primary-bg)]/5 ring-1 ring-[color:var(--primary-bg)]' : 'border-[color:var(--border)] hover:bg-[color:var(--ghost-hover-bg)]'}`}
+                      className={`relative p-8 rounded-[var(--radius)] border text-left transition-all ${!isMultiBranch ? 'border-[color:var(--primary-bg)] bg-[color:var(--primary-bg)]/5 ring-1 ring-[color:var(--primary-bg)]' : 'border-[color:var(--border)] hover:bg-[color:var(--ghost-hover-bg)]'}`}
                     >
-                      <div className="p-3 rounded-2xl bg-[color:var(--outline-bg)] w-fit mb-4">
+                      <div className="p-3 rounded-[calc(var(--radius)-8px)] bg-[color:var(--outline-bg)] w-fit mb-4">
                         <Store className="h-8 w-8 text-[color:var(--text)]" />
                       </div>
                       <h3 className="text-xl font-bold mb-2">Un solo local</h3>
@@ -485,9 +653,9 @@ export function ConfiguracionPage() {
 
                     <button
                       onClick={() => handleStructureSelect(true)}
-                      className={`relative p-8 rounded-3xl border text-left transition-all ${isMultiBranch ? 'border-[color:var(--primary-bg)] bg-[color:var(--primary-bg)]/5 ring-1 ring-[color:var(--primary-bg)]' : 'border-[color:var(--border)] hover:bg-[color:var(--ghost-hover-bg)]'}`}
+                      className={`relative p-8 rounded-[var(--radius)] border text-left transition-all ${isMultiBranch ? 'border-[color:var(--primary-bg)] bg-[color:var(--primary-bg)]/5 ring-1 ring-[color:var(--primary-bg)]' : 'border-[color:var(--border)] hover:bg-[color:var(--ghost-hover-bg)]'}`}
                     >
-                      <div className="p-3 rounded-2xl bg-[color:var(--outline-bg)] w-fit mb-4">
+                      <div className="p-3 rounded-[calc(var(--radius)-8px)] bg-[color:var(--outline-bg)] w-fit mb-4">
                         <Building2 className="h-8 w-8 text-[color:var(--text)]" />
                       </div>
                       <h3 className="text-xl font-bold mb-2">Múltiples sucursales</h3>
@@ -504,8 +672,8 @@ export function ConfiguracionPage() {
                   
                   <div className="max-w-2xl mx-auto space-y-4">
                     {branches.map((branch, idx) => (
-                      <div key={branch.id} className="flex gap-4 items-start p-4 rounded-2xl border border-[color:var(--border)] bg-[color:var(--card-bg)]">
-                        <div className="p-2 rounded-xl bg-[color:var(--outline-bg)] mt-1">
+                      <div key={branch.id} className="flex gap-4 items-start p-4 rounded-[var(--radius)] border border-[color:var(--border)] bg-[color:var(--card-bg)]">
+                        <div className="p-2 rounded-[calc(var(--radius)-8px)] bg-[color:var(--outline-bg)] mt-1">
                           <Store className="h-5 w-5 text-[color:var(--muted)]" />
                         </div>
                         <div className="flex-1 space-y-3">
@@ -582,10 +750,10 @@ export function ConfiguracionPage() {
                           key={rubro.id}
                           type="button"
                           onClick={() => handleRubroSelect(rubro.id)}
-                          className={`relative overflow-hidden rounded-2xl border p-6 text-left transition-all duration-300 hover:scale-[1.02] ${isSelected ? `ring-2 ring-[color:var(--primary-bg)] shadow-lg bg-gradient-to-br ${gradientClass}` : 'hover:shadow-md hover:bg-[color:var(--ghost-hover-bg)] bg-[color:var(--card-bg)] border-[color:var(--border)]'}`}
+                          className={`relative overflow-hidden rounded-[calc(var(--radius)_-_4px)] border p-6 text-left transition-all duration-300 hover:scale-[1.02] ${isSelected ? `ring-2 ring-[color:var(--primary-bg)] shadow-lg bg-gradient-to-br ${gradientClass}` : 'hover:shadow-md hover:bg-[color:var(--ghost-hover-bg)] bg-[color:var(--card-bg)] border-[color:var(--border)]'}`}
                         >
                           <div className="flex flex-col gap-4 relative z-10">
-                            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shadow-sm transition-colors ${isSelected ? 'bg-white/80 dark:bg-black/20' : 'bg-[color:var(--outline-bg)]'}`}>
+                            <div className={`w-14 h-14 rounded-[calc(var(--radius)-4px)] flex items-center justify-center shadow-sm transition-colors ${isSelected ? 'bg-white/80 dark:bg-black/20' : 'bg-[color:var(--outline-bg)]'}`}>
                               <Icon className={`h-7 w-7 ${isSelected ? 'text-[color:var(--text)]' : 'text-[color:var(--muted)]'}`} strokeWidth={1.5} />
                             </div>
                             <div>
@@ -610,10 +778,10 @@ export function ConfiguracionPage() {
                     <button
                       type="button"
                       onClick={() => handleStockModeSelect('complete')}
-                      className={`relative p-8 rounded-3xl border text-left transition-all ${branches[0].stockMode === 'complete' ? 'border-[color:var(--primary-bg)] bg-[color:var(--primary-bg)]/5 ring-1 ring-[color:var(--primary-bg)]' : 'border-[color:var(--border)] hover:bg-[color:var(--ghost-hover-bg)]'}`}
+                      className={`relative p-8 rounded-[--radius] border text-left transition-all ${branches[0].stockMode === 'complete' ? 'border-[color:var(--primary-bg)] bg-[color:var(--primary-bg)]/5 ring-1 ring-[color:var(--primary-bg)]' : 'border-[color:var(--border)] hover:bg-[color:var(--ghost-hover-bg)]'}`}
                     >
                       <div className="flex items-start justify-between mb-4">
-                        <div className="p-3 rounded-2xl bg-[color:var(--primary-bg)]/10 text-[color:var(--primary-bg)]">
+                        <div className="p-3 rounded-[calc(var(--radius)-4px)] bg-[color:var(--primary-bg)]/10 text-[color:var(--primary-bg)]">
                           <Package className="h-8 w-8" />
                         </div>
                       </div>
@@ -626,10 +794,10 @@ export function ConfiguracionPage() {
                     <button
                       type="button"
                       onClick={() => handleStockModeSelect('simple')}
-                      className={`relative p-8 rounded-3xl border text-left transition-all ${branches[0].stockMode === 'simple' ? 'border-[color:var(--primary-bg)] bg-[color:var(--primary-bg)]/5 ring-1 ring-[color:var(--primary-bg)]' : 'border-[color:var(--border)] hover:bg-[color:var(--ghost-hover-bg)]'}`}
+                      className={`relative p-8 rounded-[var(--radius)] border text-left transition-all ${branches[0].stockMode === 'simple' ? 'border-[color:var(--primary-bg)] bg-[color:var(--primary-bg)]/5 ring-1 ring-[color:var(--primary-bg)]' : 'border-[color:var(--border)] hover:bg-[color:var(--ghost-hover-bg)]'}`}
                     >
                       <div className="flex items-start justify-between mb-4">
-                        <div className="p-3 rounded-2xl bg-[color:var(--outline-bg)] text-[color:var(--text)]">
+                        <div className="p-3 rounded-[calc(var(--radius)-8px)] bg-[color:var(--outline-bg)] text-[color:var(--text)]">
                           <CheckCircle className="h-8 w-8" />
                         </div>
                       </div>
@@ -649,7 +817,7 @@ export function ConfiguracionPage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
                     <button
                       onClick={() => handleTemplateSelect(null)}
-                      className="group relative overflow-hidden rounded-3xl border border-dashed border-[color:var(--border)] bg-transparent p-8 text-left transition-all hover:bg-[color:var(--ghost-hover-bg)] hover:border-[color:var(--primary-bg)]"
+                      className="group relative overflow-hidden rounded-[var(--radius)] border border-dashed border-[color:var(--border)] bg-transparent p-8 text-left transition-all hover:bg-[color:var(--ghost-hover-bg)] hover:border-[color:var(--primary-bg)]"
                     >
                       <div className="flex flex-col items-center justify-center text-center gap-4">
                         <div className="w-16 h-16 rounded-full bg-[color:var(--outline-bg)] flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -668,13 +836,13 @@ export function ConfiguracionPage() {
                       <button
                         key={template.id}
                         onClick={() => handleTemplateSelect(template)}
-                        className="group relative overflow-hidden rounded-3xl border border-[color:var(--border)] bg-[color:var(--card-bg)] p-8 text-left transition-all hover:shadow-xl hover:scale-[1.02]"
+                        className="group relative overflow-hidden rounded-[var(--radius)] border border-[color:var(--border)] bg-[color:var(--card-bg)] p-8 text-left transition-all hover:shadow-xl hover:scale-[1.02]"
                       >
-                        <div className="absolute top-0 right-0 bg-[color:var(--primary-bg)]/10 text-[color:var(--primary-bg)] px-4 py-1 rounded-bl-2xl text-xs font-bold uppercase tracking-wider">
+                        <div className="absolute top-0 right-0 bg-[color:var(--primary-bg)]/10 text-[color:var(--primary-bg)] px-4 py-1 rounded-bl-[calc(var(--radius)-8px)] text-xs font-bold uppercase tracking-wider">
                           Recomendado
                         </div>
                         <div className="flex flex-col gap-4">
-                          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500/10 to-purple-500/10 flex items-center justify-center">
+                          <div className="w-16 h-16 rounded-[calc(var(--radius)-8px)] bg-gradient-to-br from-blue-500/10 to-purple-500/10 flex items-center justify-center">
                             <Package className="h-8 w-8 text-[color:var(--primary-bg)]" />
                           </div>
                           <div>
@@ -705,7 +873,7 @@ export function ConfiguracionPage() {
                         <button
                           key={branch.id}
                           onClick={() => setActiveBranchId(branch.id)}
-                          className={`flex items-center gap-2 px-4 py-2 rounded-xl border font-medium whitespace-nowrap transition-all ${activeBranchId === branch.id ? 'bg-[color:var(--primary-bg)] text-white border-transparent' : 'bg-[color:var(--card-bg)] border-[color:var(--border)] text-[color:var(--muted)]'}`}
+                          className={`flex items-center gap-2 px-4 py-2 rounded-[calc(var(--radius)-8px)] border font-medium whitespace-nowrap transition-all ${activeBranchId === branch.id ? 'bg-[color:var(--primary-bg)] text-white border-transparent' : 'bg-[color:var(--card-bg)] border-[color:var(--border)] text-[color:var(--muted)]'}`}
                         >
                           <Store className="h-4 w-4" />
                           {branch.name}
@@ -714,7 +882,7 @@ export function ConfiguracionPage() {
                     </div>
                   )}
 
-                  <div className="flex items-center gap-4 bg-[color:var(--card-bg)] p-4 rounded-2xl border border-[color:var(--border)] shadow-sm">
+                  <div className="flex items-center gap-4 bg-[color:var(--card-bg)] p-4 rounded-[var(--radius)] border border-[color:var(--border)] shadow-sm">
                     <div className="relative flex-1">
                       <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[color:var(--muted)]" />
                       <input
@@ -732,7 +900,7 @@ export function ConfiguracionPage() {
                     </Button>
                   </div>
 
-                  <div className="bg-[color:var(--card-bg)] border border-[color:var(--border)] rounded-2xl overflow-hidden shadow-sm">
+                  <div className="bg-[color:var(--card-bg)] border border-[color:var(--border)] rounded-[var(--radius)] overflow-hidden shadow-sm">
                     <div className="overflow-x-auto">
                       <table className="w-full text-sm">
                         <thead>
@@ -822,7 +990,7 @@ export function ConfiguracionPage() {
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* Add User Card */}
-                    <div className="rounded-3xl border border-[color:var(--border)] border-dashed bg-[color:var(--card-bg)]/50 p-6 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-[color:var(--card-bg)] transition-colors" onClick={() => setShowAddUser(true)}>
+                    <div className="rounded-[var(--radius)] border border-[color:var(--border)] border-dashed bg-[color:var(--card-bg)]/50 p-6 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-[color:var(--card-bg)] transition-colors" onClick={() => setShowAddUser(true)}>
                       <div className="w-12 h-12 rounded-full bg-[color:var(--outline-bg)] flex items-center justify-center mb-3">
                         <UserPlus className="h-6 w-6 text-[color:var(--primary-bg)]" />
                       </div>
@@ -832,7 +1000,7 @@ export function ConfiguracionPage() {
 
                     {/* Team List */}
                     {teamMembers.map(member => (
-                      <div key={member.id} className="rounded-3xl border border-[color:var(--border)] bg-[color:var(--card-bg)] p-6 relative group">
+                      <div key={member.id} className="rounded-[var(--radius)] border border-[color:var(--border)] bg-[color:var(--card-bg)] p-6 relative group">
                         <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
                           <button onClick={() => setTeamMembers(teamMembers.filter(m => m.id !== member.id))}>
                             <Trash2 className="h-4 w-4 text-red-500" />
@@ -862,14 +1030,14 @@ export function ConfiguracionPage() {
 
                   {showAddUser && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 animate-in fade-in">
-                      <div className="bg-[color:var(--card-bg)] rounded-3xl p-6 w-full max-w-md space-y-4 shadow-2xl">
+                      <div className="bg-[color:var(--card-bg)] rounded-[var(--radius)] p-6 w-full max-w-md space-y-4 shadow-2xl">
                         <h3 className="font-bold text-lg">Nuevo Usuario</h3>
                         <div className="space-y-3">
                           <Input placeholder="Nombre" value={newUser.name || ''} onChange={e => setNewUser({...newUser, name: e.target.value})} />
                           <Input placeholder="Email / Usuario" value={newUser.email || ''} onChange={e => setNewUser({...newUser, email: e.target.value})} />
                           <Input type="password" placeholder="Contraseña" value={newUser.password || ''} onChange={e => setNewUser({...newUser, password: e.target.value})} />
                           
-                          <div className="grid grid-cols-2 gap-3">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div>
                               <label className="text-xs font-medium text-[color:var(--muted)] ml-1">Rol</label>
                               <Select value={newUser.role} onChange={e => setNewUser({...newUser, role: e.target.value as any})}>
@@ -921,7 +1089,7 @@ export function ConfiguracionPage() {
                   </div>
                   <Button 
                     onClick={() => window.location.href = '/'} 
-                    className="h-12 px-8 rounded-2xl bg-[color:var(--primary-bg)] text-white hover:opacity-90 text-lg shadow-lg shadow-[color:var(--primary-bg)]/20"
+                    className="h-12 px-8 rounded-[var(--radius)] bg-[color:var(--primary-bg)] text-white hover:opacity-90 text-lg shadow-lg shadow-[color:var(--primary-bg)]/20"
                   >
                     Ir al Dashboard
                   </Button>
@@ -935,7 +1103,7 @@ export function ConfiguracionPage() {
       {/* --- TAB: NEGOCIO --- */}
       {activeTab === 'negocio' && (
         <div className="animate-slide-in-up max-w-2xl mx-auto space-y-6">
-          <div className="rounded-3xl border border-[color:var(--border)] bg-[color:var(--card-bg)] p-6 shadow-sm">
+          <div className="rounded-[var(--radius)] border border-[color:var(--border)] bg-[color:var(--card-bg)] p-6 shadow-sm">
             <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
               <Store className="h-5 w-5 text-[color:var(--primary-bg)]" />
               Información del Negocio
@@ -960,7 +1128,7 @@ export function ConfiguracionPage() {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1">
                   <label className="text-xs font-medium text-[color:var(--muted)]">Rubro</label>
                   <Select 
@@ -1007,12 +1175,12 @@ export function ConfiguracionPage() {
             </div>
           </div>
 
-          <div className="rounded-3xl border border-[color:var(--border)] bg-[color:var(--card-bg)] p-6 shadow-sm">
+          <div className="rounded-[var(--radius)] border border-[color:var(--border)] bg-[color:var(--card-bg)] p-6 shadow-sm">
             <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
               <Building2 className="h-5 w-5 text-[color:var(--primary-bg)]" />
               Estructura
             </h2>
-            <div className="flex items-center justify-between p-4 rounded-2xl bg-[color:var(--outline-bg)]/50 border border-[color:var(--border)]">
+            <div className="flex items-center justify-between p-4 rounded-[calc(var(--radius)-8px)] bg-[color:var(--outline-bg)]/50 border border-[color:var(--border)]">
               <div>
                 <div className="font-medium">Multi-sucursal</div>
                 <div className="text-xs text-[color:var(--muted)]">
@@ -1035,33 +1203,274 @@ export function ConfiguracionPage() {
         </div>
       )}
 
-      {/* --- TAB: USUARIOS (Existing functionality preserved) --- */}
+      {/* --- TAB: USUARIOS --- */}
       {activeTab === 'usuarios' && (
-        // ... (Keep existing Users tab implementation if needed, or redirect to new Team Management)
-        <div className="animate-slide-in-up space-y-4">
-           {/* Reusing existing code for simple user list viewing */}
-           <div className="rounded-3xl border border-[color:var(--border)] bg-[color:var(--card-bg)] p-6 shadow-[0_10px_30px_var(--shadow)]">
-            <div className="text-sm font-semibold tracking-tight">Usuarios Registrados</div>
-            <div className="mt-1 text-sm tracking-tight text-[color:var(--muted)]">Cuentas vinculadas al negocio.</div>
+        <div className="animate-slide-in-up space-y-6">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+            <div>
+              <h2 className="text-xl font-bold tracking-tight">Gestión de Equipo y Sucursales</h2>
+              <p className="text-sm text-[color:var(--muted)]">Administrá tus sucursales y el personal asignado a cada una.</p>
+            </div>
+            <div className="flex gap-3">
+              <Button onClick={handleAddBranch} variant="outline" className="shadow-sm">
+                <Plus className="h-4 w-4 mr-2" />
+                Nueva Sucursal
+              </Button>
+              <Button onClick={() => setShowAddUser(true)} className="shadow-lg shadow-[color:var(--primary-bg)]/20">
+                <UserPlus className="h-4 w-4 mr-2" />
+                Nuevo Usuario
+              </Button>
+            </div>
           </div>
-          {/* ... existing list implementation ... */}
-           {accountsStatus === 'success' && (
-            <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
-              {accounts.map((a) => (
-                <div key={a.id} className="rounded-3xl border border-[color:var(--border)] bg-[color:var(--card-bg)] p-5 shadow-[0_10px_30px_var(--shadow)]">
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="min-w-0">
-                      <div className="truncate text-sm font-semibold tracking-tight">{a.nombre}</div>
-                      <div className="mt-1 text-xs tracking-tight text-[color:var(--muted)]">{a.email}</div>
+
+          {accountsStatus === 'loading' && (
+             <div className="flex justify-center py-12"><Loader2 className="h-8 w-8 animate-spin text-[color:var(--primary-bg)]" /></div>
+          )}
+
+          {accountsStatus === 'success' && (
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 items-start">
+               {/* Global Users (Admins usually or Multi-branch access) */}
+               {accounts.some(a => !a.branchId || a.branchId === 'all') && (
+                 <div className="rounded-[var(--radius)] border border-[color:var(--border)] bg-[color:var(--card-bg)] p-1 shadow-sm overflow-hidden flex flex-col">
+                    <div className="p-4 border-b border-[color:var(--border)] bg-[color:var(--outline-bg)]/30 flex items-center gap-2">
+                       <Shield className="h-4 w-4 text-purple-500" />
+                       <span className="font-bold text-sm">Acceso Global</span>
+                       <span className="ml-auto text-xs font-medium bg-[color:var(--card-bg)] px-2 py-0.5 rounded-full border border-[color:var(--border)]">
+                         {accounts.filter(a => !a.branchId || a.branchId === 'all').length}
+                       </span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <div className="rounded-full border border-[color:var(--border)] bg-[color:var(--outline-bg)] px-2.5 py-1 text-xs font-semibold tracking-tight">
-                        {a.rol}
+                    <div className="p-2 space-y-1">
+                       {accounts.filter(a => !a.branchId || a.branchId === 'all').map(a => (
+                         <div key={a.id} className="group flex items-center gap-3 p-3 rounded-[calc(var(--radius)-8px)] hover:bg-[color:var(--ghost-hover-bg)] transition-colors">
+                            <div className="h-10 w-10 rounded-full bg-purple-500/10 text-purple-600 flex items-center justify-center font-bold text-sm">
+                               {a.nombre.charAt(0).toUpperCase()}
+                            </div>
+                            <div className="min-w-0 flex-1">
+                               <div className="font-semibold text-sm truncate">{a.nombre}</div>
+                               <div className="text-xs text-[color:var(--muted)] truncate">{a.email}</div>
+                            </div>
+                            <div className="px-2 py-1 rounded-lg bg-[color:var(--outline-bg)] text-[10px] font-bold uppercase tracking-wider">
+                               {a.rol}
+                            </div>
+                            <button
+                              onClick={() => handleImpersonateUser(a)}
+                              className="ml-auto p-2 rounded-full hover:bg-[color:var(--primary-bg)]/10 text-[color:var(--muted)] hover:text-[color:var(--primary-bg)] transition-colors opacity-0 group-hover:opacity-100"
+                              title="Ver como este usuario"
+                            >
+                              <Eye className="h-4 w-4" />
+                            </button>
+                         </div>
+                       ))}
+                    </div>
+                 </div>
+               )}
+
+               {/* Branch Specific Users */}
+               {branches.map(branch => {
+                 const branchUsers = accounts.filter(a => a.branchId === branch.id || (a.branchIds && a.branchIds.includes(branch.id)))
+                 if (branchUsers.length === 0 && !isMultiBranch && !accounts.some(a => !a.branchId || a.branchId === 'all')) return null 
+                 
+                 return (
+                  <div key={branch.id} className="rounded-[var(--radius)] border border-[color:var(--border)] bg-[color:var(--card-bg)] p-1 shadow-sm overflow-hidden flex flex-col group/card">
+                     <div className="p-4 border-b border-[color:var(--border)] bg-[color:var(--outline-bg)]/30 flex items-center gap-2 relative">
+                        <Store className="h-4 w-4 text-[color:var(--primary-bg)]" />
+                        <Input 
+                          value={branch.name} 
+                          onChange={(e) => handleUpdateBranch(branch.id, { name: e.target.value })}
+                          className="font-bold text-sm bg-transparent border-transparent hover:border-[color:var(--border)] focus:border-[color:var(--primary-bg)] h-7 px-1 w-full max-w-[150px]"
+                        />
+                        <span className="ml-auto text-xs font-medium bg-[color:var(--card-bg)] px-2 py-0.5 rounded-full border border-[color:var(--border)]">
+                          {branchUsers.length}
+                        </span>
+                        {branches.length > 1 && (
+                          <button 
+                            onClick={() => handleDeleteBranch(branch.id)}
+                            className="absolute right-2 top-2 p-1.5 rounded-full bg-red-500/10 text-red-500 opacity-0 group-hover/card:opacity-100 transition-opacity hover:bg-red-500/20"
+                            title="Eliminar sucursal"
+                          >
+                            <Trash2 className="h-3 w-3" />
+                          </button>
+                        )}
+                     </div>
+                     <div className="p-2 space-y-1 min-h-[100px]">
+                         {branchUsers.length === 0 ? (
+                           <div className="h-full flex flex-col items-center justify-center text-[color:var(--muted)] text-xs py-8">
+                              <UserPlus className="h-8 w-8 opacity-20 mb-2" />
+                              Sin usuarios asignados
+                           </div>
+                         ) : (
+                           branchUsers.map(a => (
+                             <div key={a.id} className="group flex items-center gap-3 p-3 rounded-[calc(var(--radius)-8px)] hover:bg-[color:var(--ghost-hover-bg)] transition-colors">
+                                <div className="h-10 w-10 rounded-full bg-[color:var(--primary-bg)]/10 text-[color:var(--primary-bg)] flex items-center justify-center font-bold text-sm">
+                                   {a.nombre.charAt(0).toUpperCase()}
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                   <div className="font-semibold text-sm truncate">{a.nombre}</div>
+                                   <div className="text-xs text-[color:var(--muted)] truncate">{a.email}</div>
+                                </div>
+                                <div className="px-2 py-1 rounded-lg bg-[color:var(--outline-bg)] text-[10px] font-bold uppercase tracking-wider">
+                                   {a.rol}
+                                </div>
+                                <button
+                                  onClick={() => handleImpersonateUser(a)}
+                                  className="ml-auto p-2 rounded-full hover:bg-[color:var(--primary-bg)]/10 text-[color:var(--muted)] hover:text-[color:var(--primary-bg)] transition-colors opacity-0 group-hover:opacity-100"
+                                  title="Ver como este usuario"
+                                >
+                                  <Eye className="h-4 w-4" />
+                                </button>
+                             </div>
+                           ))
+                         )}
+                      </div>
+                      <div className="p-2 pt-0">
+                        <Button 
+                          variant="ghost" 
+                          className="w-full text-xs h-8 text-[color:var(--muted)] hover:text-[color:var(--primary-bg)]"
+                          onClick={() => {
+                            setNewUser({ ...newUser, branchId: branch.id })
+                            setShowAddUser(true)
+                          }}
+                        >
+                          <Plus className="h-3 w-3 mr-1.5" /> Agregar a esta sucursal
+                        </Button>
+                      </div>
+                   </div>
+                 )
+               })}
+            </div>
+          )}
+
+          {/* Add User Modal */}
+          {showAddUser && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in">
+              <div className="bg-[color:var(--card-bg)] rounded-[var(--radius)] p-6 w-full max-w-md space-y-6 shadow-2xl animate-in zoom-in-95 duration-200 border border-[color:var(--border)]">
+                <div className="flex items-center justify-between">
+                   <h3 className="font-bold text-xl">{isAddingExistingUser ? 'Asignar Usuario Existente' : 'Nuevo Usuario'}</h3>
+                   <button onClick={() => { setShowAddUser(false); setIsAddingExistingUser(false); }} className="p-2 rounded-full hover:bg-[color:var(--ghost-hover-bg)]">
+                     <X className="h-5 w-5" />
+                   </button>
+                </div>
+                
+                {!isAddingExistingUser ? (
+                  <>
+                    <div className="space-y-4">
+                      <div className="p-4 rounded-xl bg-[color:var(--outline-bg)] border border-[color:var(--border)] mb-4">
+                        <p className="text-sm font-medium mb-2">¿Querés asignar un usuario que ya existe?</p>
+                        <Button variant="outline" size="sm" onClick={() => setIsAddingExistingUser(true)} className="w-full">
+                          <Users className="h-4 w-4 mr-2" />
+                          Seleccionar de la lista
+                        </Button>
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="text-xs font-bold uppercase tracking-wider text-[color:var(--muted)] ml-1">Información Personal</label>
+                        <div className="grid gap-3">
+                          <Input 
+                            placeholder="Nombre completo" 
+                            value={newUser.name || ''} 
+                            onChange={e => setNewUser({...newUser, name: e.target.value})} 
+                            className="rounded-xl h-11"
+                            autoFocus
+                          />
+                          <Input 
+                            placeholder="Correo electrónico" 
+                            value={newUser.email || ''} 
+                            onChange={e => setNewUser({...newUser, email: e.target.value})} 
+                            className="rounded-xl h-11"
+                          />
+                          <Input 
+                            type="password" 
+                            placeholder="Contraseña" 
+                            value={newUser.password || ''} 
+                            onChange={e => setNewUser({...newUser, password: e.target.value})} 
+                            className="rounded-xl h-11"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="text-xs font-bold uppercase tracking-wider text-[color:var(--muted)] ml-1">Permisos</label>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div>
+                            <label className="text-xs font-medium text-[color:var(--muted)] mb-1.5 block">Rol</label>
+                            <Select 
+                              value={newUser.role} 
+                              onChange={e => setNewUser({...newUser, role: e.target.value as any})}
+                              className="rounded-xl h-11"
+                            >
+                              <option value="vendedor">Vendedor</option>
+                              <option value="gerente">Gerente</option>
+                              <option value="admin">Administrador</option>
+                            </Select>
+                          </div>
+                          <div>
+                            <label className="text-xs font-medium text-[color:var(--muted)] mb-1.5 block">Asignar a</label>
+                            <Select 
+                              value={newUser.branchId} 
+                              onChange={e => setNewUser({...newUser, branchId: e.target.value})}
+                              className="rounded-xl h-11"
+                              disabled={!isMultiBranch}
+                            >
+                              {isMultiBranch && <option value="all">Todas (Global)</option>}
+                              {branches.map(b => (
+                                <option key={b.id} value={b.id}>{b.name}</option>
+                              ))}
+                            </Select>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-              ))}
+
+                    <div className="flex gap-3 pt-2">
+                      <Button variant="ghost" className="flex-1 h-12 rounded-xl font-medium" onClick={() => setShowAddUser(false)}>Cancelar</Button>
+                      <Button className="flex-1 h-12 rounded-xl font-bold shadow-lg shadow-[color:var(--primary-bg)]/20" onClick={handleCreateEmployee} disabled={isSaving}>
+                        {isSaving ? <Loader2 className="h-5 w-5 animate-spin" /> : 'Crear Cuenta'}
+                      </Button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="space-y-4">
+                      <div className="space-y-2">
+                        <label className="text-xs font-bold uppercase tracking-wider text-[color:var(--muted)] ml-1">Usuario</label>
+                        <Select 
+                          value={selectedExistingUser}
+                          onChange={(e) => setSelectedExistingUser(e.target.value)}
+                          className="rounded-xl h-11"
+                        >
+                          <option value="">Seleccionar usuario...</option>
+                          {accounts
+                            .filter(a => a.rol !== 'admin' || a.id !== accounts.find(acc => acc.rol === 'admin')?.id) // Filter out main admin if needed or just show all
+                            .map(a => (
+                            <option key={a.id} value={a.id}>{a.nombre} ({a.email})</option>
+                          ))}
+                        </Select>
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="text-xs font-bold uppercase tracking-wider text-[color:var(--muted)] ml-1">Asignar a Sucursal</label>
+                        <Select 
+                          value={newUser.branchId} 
+                          onChange={e => setNewUser({...newUser, branchId: e.target.value})}
+                          className="rounded-xl h-11"
+                        >
+                          {isMultiBranch && <option value="all">Todas (Global)</option>}
+                          {branches.map(b => (
+                            <option key={b.id} value={b.id}>{b.name}</option>
+                          ))}
+                        </Select>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-3 pt-4">
+                      <Button variant="ghost" className="flex-1 h-12 rounded-xl font-medium" onClick={() => setIsAddingExistingUser(false)}>Volver</Button>
+                      <Button className="flex-1 h-12 rounded-xl font-bold shadow-lg shadow-[color:var(--primary-bg)]/20" onClick={handleAddExistingUserToBranch} disabled={!selectedExistingUser || isSaving}>
+                        {isSaving ? <Loader2 className="h-5 w-5 animate-spin" /> : 'Asignar'}
+                      </Button>
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
           )}
         </div>

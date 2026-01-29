@@ -157,6 +157,29 @@ export const RUBROS: Rubro[] = [
     ]
   },
   {
+    id: 'hamburgueseria',
+    name: 'Hamburguesería',
+    icon: 'Utensils',
+    templates: [
+      {
+        id: 'menu-hamburguesas',
+        name: 'Menú de Hamburguesas',
+        description: 'Hamburguesas, papas fritas y bebidas.',
+        items: [
+          { nombre: 'Hamburguesa Simple', categoria: 'Hamburguesas', unidad: 'u', priceCents: 450000, costCents: 200000, stock: 50, trackStock: true, disponible: true },
+          { nombre: 'Hamburguesa Completa', categoria: 'Hamburguesas', unidad: 'u', priceCents: 600000, costCents: 300000, stock: 50, trackStock: true, disponible: true },
+          { nombre: 'Hamburguesa Doble Queso', categoria: 'Hamburguesas', unidad: 'u', priceCents: 750000, costCents: 350000, stock: 40, trackStock: true, disponible: true },
+          { nombre: 'Papas Fritas Medianas', categoria: 'Guarnición', unidad: 'u', priceCents: 300000, costCents: 100000, stock: 100, trackStock: true, disponible: true },
+          { nombre: 'Papas Fritas Grandes', categoria: 'Guarnición', unidad: 'u', priceCents: 450000, costCents: 150000, stock: 100, trackStock: true, disponible: true },
+          { nombre: 'Nuggets de Pollo x6', categoria: 'Pollo', unidad: 'u', priceCents: 400000, costCents: 180000, stock: 60, trackStock: true, disponible: true },
+          { nombre: 'Pancho Clásico', categoria: 'Panchos', unidad: 'u', priceCents: 250000, costCents: 100000, stock: 50, trackStock: true, disponible: true },
+          { nombre: 'Gaseosa Cola 500ml', categoria: 'Bebidas', unidad: 'u', priceCents: 200000, costCents: 120000, stock: 48, trackStock: true, disponible: true },
+          { nombre: 'Cerveza Lata 473ml', categoria: 'Bebidas', unidad: 'u', priceCents: 300000, costCents: 180000, stock: 48, trackStock: true, disponible: true },
+        ]
+      }
+    ]
+  },
+  {
     id: 'libreria',
     name: 'Librería',
     icon: 'BookOpen',

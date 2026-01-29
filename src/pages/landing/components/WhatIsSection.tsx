@@ -73,10 +73,10 @@ export function WhatIsSection({ data }: WhatIsSectionProps) {
               {data.steps.map((s) => {
                 const meta = steps.find((m) => m.id === s.id) ?? steps[0]
                 return (
-                  <div key={s.id} className="relative rounded-3xl border border-black/10 bg-white p-6">
+                  <div key={s.id} className="relative rounded-[var(--radius)] border border-black/10 bg-white p-6">
                     <div className="flex items-start justify-between gap-4">
                       <div
-                        className="flex h-12 w-12 items-center justify-center rounded-2xl"
+                        className="flex h-12 w-12 items-center justify-center rounded-[calc(var(--radius)_-_4px)]"
                         style={{ backgroundColor: `${meta.accent}1a`, color: meta.accent }}
                       >
                         <meta.icon className="h-6 w-6" strokeWidth={1.6} />
@@ -94,7 +94,7 @@ export function WhatIsSection({ data }: WhatIsSectionProps) {
           </div>
         </div>
 
-        <div className="relative mt-14 overflow-hidden rounded-[2.75rem] border border-black/10 bg-gradient-to-b from-white/80 to-white/55 p-8 shadow-[0_24px_70px_rgba(0,0,0,0.10)] backdrop-blur md:mt-16 md:p-10">
+        <div className="relative mt-14 overflow-hidden rounded-[calc(var(--radius)*2)] border border-black/10 bg-gradient-to-b from-white/80 to-white/55 p-8 shadow-[0_24px_70px_rgba(0,0,0,0.10)] backdrop-blur md:mt-16 md:p-10">
           <div className="pointer-events-none absolute inset-0">
             <div className="absolute -left-28 -top-28 h-80 w-80 rounded-full bg-[#0a84ff]/10 blur-3xl" />
             <div className="absolute -bottom-40 -right-32 h-96 w-96 rounded-full bg-[#30d158]/10 blur-3xl" />
@@ -184,7 +184,7 @@ export function WhatIsSection({ data }: WhatIsSectionProps) {
                   </div>
                 </div>
 
-                <div className="mt-4 rounded-3xl border border-black/10 bg-white p-5">
+                <div className="mt-4 rounded-[var(--radius)] border border-black/10 bg-white p-5">
                   <div className="flex items-center justify-between">
                     <div>
                       <div className="text-sm font-semibold tracking-tight text-black">Venta en segundos</div>

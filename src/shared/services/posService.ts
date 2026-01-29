@@ -22,6 +22,8 @@ export type CartItem = {
   priceCents: number
   unidad: string
   quantity: number
+  imageUrl?: string | null
+  category?: string
 }
 
 export type Sale = {
@@ -37,6 +39,7 @@ export type Sale = {
   paymentMethod: 'efectivo' | 'tarjeta' | 'mp'
   customerName?: string
   isPending: boolean
+  status?: 'pending' | 'preparing' | 'ready' | 'delivered'
 }
 
 export type StockMovement = {

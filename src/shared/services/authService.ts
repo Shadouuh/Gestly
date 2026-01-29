@@ -39,6 +39,33 @@ export async function listAccounts(businessId: number | string) {
   return await fetchJson<AccountAdminRecord[]>(`/api/accounts?${params.toString()}`)
 }
 
+export async function updateAccount(id: number | string, data: Partial<AccountAdminRecord>) {
+  return await fetchJson<Account>(`/api/accounts/${id}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  })
+}
+
+export async function createEmployeeAccount(data: {
+  businessId: number | string
+  nombre: string
+  email: string
+  password: string
+  rol: string
+  branchId?: string
+  branchIds?: string[]
+}) {
+  return await fetchJson<Account>('/api/accounts', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      ...data,
+      activo: true,
+    }),
+  })
+}
+
 export async function registerAccount(data: RegistrationData): Promise<LoginResponse | null> {
   const business = await fetchJson<Business>('/api/businesses', {
     method: 'POST',

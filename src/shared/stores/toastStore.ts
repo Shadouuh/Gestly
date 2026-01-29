@@ -1,30 +1,37 @@
 import { create } from 'zustand'
 
-export type ToastType = 'success' | 'error' | 'info'
+export type ToastType = 'success' | 'error' | 'info' | 'warning'
 
 export type ToastItem = {
   id: string
   message: string
   type: ToastType
+  duration?: number
 }
 
 type ToastState = {
-  toasts: ToastItem[]
-  showToast: (message: string, type?: ToastType) => void
-  dismissToast: (id: string) => void
-  clearToasts: () => void
+  toast: ToastItem | null
+  showToast: (message: string, type?: ToastType, duration?: number) => void
+  dismissToast: () => void
 }
 
 export const useToastStore = create<ToastState>((set, get) => ({
-  toasts: [],
-  showToast: (message, type = 'info') => {
+  toast: null,
+  showToast: (message, type = 'info', duration = 3000) => {
     const id = `${Date.now()}-${Math.random().toString(16).slice(2)}`
-    set({ toasts: [...get().toasts, { id, message, type }] })
-    window.setTimeout(() => {
-      set((s) => ({ toasts: s.toasts.filter((t) => t.id !== id) }))
-    }, 2600)
+    // Dismiss existing first to trigger exit animation if needed, 
+    // but for "one only", replacing it immediately is snappier.
+    set({ toast: { id, message, type, duration } })
+
+    if (duration > 0) {
+      setTimeout(() => {
+        const current = get().toast
+        if (current?.id === id) {
+          set({ toast: null })
+        }
+      }, duration)
+    }
   },
-  dismissToast: (id) => set((s) => ({ toasts: s.toasts.filter((t) => t.id !== id) })),
-  clearToasts: () => set({ toasts: [] }),
+  dismissToast: () => set({ toast: null }),
 }))
 

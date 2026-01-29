@@ -17,7 +17,7 @@ export function CtaSection({ data }: CtaSectionProps) {
         <div className="absolute -right-44 top-24 h-[28rem] w-[28rem] rounded-full bg-[#ff2d55]/10 blur-3xl" />
       </div>
       <Container>
-        <div className="relative overflow-hidden rounded-[2.75rem] border border-black/10 bg-white/70 px-6 py-12 text-center shadow-[0_20px_60px_rgba(0,0,0,0.08)] backdrop-blur md:px-10 md:py-16">
+        <div className="relative overflow-hidden rounded-[calc(var(--radius)*2)] border border-black/10 bg-white/70 px-6 py-12 text-center shadow-[0_20px_60px_rgba(0,0,0,0.08)] backdrop-blur md:px-10 md:py-16">
           <div className="pointer-events-none absolute inset-0">
             <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-black/10 to-transparent" />
             <div className="absolute left-1/2 top-10 h-72 w-72 -translate-x-1/2 rounded-full bg-[#0a84ff]/10 blur-3xl" />

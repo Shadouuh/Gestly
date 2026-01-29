@@ -22,7 +22,7 @@ export function TemasPage() {
               'radial-gradient(circle at 1px 1px, rgba(0,0,0,0.10) 1px, rgba(0,0,0,0) 0), repeating-linear-gradient(135deg, rgba(0,0,0,0.04) 0px, rgba(0,0,0,0.04) 1px, rgba(0,0,0,0) 1px, rgba(0,0,0,0) 14px)',
             backgroundSize: '18px 18px, auto',
             color: '#0b0b0d',
-            accent: '#0b0b0d',
+            accent: '#111827',
           },
         },
         {
@@ -178,9 +178,9 @@ export function TemasPage() {
       </div>
 
       <div className="animate-slide-in-up space-y-4">
-        <div className="max-w-3xl rounded-3xl border border-[color:var(--border)] bg-[color:var(--card-bg)] p-6 shadow-[0_10px_30px_var(--shadow)]">
+        <div className="max-w-3xl rounded-[--radius] border border-[color:var(--border)] bg-[color:var(--card-bg)] p-6 shadow-[0_10px_30px_var(--shadow)]">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[color:var(--outline-bg)]">
+            <div className="flex h-10 w-10 items-center justify-center rounded-[calc(var(--radius)_-_4px)] bg-[color:var(--outline-bg)]">
               <Palette className="h-5 w-5" strokeWidth={1.5} />
             </div>
             <div>
@@ -196,7 +196,7 @@ export function TemasPage() {
                 type="button"
                 onClick={() => setTheme('light')}
                 className={[
-                  'flex h-11 items-center justify-center rounded-2xl border px-4 text-sm font-semibold tracking-tight transition-transform active:scale-[0.98]',
+                  'flex h-11 items-center justify-center rounded-[calc(var(--radius)-4px)] border px-4 text-sm font-semibold tracking-tight transition-transform active:scale-[0.98]',
                   theme === 'light'
                     ? 'border-[color:var(--primary-bg)] bg-[color:var(--primary-bg)] text-[color:var(--primary-fg)]'
                     : 'border-[color:var(--border)] bg-[color:var(--outline-bg)] text-[color:var(--text)] hover:bg-[color:var(--outline-hover-bg)]',
@@ -208,7 +208,7 @@ export function TemasPage() {
                 type="button"
                 onClick={() => setTheme('dark')}
                 className={[
-                  'flex h-11 items-center justify-center rounded-2xl border px-4 text-sm font-semibold tracking-tight transition-transform active:scale-[0.98]',
+                  'flex h-11 items-center justify-center rounded-[calc(var(--radius)-4px)] border px-4 text-sm font-semibold tracking-tight transition-transform active:scale-[0.98]',
                   theme === 'dark'
                     ? 'border-[color:var(--primary-bg)] bg-[color:var(--primary-bg)] text-[color:var(--primary-fg)]'
                     : 'border-[color:var(--border)] bg-[color:var(--outline-bg)] text-[color:var(--text)] hover:bg-[color:var(--outline-hover-bg)]',
@@ -229,7 +229,7 @@ export function TemasPage() {
                 type="button"
                 onClick={() => setThemeId(t.id)}
                 className={[
-                  'group relative overflow-hidden rounded-3xl border p-5 text-left shadow-[0_10px_30px_var(--shadow)] transition-transform active:scale-[0.99]',
+                  'group relative overflow-hidden rounded-[--radius] border p-5 text-left shadow-[0_10px_30px_var(--shadow)] transition-transform active:scale-[0.99]',
                   active ? 'border-[color:var(--primary-bg)]' : 'border-[color:var(--border)]',
                 ].join(' ')}
               >
@@ -249,26 +249,26 @@ export function TemasPage() {
                     <div className="mt-1 truncate text-xs tracking-tight text-[color:var(--muted)]">{t.subtitle}</div>
                   </div>
                   {active ? (
-                    <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-[color:var(--primary-bg)] text-[color:var(--primary-fg)]">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-[calc(var(--radius)_-_4px)] bg-[color:var(--primary-bg)] text-[color:var(--primary-fg)]">
                       <Check className="h-4 w-4" strokeWidth={2} />
                     </div>
                   ) : (
                     <div
-                      className="h-9 w-9 rounded-2xl border"
+                      className="h-9 w-9 rounded-[calc(var(--radius)_-_4px)] border"
                       style={{ borderColor: t.preview.accent, backgroundColor: `${t.preview.accent}20` }}
                     />
                   )}
                 </div>
 
-                <div className="relative mt-5 rounded-2xl border border-[color:var(--border)] bg-[color:var(--card-bg)]/65 p-4 backdrop-blur">
+                <div className="relative mt-5 rounded-[calc(var(--radius)_-_4px)] border border-[color:var(--border)] bg-[color:var(--card-bg)]/65 p-4 backdrop-blur">
                   <div className="flex items-center justify-between">
                     <div className="text-xs font-semibold tracking-tight text-[color:var(--muted)]">Vista previa</div>
                     <div className="h-2 w-10 rounded-full" style={{ backgroundColor: t.preview.accent }} />
                   </div>
                   <div className="mt-3 grid grid-cols-3 gap-2">
-                    <div className="h-8 rounded-xl border border-[color:var(--border)] bg-[color:var(--outline-bg)]" />
-                    <div className="h-8 rounded-xl" style={{ backgroundColor: t.preview.accent, opacity: 0.85 }} />
-                    <div className="h-8 rounded-xl border border-[color:var(--border)] bg-[color:var(--outline-bg)]" />
+                    <div className="h-8 rounded-[calc(var(--radius)_-_8px)] border border-[color:var(--border)] bg-[color:var(--outline-bg)]" />
+                    <div className="h-8 rounded-[calc(var(--radius)_-_8px)]" style={{ backgroundColor: t.preview.accent, opacity: 0.85 }} />
+                    <div className="h-8 rounded-[calc(var(--radius)_-_8px)] border border-[color:var(--border)] bg-[color:var(--outline-bg)]" />
                   </div>
                 </div>
               </button>
@@ -276,7 +276,7 @@ export function TemasPage() {
           })}
         </div>
 
-        <div className="max-w-3xl rounded-3xl border border-[color:var(--border)] bg-[color:var(--card-bg)] p-5 text-xs tracking-tight text-[color:var(--muted)] shadow-[0_10px_30px_var(--shadow)]">
+        <div className="max-w-3xl rounded-[--radius] border border-[color:var(--border)] bg-[color:var(--card-bg)] p-5 text-xs tracking-tight text-[color:var(--muted)] shadow-[0_10px_30px_var(--shadow)]">
           El fondo y los acentos cambian automáticamente según el tema elegido.
         </div>
       </div>

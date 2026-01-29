@@ -2,10 +2,11 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 import type { CartItem, Product } from '@shared/services/posService'
+import { useToastStore } from './toastStore'
 
 type CartState = {
   items: CartItem[]
-  addProduct: (product: Product) => void
+  addProduct: (product: Product, quantity?: number) => void
   updateQuantity: (productId: number | string, quantity: number) => void
   removeItem: (productId: number | string) => void
   clear: () => void
@@ -17,12 +18,15 @@ export const useCartStore = create<CartState>()(
   persist(
     (set, get) => ({
       items: [],
-      addProduct: (product) =>
+      addProduct: (product, quantity = 1) => {
         set((s) => {
           const existing = s.items.find((i) => i.productId === product.id)
+          // Trigger toast
+          useToastStore.getState().showToast(`Se añadió ${product.nombre} al carrito`, 'success', 2000)
+          
           if (existing) {
             return {
-              items: s.items.map((i) => (i.productId === product.id ? { ...i, quantity: i.quantity + 1 } : i)),
+              items: s.items.map((i) => (i.productId === product.id ? { ...i, quantity: i.quantity + quantity } : i)),
             }
           }
           return {
@@ -33,11 +37,14 @@ export const useCartStore = create<CartState>()(
                 nombre: product.nombre,
                 priceCents: product.priceCents,
                 unidad: product.unidad,
-                quantity: 1,
+                quantity: quantity,
+                imageUrl: product.imageUrl,
+                category: product.categoria,
               },
             ],
           }
-        }),
+        })
+      },
       updateQuantity: (productId, quantity) =>
         set((s) => {
           if (quantity <= 0) return { items: s.items.filter((i) => i.productId !== productId) }

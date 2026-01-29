@@ -79,7 +79,7 @@ export function LandingHeader() {
                 type="button"
                 onClick={() => setIsOpen((v) => !v)}
                 aria-label={isOpen ? 'Cerrar menú' : 'Abrir menú'}
-                className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-black/10 bg-white/80 text-black/80 shadow-sm backdrop-blur hover:bg-white md:hidden"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-[var(--radius)] border border-black/10 bg-white/80 text-black/80 shadow-sm backdrop-blur hover:bg-white md:hidden"
               >
                 {isOpen ? <X className="h-5 w-5" strokeWidth={2} /> : <Menu className="h-5 w-5" strokeWidth={2} />}
               </button>
@@ -99,7 +99,7 @@ export function LandingHeader() {
                       key={item.href}
                       href={item.href}
                       onClick={() => setIsOpen(false)}
-                      className="flex h-12 items-center justify-between rounded-2xl px-4 text-sm font-semibold tracking-tight text-black/80 hover:bg-black/5"
+                      className="flex h-12 items-center justify-between rounded-[calc(var(--radius)_-_4px)] px-4 text-sm font-semibold tracking-tight text-black/80 hover:bg-black/5"
                     >
                       {item.label}
                       <span className="text-black/40">↗</span>
@@ -110,14 +110,14 @@ export function LandingHeader() {
                   <Link
                     to="/login"
                     onClick={() => setIsOpen(false)}
-                    className="inline-flex h-11 items-center justify-center rounded-2xl border border-black/10 bg-white text-sm font-semibold tracking-tight text-black/75 hover:bg-black/5"
+                    className="inline-flex h-11 items-center justify-center rounded-[var(--radius)] border border-black/10 bg-white text-sm font-semibold tracking-tight text-black/75 hover:bg-black/5"
                   >
                     Iniciar sesión
                   </Link>
                   <Link
                     to="/login"
                     onClick={() => setIsOpen(false)}
-                    className="inline-flex h-11 items-center justify-center rounded-2xl bg-[#0a84ff] text-sm font-semibold tracking-tight text-white shadow-[0_12px_22px_rgba(10,132,255,0.25)] hover:bg-[#0a84ff]/90"
+                    className="inline-flex h-11 items-center justify-center rounded-[var(--radius)] bg-[#0a84ff] text-sm font-semibold tracking-tight text-white shadow-[0_12px_22px_rgba(10,132,255,0.25)] hover:bg-[#0a84ff]/90"
                   >
                     Comenzar
                   </Link>

@@ -48,7 +48,7 @@ export function LandingFooter({ tagline, links }: LandingFooterProps) {
       </div>
 
       <Container>
-        <div className="relative overflow-hidden rounded-[2.5rem] border border-black/10 bg-white/70 px-6 py-10 shadow-[0_20px_60px_rgba(0,0,0,0.08)] backdrop-blur md:px-10">
+        <div className="relative overflow-hidden rounded-[calc(var(--radius)*2)] border border-black/10 bg-white/70 px-6 py-10 shadow-[0_20px_60px_rgba(0,0,0,0.08)] backdrop-blur md:px-10">
           <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
             <div className="min-w-0 space-y-4">
               <div className="flex items-center gap-3">
@@ -82,7 +82,7 @@ export function LandingFooter({ tagline, links }: LandingFooterProps) {
                     key={label}
                     href={href}
                     aria-label={label}
-                    className="group inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-black/10 bg-white/70 text-black/65 shadow-sm transition hover:-translate-y-0.5 hover:bg-white hover:text-black"
+                    className="group inline-flex h-11 w-11 items-center justify-center rounded-[var(--radius)] border border-black/10 bg-white/70 text-black/65 shadow-sm transition hover:-translate-y-0.5 hover:bg-white hover:text-black"
                   >
                     <Icon className="h-5 w-5" strokeWidth={1.8} />
                   </a>

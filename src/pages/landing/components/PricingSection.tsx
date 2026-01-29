@@ -117,7 +117,7 @@ export function PricingSection({ data }: PricingSectionProps) {
           </div>
 
           <div className="relative hidden md:block">
-            <div className="overflow-hidden rounded-3xl border border-black/10 bg-white">
+            <div className="overflow-hidden rounded-[calc(var(--radius)+8px)] border border-black/10 bg-white">
               <div className="grid border-b border-black/10 bg-[#fbfbfe]" style={gridStyle}>
                 <div className="p-6" />
                 {ordered.map((id) => {
@@ -193,7 +193,7 @@ export function PricingSection({ data }: PricingSectionProps) {
               if (!p) return null
               const ars = p.price * ARS_PER_USD
               return (
-                <div key={id} className="overflow-hidden rounded-3xl border border-black/10 bg-white">
+                <div key={id} className="overflow-hidden rounded-[var(--radius)] border border-black/10 bg-white">
                   <div className="border-b border-black/10 bg-[#fbfbfe] p-6">
                     <div className="flex items-start justify-between gap-4">
                       <div>
@@ -231,7 +231,7 @@ export function PricingSection({ data }: PricingSectionProps) {
                           <div className="flex items-center gap-3">
                             <div
                               className={[
-                                'flex h-8 w-8 items-center justify-center rounded-xl border',
+                                'flex h-8 w-8 items-center justify-center rounded-[calc(var(--radius)_-_8px)] border',
                                 v.included
                                   ? 'border-[#0a84ff]/20 bg-[#0a84ff]/10 text-[#0a84ff]'
                                   : 'border-black/10 bg-black/5 text-black/40',

@@ -40,7 +40,7 @@ export function FeaturesSection({ data }: FeaturesSectionProps) {
         <div className="absolute -right-40 top-10 h-96 w-96 rounded-full bg-[#30d158]/8 blur-3xl" />
       </div>
       <Container>
-        <div className="relative overflow-hidden rounded-[2.75rem] border border-black/10 bg-white/70 px-6 py-12 shadow-[0_20px_60px_rgba(0,0,0,0.08)] backdrop-blur md:px-10 md:py-16">
+        <div className="relative overflow-hidden rounded-[calc(var(--radius)*2)] border border-black/10 bg-white/70 px-6 py-12 shadow-[0_20px_60px_rgba(0,0,0,0.08)] backdrop-blur md:px-10 md:py-16">
           <div className="pointer-events-none absolute inset-0">
             <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-black/10 to-transparent" />
             <div className="absolute -left-24 -top-24 h-72 w-72 rounded-full bg-[#0a84ff]/10 blur-3xl" />
@@ -67,7 +67,7 @@ export function FeaturesSection({ data }: FeaturesSectionProps) {
                 return (
                   <div
                     key={f.id}
-                    className="group relative overflow-hidden rounded-3xl border border-black/10 bg-white p-6 shadow-[0_1px_0_rgba(0,0,0,0.04)] transition-transform hover:-translate-y-0.5"
+                    className="group relative overflow-hidden rounded-[var(--radius)] border border-black/10 bg-white p-6 shadow-[0_1px_0_rgba(0,0,0,0.04)] transition-transform hover:-translate-y-0.5"
                   >
                     <div
                       className="pointer-events-none absolute -right-12 -top-14 h-32 w-32 rounded-full blur-2xl"
@@ -76,7 +76,7 @@ export function FeaturesSection({ data }: FeaturesSectionProps) {
                     <div className="relative">
                       <div className="mb-4 flex items-center gap-3">
                         <div
-                          className="flex h-11 w-11 items-center justify-center rounded-2xl"
+                          className="flex h-11 w-11 items-center justify-center rounded-[var(--radius)]"
                           style={{ backgroundColor: `${accent}1a`, color: accent }}
                         >
                           <Icon className="h-5 w-5" strokeWidth={1.6} />

@@ -5,8 +5,12 @@ import {
   ArrowRight,
   BarChart3,
   Calendar,
+  CheckCircle2,
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
+  ChevronUp,
+  Clock,
   CreditCard,
   DollarSign,
   LayoutGrid,
@@ -16,6 +20,7 @@ import {
   Search,
   TrendingDown,
   TrendingUp,
+  Truck,
   User,
   Users,
   Wallet,
@@ -28,7 +33,7 @@ import { Select } from '@shared/components/ui/Select'
 import { useAuthStore } from '@shared/stores/authStore'
 import { useSalesStore } from '@shared/stores/salesStore'
 import { useToastStore } from '@shared/stores/toastStore'
-import { type Product, getProducts, type Sale, type StockMovement, getStockMovements } from '@shared/services/posService'
+import { type Product, getProducts, type Sale, type StockMovement, getStockMovements, patchSale } from '@shared/services/posService'
 
 type ActiveTab = 'ventas' | 'fiados' | 'stock'
 type ViewType = 'daily' | 'weekly' | 'monthly' | 'yearly'
@@ -94,6 +99,170 @@ function formatDateRange(date: Date, type: ViewType): string {
     return start.toLocaleDateString(locale, { year: 'numeric' })
   }
   return ''
+}
+
+function OrderCard({ sale }: { sale: Sale & { status?: string } }) {
+  const [expanded, setExpanded] = useState(false)
+  // Default status logic if not present
+  const [status, setStatus] = useState<string>(sale.status || (sale.isPending ? 'pending' : 'delivered'))
+  const [loading, setLoading] = useState(false)
+  const showToast = useToastStore((s) => s.showToast)
+  
+  const handleStatusChange = async (newStatus: string) => {
+    if (loading) return
+    setLoading(true)
+    try {
+      await patchSale(sale.id, { status: newStatus as any })
+      setStatus(newStatus)
+      showToast('Estado actualizado', 'success')
+    } catch (error) {
+      showToast('Error al actualizar estado', 'error')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const getStatusColor = (s: string) => {
+    switch (s) {
+      case 'pending': return 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 border-amber-200 dark:border-amber-800'
+      case 'preparing': return 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 border-blue-200 dark:border-blue-800'
+      case 'ready': return 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400 border-indigo-200 dark:border-indigo-800'
+      case 'delivered': return 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800'
+      default: return 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400 border-gray-200 dark:border-gray-700'
+    }
+  }
+
+  const getStatusLabel = (s: string) => {
+    switch (s) {
+      case 'pending': return 'Pendiente'
+      case 'preparing': return 'En preparación'
+      case 'ready': return 'En camino'
+      case 'delivered': return 'Entregado'
+      default: return s
+    }
+  }
+
+  const dateObj = new Date(sale.date)
+
+  return (
+    <div className={`bg-[color:var(--card-bg)] border border-[color:var(--border)] rounded-[--radius] overflow-hidden transition-all duration-300 ${expanded ? 'shadow-lg ring-1 ring-[color:var(--border)]' : 'shadow-sm hover:shadow-md'}`}>
+      <div 
+        className="p-3 flex flex-col gap-2 cursor-pointer select-none"
+        onClick={() => setExpanded(!expanded)}
+      >
+        {/* Header Row */}
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex items-center gap-3 min-w-0">
+             <div className={`h-10 w-10 rounded-full flex items-center justify-center border-2 shrink-0 transition-colors ${getStatusColor(status)}`}>
+                {status === 'delivered' ? <CheckCircle2 className="h-5 w-5" /> : 
+                 status === 'ready' ? <Truck className="h-5 w-5" /> :
+                 status === 'preparing' ? <Package className="h-5 w-5" /> :
+                 <Clock className="h-5 w-5" />}
+             </div>
+             <div className="min-w-0">
+                <div className="flex items-center gap-2">
+                   <span className="font-bold text-sm text-[color:var(--text)] truncate">
+                      #{String(sale.id).slice(-4)} • {sale.customerName || 'Cliente Ocasional'}
+                   </span>
+                </div>
+                <div className="flex items-center gap-2 text-[10px] text-[color:var(--muted)] mt-0.5">
+                   <Clock className="h-3 w-3" />
+                   {dateObj.toLocaleString('es-AR', { hour: '2-digit', minute: '2-digit' })} • {dateObj.toLocaleDateString('es-AR', { day: 'numeric', month: 'short' })}
+                </div>
+             </div>
+          </div>
+          
+          <div className="text-right shrink-0">
+             <div className="text-base font-extrabold tracking-tight text-[color:var(--text)]">
+                ${(sale.totalCents / 100).toFixed(2)}
+             </div>
+             <div className={`text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full inline-block border ${getStatusColor(status)}`}>
+                {getStatusLabel(status)}
+             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Expanded Content */}
+      {expanded && (
+        <div className="px-3 pb-3 pt-0 animate-in slide-in-from-top-2 duration-200">
+          <div className="h-px w-full bg-[color:var(--border)] my-2" />
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+             <div className="space-y-2">
+                <h4 className="text-[10px] font-bold uppercase tracking-wider text-[color:var(--muted)]">Productos</h4>
+                <div className="space-y-1.5">
+                   {sale.items.map((item, idx) => (
+                      <div key={idx} className="flex justify-between items-center text-xs p-1.5 rounded-[calc(var(--radius)_-_8px)] bg-[color:var(--ghost-hover-bg)]/50">
+                         <div className="flex items-center gap-2">
+                            <span className="font-bold text-[color:var(--text)] bg-[color:var(--card-bg)] px-1.5 py-0.5 rounded-[calc(var(--radius)_-_10px)] shadow-sm border border-[color:var(--border)]">{item.quantity}x</span>
+                            <span className="text-[color:var(--text)]">{item.nombre}</span>
+                         </div>
+                         <span className="font-medium text-[color:var(--muted)]">${((item.priceCents * item.quantity) / 100).toFixed(2)}</span>
+                      </div>
+                   ))}
+                </div>
+             </div>
+
+             <div className="space-y-4">
+                <div>
+                   <h4 className="text-xs font-bold uppercase tracking-wider text-[color:var(--muted)] mb-2">Detalles de Entrega</h4>
+                   <div className="bg-[color:var(--ghost-hover-bg)]/50 p-3 rounded-[calc(var(--radius)_-_4px)] space-y-2 text-sm">
+                      <div className="flex justify-between">
+                         <span className="text-[color:var(--muted)]">Método de pago</span>
+                         <span className="font-bold capitalize">{sale.paymentMethod}</span>
+                      </div>
+                      <div className="flex justify-between">
+                         <span className="text-[color:var(--muted)]">Vendedor</span>
+                         <span className="font-medium">{sale.userName || '-'}</span>
+                      </div>
+                      <div className="flex justify-between">
+                         <span className="text-[color:var(--muted)]">Estado de pago</span>
+                         <span className={`font-bold ${sale.isPending ? 'text-amber-600' : 'text-emerald-600'}`}>
+                            {sale.isPending ? 'Pendiente (Fiado)' : 'Pagado'}
+                         </span>
+                      </div>
+                   </div>
+                </div>
+
+                <div>
+                   <h4 className="text-xs font-bold uppercase tracking-wider text-[color:var(--muted)] mb-2">Actualizar Estado</h4>
+                   <div className="flex flex-wrap gap-2">
+                      {[
+                        { id: 'pending', label: 'Pendiente', icon: Clock },
+                        { id: 'preparing', label: 'Preparando', icon: Package },
+                        { id: 'ready', label: 'En camino', icon: Truck },
+                        { id: 'delivered', label: 'Entregado', icon: CheckCircle2 }
+                      ].map((s) => (
+                         <button
+                           key={s.id}
+                           onClick={() => handleStatusChange(s.id)}
+                           disabled={loading}
+                           className={`flex items-center gap-1.5 px-3 py-2 rounded-[calc(var(--radius)_-_8px)] text-xs font-bold transition-all ${
+                              status === s.id 
+                                 ? 'bg-[color:var(--primary-bg)] text-[color:var(--primary-fg)] shadow-md ring-2 ring-offset-1 ring-[color:var(--primary-bg)]' 
+                                 : 'bg-[color:var(--card-bg)] border border-[color:var(--border)] text-[color:var(--muted)] hover:bg-[color:var(--ghost-hover-bg)] hover:text-[color:var(--text)]'
+                           }`}
+                         >
+                            <s.icon className="h-3.5 w-3.5" />
+                            {s.label}
+                         </button>
+                      ))}
+                   </div>
+                </div>
+             </div>
+          </div>
+          
+          <div className="mt-4 flex justify-end">
+             <Button variant="ghost" size="sm" onClick={() => setExpanded(false)} className="text-xs">
+                <ChevronUp className="mr-1 h-3 w-3" />
+                Ocultar detalles
+             </Button>
+          </div>
+        </div>
+      )}
+    </div>
+  )
 }
 
 export function VentasPage() {
@@ -383,22 +552,22 @@ export function VentasPage() {
            <h1 className="text-2xl font-bold tracking-tight text-[color:var(--text)]">Balance General</h1>
            <p className="text-sm text-[color:var(--muted)]">Reporte de ingresos, stock y cuentas pendientes.</p>
         </div>
-        <div className="flex bg-[color:var(--card-bg)] p-1 rounded-lg border border-[color:var(--border)] w-fit overflow-x-auto">
+        <div className="flex bg-[color:var(--card-bg)] p-1 rounded-[calc(var(--radius)-8px)] border border-[color:var(--border)] w-full max-w-[100vw] sm:w-fit overflow-x-auto">
            <button 
              onClick={() => setActiveTab('ventas')}
-             className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all whitespace-nowrap ${activeTab === 'ventas' ? 'bg-[color:var(--primary-bg)] text-[color:var(--primary-fg)] shadow-sm' : 'text-[color:var(--muted)] hover:text-[color:var(--text)]'}`}
+             className={`px-4 py-1.5 rounded-[calc(var(--radius)-10px)] text-sm font-medium transition-all whitespace-nowrap ${activeTab === 'ventas' ? 'bg-[color:var(--primary-bg)] text-[color:var(--primary-fg)] shadow-sm' : 'text-[color:var(--muted)] hover:text-[color:var(--text)]'}`}
            >
              Reporte Ventas
            </button>
            <button 
              onClick={() => setActiveTab('stock')}
-             className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all whitespace-nowrap ${activeTab === 'stock' ? 'bg-[color:var(--primary-bg)] text-[color:var(--primary-fg)] shadow-sm' : 'text-[color:var(--muted)] hover:text-[color:var(--text)]'}`}
+             className={`px-4 py-1.5 rounded-[calc(var(--radius)-10px)] text-sm font-medium transition-all whitespace-nowrap ${activeTab === 'stock' ? 'bg-[color:var(--primary-bg)] text-[color:var(--primary-fg)] shadow-sm' : 'text-[color:var(--muted)] hover:text-[color:var(--text)]'}`}
            >
              Reporte Stock
            </button>
            <button 
              onClick={() => setActiveTab('fiados')}
-             className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all whitespace-nowrap ${activeTab === 'fiados' ? 'bg-[color:var(--primary-bg)] text-[color:var(--primary-fg)] shadow-sm' : 'text-[color:var(--muted)] hover:text-[color:var(--text)]'}`}
+             className={`px-4 py-1.5 rounded-[calc(var(--radius)-10px)] text-sm font-medium transition-all whitespace-nowrap ${activeTab === 'fiados' ? 'bg-[color:var(--primary-bg)] text-[color:var(--primary-fg)] shadow-sm' : 'text-[color:var(--muted)] hover:text-[color:var(--text)]'}`}
            >
              Fiados
            </button>
@@ -410,26 +579,26 @@ export function VentasPage() {
           
           {/* Controls */}
           <div className="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center">
-             <div className="flex items-center gap-2 bg-[color:var(--card-bg)] rounded-lg border border-[color:var(--border)] p-1">
+             <div className="flex items-center gap-2 bg-[color:var(--card-bg)] rounded-[calc(var(--radius)-8px)] border border-[color:var(--border)] p-1">
                 {(['daily', 'weekly', 'monthly', 'yearly'] as const).map(t => (
                   <button
                     key={t}
                     onClick={() => setViewType(t)}
-                    className={`px-3 py-1.5 rounded-md text-xs font-semibold uppercase tracking-wide transition-all ${viewType === t ? 'bg-[color:var(--primary-bg)] text-[color:var(--primary-fg)]' : 'text-[color:var(--muted)] hover:bg-[color:var(--ghost-hover-bg)]'}`}
+                    className={`px-3 py-1.5 rounded-[calc(var(--radius)-10px)] text-xs font-semibold uppercase tracking-wide transition-all ${viewType === t ? 'bg-[color:var(--primary-bg)] text-[color:var(--primary-fg)]' : 'text-[color:var(--muted)] hover:bg-[color:var(--ghost-hover-bg)]'}`}
                   >
                     {{daily: 'Diario', weekly: 'Semanal', monthly: 'Mensual', yearly: 'Anual'}[t]}
                   </button>
                 ))}
              </div>
 
-             <div className="flex items-center gap-4 bg-[color:var(--card-bg)] px-2 py-1 rounded-lg border border-[color:var(--border)]">
-                <button onClick={() => navigateDate(-1)} className="p-1.5 hover:bg-[color:var(--ghost-hover-bg)] rounded-md text-[color:var(--muted)] hover:text-[color:var(--text)]">
+             <div className="flex items-center gap-4 bg-[color:var(--card-bg)] px-2 py-1 rounded-[calc(var(--radius)-8px)] border border-[color:var(--border)]">
+                <button onClick={() => navigateDate(-1)} className="p-1.5 hover:bg-[color:var(--ghost-hover-bg)] rounded-[calc(var(--radius)-10px)] text-[color:var(--muted)] hover:text-[color:var(--text)]">
                   <ChevronLeft className="h-5 w-5" />
                 </button>
                 <span className="text-sm font-semibold min-w-[140px] text-center capitalize tabular-nums">
                   {formatDateRange(currentDate, viewType)}
                 </span>
-                <button onClick={() => navigateDate(1)} className="p-1.5 hover:bg-[color:var(--ghost-hover-bg)] rounded-md text-[color:var(--muted)] hover:text-[color:var(--text)]">
+                <button onClick={() => navigateDate(1)} className="p-1.5 hover:bg-[color:var(--ghost-hover-bg)] rounded-[calc(var(--radius)-10px)] text-[color:var(--muted)] hover:text-[color:var(--text)]">
                   <ChevronRight className="h-5 w-5" />
                 </button>
              </div>
@@ -438,14 +607,14 @@ export function VentasPage() {
           {/* Stats Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
              {/* Total Revenue */}
-             <div className="group relative overflow-hidden rounded-2xl border border-[color:var(--border)] bg-[color:var(--card-bg)] p-6 shadow-sm transition-all hover:shadow-lg hover:-translate-y-1">
+             <div className="group relative overflow-hidden rounded-[--radius] border border-[color:var(--border)] bg-[color:var(--card-bg)] p-6 shadow-sm transition-all hover:shadow-lg hover:-translate-y-1">
                 <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity">
                    <DollarSign className="h-24 w-24 -mr-8 -mt-8 text-indigo-500" strokeWidth={1} />
                 </div>
                 
                 <div className="relative z-10">
                    <div className="flex items-center gap-3 mb-4">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-100 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-300">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-[calc(var(--radius)-4px)] bg-indigo-100 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-300">
                          <DollarSign className="h-5 w-5" strokeWidth={2.5} />
                       </div>
                       <span className="text-sm font-bold uppercase tracking-wider text-[color:var(--muted)]">Ingresos</span>
@@ -465,14 +634,14 @@ export function VentasPage() {
              </div>
 
              {/* COGS (Expenses equivalent) */}
-             <div className="group relative overflow-hidden rounded-2xl border border-[color:var(--border)] bg-[color:var(--card-bg)] p-6 shadow-sm transition-all hover:shadow-lg hover:-translate-y-1">
+             <div className="group relative overflow-hidden rounded-[--radius] border border-[color:var(--border)] bg-[color:var(--card-bg)] p-6 shadow-sm transition-all hover:shadow-lg hover:-translate-y-1">
                 <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity">
                    <Package className="h-24 w-24 -mr-8 -mt-8 text-rose-500" strokeWidth={1} />
                 </div>
 
                 <div className="relative z-10">
                    <div className="flex items-center gap-3 mb-4">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-rose-100 text-rose-700 dark:bg-rose-500/20 dark:text-rose-300">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-[calc(var(--radius)-4px)] bg-rose-100 text-rose-700 dark:bg-rose-500/20 dark:text-rose-300">
                          <TrendingDown className="h-5 w-5" strokeWidth={2.5} />
                       </div>
                       <span className="text-sm font-bold uppercase tracking-wider text-[color:var(--muted)]">Costos</span>
@@ -492,14 +661,14 @@ export function VentasPage() {
              </div>
 
              {/* Profit */}
-             <div className="group relative overflow-hidden rounded-2xl border border-[color:var(--border)] bg-[color:var(--card-bg)] p-6 shadow-sm transition-all hover:shadow-lg hover:-translate-y-1">
+             <div className="group relative overflow-hidden rounded-[--radius] border border-[color:var(--border)] bg-[color:var(--card-bg)] p-6 shadow-sm transition-all hover:shadow-lg hover:-translate-y-1">
                 <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity">
                    <Wallet className="h-24 w-24 -mr-8 -mt-8 text-emerald-500" strokeWidth={1} />
                 </div>
 
                 <div className="relative z-10">
                    <div className="flex items-center gap-3 mb-4">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-300">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-[calc(var(--radius)-4px)] bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-300">
                          <Wallet className="h-5 w-5" strokeWidth={2.5} />
                       </div>
                       <span className="text-sm font-bold uppercase tracking-wider text-[color:var(--muted)]">Utilidad Neta</span>
@@ -519,14 +688,14 @@ export function VentasPage() {
              </div>
 
              {/* Pending */}
-             <div className="group relative overflow-hidden rounded-2xl border border-[color:var(--border)] bg-[color:var(--card-bg)] p-6 shadow-sm transition-all hover:shadow-lg hover:-translate-y-1">
+             <div className="group relative overflow-hidden rounded-[--radius] border border-[color:var(--border)] bg-[color:var(--card-bg)] p-6 shadow-sm transition-all hover:shadow-lg hover:-translate-y-1">
                 <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity">
                    <AlertCircle className="h-24 w-24 -mr-8 -mt-8 text-amber-500" strokeWidth={1} />
                 </div>
 
                 <div className="relative z-10">
                    <div className="flex items-center gap-3 mb-4">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-300">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-[calc(var(--radius)-4px)] bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-300">
                          <AlertCircle className="h-5 w-5" strokeWidth={2.5} />
                       </div>
                       <span className="text-sm font-bold uppercase tracking-wider text-[color:var(--muted)]">Por Cobrar</span>
@@ -549,9 +718,9 @@ export function VentasPage() {
           {/* Charts Section */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
              {/* Sales Trend Chart */}
-             <div className="lg:col-span-2 bg-[color:var(--card-bg)] border border-[color:var(--border)] rounded-2xl p-6 shadow-sm">
+             <div className="lg:col-span-2 bg-[color:var(--card-bg)] border border-[color:var(--border)] rounded-[--radius] p-6 shadow-sm">
                 <h3 className="text-base font-bold mb-6 flex items-center gap-2">
-                   <div className="p-2 rounded-lg bg-[color:var(--primary-bg)]/10 text-[color:var(--primary-bg)]">
+                   <div className="p-2 rounded-[calc(var(--radius)-8px)] bg-[color:var(--primary-bg)]/10 text-[color:var(--primary-bg)]">
                       <BarChart3 className="h-4 w-4" />
                    </div>
                    Tendencia de Ingresos
@@ -561,10 +730,10 @@ export function VentasPage() {
                       <div key={i} className="flex-1 flex flex-col justify-end items-center gap-3 group h-full">
                          <div className="w-full relative flex-1 flex items-end">
                             <div 
-                              className="w-full bg-[color:var(--primary-bg)] opacity-80 group-hover:opacity-100 rounded-t-lg transition-all relative group-hover:scale-y-[1.05] origin-bottom min-h-[6px] shadow-[0_0_10px_rgba(0,0,0,0.05)]"
+                              className="w-full bg-[color:var(--primary-bg)] opacity-80 group-hover:opacity-100 rounded-t-[calc(var(--radius)-8px)] transition-all relative group-hover:scale-y-[1.05] origin-bottom min-h-[6px] shadow-[0_0_10px_rgba(0,0,0,0.05)]"
                               style={{ height: `${(d.value / maxChartValue) * 100}%` }}
                             >
-                               <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-[color:var(--text)] text-[color:var(--bg)] text-[10px] font-bold py-1.5 px-2.5 rounded-lg opacity-0 group-hover:opacity-100 transition-all pointer-events-none whitespace-nowrap z-10 shadow-xl transform translate-y-2 group-hover:translate-y-0">
+                               <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-[color:var(--text)] text-[color:var(--bg)] text-[10px] font-bold py-1.5 px-2.5 rounded-[calc(var(--radius)-8px)] opacity-0 group-hover:opacity-100 transition-all pointer-events-none whitespace-nowrap z-10 shadow-xl transform translate-y-2 group-hover:translate-y-0">
                                   ${(d.value / 100).toFixed(0)}
                                   <div className="absolute bottom-[-4px] left-1/2 -translate-x-1/2 w-2 h-2 bg-[color:var(--text)] rotate-45" />
                                </div>
@@ -579,9 +748,9 @@ export function VentasPage() {
              </div>
 
              {/* Top Products */}
-             <div className="bg-[color:var(--card-bg)] border border-[color:var(--border)] rounded-2xl p-6 shadow-sm">
+             <div className="bg-[color:var(--card-bg)] border border-[color:var(--border)] rounded-[--radius] p-6 shadow-sm">
                 <h3 className="text-base font-bold mb-6 flex items-center gap-2">
-                   <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+                   <div className="p-2 rounded-[calc(var(--radius)-8px)] bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
                       <TrendingUp className="h-4 w-4" />
                    </div>
                    Más Vendidos
@@ -616,9 +785,9 @@ export function VentasPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Branch Breakdown */}
               {breakdown.branches.length > 1 && (
-                <div className="bg-[color:var(--card-bg)] border border-[color:var(--border)] rounded-2xl p-6 shadow-sm">
+                <div className="bg-[color:var(--card-bg)] border border-[color:var(--border)] rounded-[--radius] p-6 shadow-sm">
                    <h3 className="text-base font-bold mb-4 flex items-center gap-2">
-                      <div className="p-2 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400">
+                      <div className="p-2 rounded-[calc(var(--radius)-8px)] bg-blue-500/10 text-blue-600 dark:text-blue-400">
                          <Building2 className="h-4 w-4" />
                       </div>
                       Ingresos por Sucursal
@@ -648,9 +817,9 @@ export function VentasPage() {
 
               {/* User Breakdown */}
               {breakdown.users.length > 1 && (
-                <div className="bg-[color:var(--card-bg)] border border-[color:var(--border)] rounded-2xl p-6 shadow-sm">
+                <div className="bg-[color:var(--card-bg)] border border-[color:var(--border)] rounded-[--radius] p-6 shadow-sm">
                    <h3 className="text-base font-bold mb-4 flex items-center gap-2">
-                      <div className="p-2 rounded-lg bg-purple-500/10 text-purple-600 dark:text-purple-400">
+                      <div className="p-2 rounded-[calc(var(--radius)-8px)] bg-purple-500/10 text-purple-600 dark:text-purple-400">
                          <Users className="h-4 w-4" />
                       </div>
                       Rendimiento del Equipo
@@ -683,7 +852,7 @@ export function VentasPage() {
           {/* Sales List */}
           <div className="space-y-4">
              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold">Detalle de Ventas</h3>
+                <h3 className="text-lg font-bold tracking-tight">Mis Pedidos</h3>
                 <div className="flex gap-2">
                    <div className="relative">
                       <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[color:var(--muted)]" />
@@ -691,103 +860,67 @@ export function VentasPage() {
                         value={searchQuery}
                         onChange={e => setSearchQuery(e.target.value)}
                         placeholder="Buscar..."
-                        className="h-9 pl-9 w-[200px] text-xs"
+                        className="h-10 pl-9 w-[200px] text-sm rounded-[calc(var(--radius)-4px)] bg-[color:var(--card-bg)] border-[color:var(--border)]"
                       />
-                   </div>
-                   <div className="flex bg-[color:var(--card-bg)] border border-[color:var(--border)] rounded-lg p-0.5">
-                      <button 
-                        onClick={() => setDisplayMode('cards')}
-                        className={`p-1.5 rounded ${displayMode === 'cards' ? 'bg-[color:var(--ghost-hover-bg)] text-[color:var(--text)]' : 'text-[color:var(--muted)]'}`}
-                      >
-                         <LayoutGrid className="h-4 w-4" />
-                      </button>
-                      <button 
-                        onClick={() => setDisplayMode('table')}
-                        className={`p-1.5 rounded ${displayMode === 'table' ? 'bg-[color:var(--ghost-hover-bg)] text-[color:var(--text)]' : 'text-[color:var(--muted)]'}`}
-                      >
-                         <List className="h-4 w-4" />
-                      </button>
                    </div>
                 </div>
              </div>
 
-             {filteredSales.length === 0 ? (
-                <div className="p-12 text-center border border-dashed border-[color:var(--border)] rounded-lg text-[color:var(--muted)] text-sm">
-                   No se encontraron ventas en este periodo.
-                </div>
+             {status === 'loading' ? (
+               <div className="p-10 flex justify-center">
+                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[color:var(--primary-bg)]" />
+               </div>
+             ) : filteredSales.length === 0 ? (
+               <div className="text-center p-10 border border-dashed border-[color:var(--border)] rounded-[--radius] text-[color:var(--muted)]">
+                 No se encontraron ventas
+               </div>
+             ) : displayMode === 'cards' ? (
+               <div className="space-y-3">
+                 {filteredSales.slice().reverse().map((sale) => (
+                   <OrderCard key={sale.id} sale={sale} />
+                 ))}
+               </div>
              ) : (
-                <>
-                   {displayMode === 'cards' ? (
-                      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-                         {filteredSales.slice().reverse().map(sale => (
-                            <div key={sale.id} className="bg-[color:var(--card-bg)] border border-[color:var(--border)] rounded-lg p-4 hover:shadow-md transition-shadow">
-                               <div className="flex justify-between items-start mb-3">
-                                  <div>
-                                     <div className="font-semibold text-sm">
-                                        {sale.isPending ? 'Fiado' : 'Venta'} 
-                                        {sale.customerName && <span className="font-normal text-[color:var(--muted)]"> • {sale.customerName}</span>}
-                                     </div>
-                                     <div className="text-xs text-[color:var(--muted)] mt-0.5">
-                                        {sale.dateObj.toLocaleString('es-AR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}
-                                     </div>
-                                  </div>
-                                  <div className="text-right">
-                                     <div className="font-bold text-lg">${(sale.totalCents / 100).toFixed(2)}</div>
-                                     <div className="text-[10px] uppercase tracking-wider font-bold text-[color:var(--muted)] bg-[color:var(--ghost-hover-bg)] px-1.5 py-0.5 rounded inline-block">
-                                        {sale.paymentMethod}
-                                     </div>
-                                  </div>
-                               </div>
-                               <div className="border-t border-[color:var(--border)] pt-3 space-y-1">
-                                  {sale.items.map((item, idx) => (
-                                     <div key={idx} className="flex justify-between text-xs">
-                                        <span className="text-[color:var(--muted)]"><strong className="text-[color:var(--text)]">{item.quantity}x</strong> {item.nombre}</span>
-                                        <span>${((item.priceCents * item.quantity) / 100).toFixed(2)}</span>
-                                     </div>
-                                  ))}
-                               </div>
-                            </div>
-                         ))}
-                      </div>
-                   ) : (
-                      <div className="bg-[color:var(--card-bg)] border border-[color:var(--border)] rounded-2xl overflow-hidden shadow-sm">
-                         <table className="w-full text-sm text-left">
-                            <thead className="bg-[color:var(--muted)]/5 text-xs uppercase font-bold tracking-wider text-[color:var(--muted)]">
-                               <tr>
-                                  <th className="px-6 py-4">Fecha</th>
-                                  <th className="px-6 py-4">Cliente</th>
-                                  <th className="px-6 py-4">Items</th>
-                                  <th className="px-6 py-4">Método</th>
-                                  <th className="px-6 py-4 text-right">Total</th>
-                               </tr>
-                            </thead>
-                            <tbody className="divide-y divide-[color:var(--border)]">
-                               {filteredSales.slice().reverse().map(sale => (
-                                  <tr key={sale.id} className="hover:bg-[color:var(--ghost-hover-bg)]/50 transition-colors group">
-                                     <td className="px-6 py-4 whitespace-nowrap text-[color:var(--muted)] group-hover:text-[color:var(--text)] transition-colors">
-                                        {sale.dateObj.toLocaleString('es-AR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}
-                                     </td>
-                                     <td className="px-6 py-4 font-medium">
-                                        {sale.customerName || '-'}
-                                        {sale.isPending && <span className="ml-2 text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-bold uppercase tracking-wider dark:bg-amber-900/30 dark:text-amber-400">Fiado</span>}
-                                        {sale.userName && <div className="text-xs text-[color:var(--muted)] font-normal mt-0.5">Vend: {sale.userName}</div>}
-                                     </td>
-                                     <td className="px-6 py-4 text-[color:var(--muted)]">
-                                        {sale.items.length} productos
-                                     </td>
-                                     <td className="px-6 py-4 capitalize text-[color:var(--muted)]">
-                                        {sale.paymentMethod}
-                                     </td>
-                                     <td className="px-6 py-4 text-right font-bold tabular-nums text-base">
-                                        ${(sale.totalCents / 100).toFixed(2)}
-                                     </td>
-                                  </tr>
-                               ))}
-                            </tbody>
-                         </table>
-                      </div>
-                   )}
-                </>
+               <div className="rounded-[--radius] border border-[color:var(--border)] overflow-x-auto">
+                 <table className="w-full text-sm text-left min-w-[600px]">
+                     <thead className="bg-[color:var(--ghost-hover-bg)] text-xs uppercase font-semibold text-[color:var(--muted)]">
+                        <tr>
+                           <th className="px-4 py-3">ID</th>
+                           <th className="px-4 py-3">Cliente</th>
+                           <th className="px-4 py-3">Fecha</th>
+                           <th className="px-4 py-3 text-right">Total</th>
+                           <th className="px-4 py-3 text-center">Estado</th>
+                        </tr>
+                     </thead>
+                     <tbody className="divide-y divide-[color:var(--border)]">
+                        {filteredSales.slice().reverse().map(sale => (
+                           <tr key={sale.id} className="hover:bg-[color:var(--ghost-hover-bg)] transition-colors">
+                              <td className="px-4 py-3 font-mono text-xs">#{String(sale.id).slice(-4)}</td>
+                              <td className="px-4 py-3 font-medium">{sale.customerName || 'Ocasional'}</td>
+                              <td className="px-4 py-3 text-[color:var(--muted)]">
+                                 {sale.dateObj.toLocaleString('es-AR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
+                              </td>
+                              <td className="px-4 py-3 text-right font-bold">
+                                 ${(sale.totalCents / 100).toFixed(2)}
+                              </td>
+                              <td className="px-4 py-3 text-center">
+                                 <span className={`inline-block px-2 py-0.5 rounded-[calc(var(--radius)-12px)] text-[10px] font-bold uppercase tracking-wider ${
+                                    sale.status === 'delivered' ? 'bg-emerald-100 text-emerald-700' :
+                                    sale.status === 'ready' ? 'bg-indigo-100 text-indigo-700' :
+                                    sale.status === 'preparing' ? 'bg-blue-100 text-blue-700' :
+                                    'bg-amber-100 text-amber-700'
+                                 }`}>
+                                    {sale.status === 'delivered' ? 'Entregado' : 
+                                     sale.status === 'ready' ? 'En camino' :
+                                     sale.status === 'preparing' ? 'Prep' :
+                                     'Pend'}
+                                 </span>
+                              </td>
+                           </tr>
+                        ))}
+                     </tbody>
+                  </table>
+               </div>
              )}
           </div>
         </div>
@@ -797,148 +930,105 @@ export function VentasPage() {
          <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
              {/* Stock Stats */}
              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="group relative overflow-hidden rounded-2xl border border-blue-100 bg-white p-6 shadow-sm transition-all hover:shadow-md dark:border-blue-500/20 dark:bg-blue-950/10">
-                   <div className="flex items-start justify-between">
-                      <div>
-                         <span className="text-xs font-bold uppercase tracking-wider text-blue-600/70 dark:text-blue-400/70">Inventario (Costo)</span>
-                         <div className="mt-2 text-3xl font-bold tracking-tight text-blue-950 dark:text-blue-100 tabular-nums">
-                            ${(stockStats.totalStockValue / 100).toFixed(2)}
-                         </div>
-                      </div>
-                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400 group-hover:scale-110 transition-transform">
-                         <Package className="h-6 w-6" strokeWidth={2} />
-                      </div>
-                   </div>
-                   <div className="mt-4 flex items-center gap-2 text-xs font-medium text-blue-700/80 dark:text-blue-300/80">
-                      <div className="flex items-center gap-1 rounded-full bg-blue-50 px-2 py-0.5 dark:bg-blue-500/20">
-                         <span>Dinero invertido</span>
-                      </div>
-                   </div>
+                <div className="bg-[color:var(--card-bg)] border border-[color:var(--border)] rounded-[--radius] p-6 shadow-sm">
+                   <div className="text-sm font-semibold text-[color:var(--muted)] uppercase tracking-wider">Valor en Costo</div>
+                   <div className="text-3xl font-bold mt-2">${(stockStats.totalStockValue / 100).toFixed(2)}</div>
+                   <div className="text-xs text-[color:var(--muted)] mt-1">Capital invertido en mercadería</div>
                 </div>
-
-                <div className="group relative overflow-hidden rounded-2xl border border-purple-100 bg-white p-6 shadow-sm transition-all hover:shadow-md dark:border-purple-500/20 dark:bg-purple-950/10">
-                   <div className="flex items-start justify-between">
-                      <div>
-                         <span className="text-xs font-bold uppercase tracking-wider text-purple-600/70 dark:text-purple-400/70">Venta Potencial</span>
-                         <div className="mt-2 text-3xl font-bold tracking-tight text-purple-950 dark:text-purple-100 tabular-nums">
-                            ${(stockStats.totalStockRevenue / 100).toFixed(2)}
-                         </div>
-                      </div>
-                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-50 text-purple-600 dark:bg-purple-500/20 dark:text-purple-400 group-hover:scale-110 transition-transform">
-                         <DollarSign className="h-6 w-6" strokeWidth={2} />
-                      </div>
-                   </div>
-                   <div className="mt-4 flex items-center gap-2 text-xs font-medium text-purple-700/80 dark:text-purple-300/80">
-                      <div className="flex items-center gap-1 rounded-full bg-purple-50 px-2 py-0.5 dark:bg-purple-500/20">
-                         <span>Si vendes todo hoy</span>
-                      </div>
-                   </div>
+                <div className="bg-[color:var(--card-bg)] border border-[color:var(--border)] rounded-[--radius] p-6 shadow-sm">
+                   <div className="text-sm font-semibold text-[color:var(--muted)] uppercase tracking-wider">Valor en Venta</div>
+                   <div className="text-3xl font-bold mt-2 text-emerald-600">${(stockStats.totalStockRevenue / 100).toFixed(2)}</div>
+                   <div className="text-xs text-[color:var(--muted)] mt-1">Ingreso potencial total</div>
                 </div>
-
-                <div className="group relative overflow-hidden rounded-2xl border border-teal-100 bg-white p-6 shadow-sm transition-all hover:shadow-md dark:border-teal-500/20 dark:bg-teal-950/10">
-                   <div className="flex items-start justify-between">
-                      <div>
-                         <span className="text-xs font-bold uppercase tracking-wider text-teal-600/70 dark:text-teal-400/70">Ganancia Esperada</span>
-                         <div className="mt-2 text-3xl font-bold tracking-tight text-teal-950 dark:text-teal-100 tabular-nums">
-                            ${(stockStats.totalPotentialProfit / 100).toFixed(2)}
-                         </div>
-                      </div>
-                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-teal-50 text-teal-600 dark:bg-teal-500/20 dark:text-teal-400 group-hover:scale-110 transition-transform">
-                         <TrendingUp className="h-6 w-6" strokeWidth={2} />
-                      </div>
-                   </div>
-                   <div className="mt-4 flex items-center gap-2 text-xs font-medium text-teal-700/80 dark:text-teal-300/80">
-                      <div className="flex items-center gap-1 rounded-full bg-teal-50 px-2 py-0.5 dark:bg-teal-500/20">
-                         <span>Utilidad proyectada</span>
-                      </div>
-                   </div>
+                <div className="bg-[color:var(--card-bg)] border border-[color:var(--border)] rounded-[--radius] p-6 shadow-sm">
+                   <div className="text-sm font-semibold text-[color:var(--muted)] uppercase tracking-wider">Ganancia Potencial</div>
+                   <div className="text-3xl font-bold mt-2 text-indigo-600">${(stockStats.totalPotentialProfit / 100).toFixed(2)}</div>
+                   <div className="text-xs text-[color:var(--muted)] mt-1">Margen proyectado</div>
                 </div>
              </div>
 
-             <div className="bg-[color:var(--card-bg)] border border-[color:var(--border)] rounded-lg overflow-hidden">
-                <table className="w-full text-sm text-left">
-                   <thead className="bg-[color:var(--ghost-hover-bg)] text-xs uppercase font-semibold text-[color:var(--muted)]">
-                      <tr>
-                         <th className="px-4 py-3">Producto</th>
-                         <th className="px-4 py-3 text-right">Stock</th>
-                         <th className="px-4 py-3 text-right">Costo Unit.</th>
-                         <th className="px-4 py-3 text-right">Valor Stock</th>
-                         <th className="px-4 py-3 text-right">Ganancia Pot.</th>
-                      </tr>
-                   </thead>
-                   <tbody className="divide-y divide-[color:var(--border)]">
-                      {stockStats.products
-                        .sort((a, b) => b.valuation - a.valuation)
-                        .map(p => (
-                         <tr key={p.id} className="hover:bg-[color:var(--ghost-hover-bg)] transition-colors">
-                            <td className="px-4 py-3 font-medium">
-                               {p.nombre}
-                            </td>
-                            <td className="px-4 py-3 text-right tabular-nums">
-                               {p.stock ?? 0}
-                            </td>
-                            <td className="px-4 py-3 text-right tabular-nums text-[color:var(--muted)]">
-                               ${((p.costCents || 0) / 100).toFixed(2)}
-                            </td>
-                            <td className="px-4 py-3 text-right tabular-nums font-medium text-blue-600 dark:text-blue-400">
-                               ${(p.valuation / 100).toFixed(2)}
-                            </td>
-                            <td className="px-4 py-3 text-right tabular-nums text-teal-600 dark:text-teal-400">
-                               ${(p.potentialProfit / 100).toFixed(2)}
-                            </td>
-                         </tr>
-                      ))}
-                   </tbody>
-                </table>
-             </div>
-
-             {/* Stock Movements History */}
-             <div className="space-y-4">
-                <h3 className="text-lg font-semibold">Historial de Movimientos</h3>
-                <div className="bg-[color:var(--card-bg)] border border-[color:var(--border)] rounded-lg overflow-hidden">
-                   {stockMovements.length === 0 ? (
-                      <div className="p-8 text-center text-[color:var(--muted)] text-sm">
-                         No hay movimientos registrados.
-                      </div>
-                   ) : (
-                      <table className="w-full text-sm text-left">
-                         <thead className="bg-[color:var(--ghost-hover-bg)] text-xs uppercase font-semibold text-[color:var(--muted)]">
+             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Product Valuation Table */}
+                <div className="bg-[color:var(--card-bg)] border border-[color:var(--border)] rounded-[--radius] overflow-hidden shadow-sm">
+                   <div className="p-4 border-b border-[color:var(--border)] bg-[color:var(--ghost-hover-bg)]/50">
+                      <h3 className="font-bold">Valoración por Producto</h3>
+                   </div>
+                   <div className="max-h-[400px] overflow-y-auto overflow-x-auto">
+                      <table className="w-full text-sm text-left min-w-[600px]">
+                         <thead className="bg-[color:var(--ghost-hover-bg)] text-xs uppercase font-semibold text-[color:var(--muted)] sticky top-0">
                             <tr>
-                               <th className="px-4 py-3">Fecha</th>
                                <th className="px-4 py-3">Producto</th>
-                               <th className="px-4 py-3">Tipo</th>
-                               <th className="px-4 py-3 text-right">Cantidad</th>
-                               <th className="px-4 py-3 text-right">Costo Histórico</th>
+                               <th className="px-4 py-3 text-right">Stock</th>
+                               <th className="px-4 py-3 text-right">Costo Total</th>
+                               <th className="px-4 py-3 text-right">Venta Total</th>
                             </tr>
                          </thead>
                          <tbody className="divide-y divide-[color:var(--border)]">
-                            {stockMovements.slice().reverse().map(m => (
-                               <tr key={m.id} className="hover:bg-[color:var(--ghost-hover-bg)] transition-colors">
-                                  <td className="px-4 py-3 whitespace-nowrap text-[color:var(--muted)]">
-                                     {new Date(m.date).toLocaleString('es-AR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}
-                                  </td>
-                                  <td className="px-4 py-3 font-medium">
-                                     {m.productName}
-                                  </td>
-                                  <td className="px-4 py-3">
-                                     <span className={`px-2 py-0.5 rounded text-[10px] uppercase font-bold tracking-wider ${
-                                        m.type === 'entry' 
-                                           ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400' 
-                                           : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'
-                                     }`}>
-                                        {m.type === 'entry' ? 'Ingreso' : 'Ajuste'}
-                                     </span>
-                                  </td>
-                                  <td className="px-4 py-3 text-right tabular-nums">
-                                     {m.quantity > 0 ? '+' : ''}{m.quantity}
-                                  </td>
-                                  <td className="px-4 py-3 text-right tabular-nums text-[color:var(--muted)]">
-                                     ${(m.costCents / 100).toFixed(2)}
-                                  </td>
+                            {stockStats.products
+                              .sort((a, b) => b.valuation - a.valuation)
+                              .map(p => (
+                               <tr key={p.id} className="hover:bg-[color:var(--ghost-hover-bg)] transition-colors">
+                                  <td className="px-4 py-3 font-medium">{p.nombre}</td>
+                                  <td className="px-4 py-3 text-right text-[color:var(--muted)]">{p.stock}</td>
+                                  <td className="px-4 py-3 text-right tabular-nums">${(p.valuation / 100).toFixed(2)}</td>
+                                  <td className="px-4 py-3 text-right tabular-nums font-semibold">${(p.potentialRevenue / 100).toFixed(2)}</td>
                                </tr>
                             ))}
                          </tbody>
                       </table>
+                   </div>
+                </div>
+
+                {/* Recent Movements */}
+                <div className="bg-[color:var(--card-bg)] border border-[color:var(--border)] rounded-[--radius] overflow-hidden shadow-sm">
+                   <div className="p-4 border-b border-[color:var(--border)] bg-[color:var(--ghost-hover-bg)]/50">
+                      <h3 className="font-bold">Movimientos de Stock Recientes</h3>
+                   </div>
+                   {stockMovements.length === 0 ? (
+                      <div className="p-8 text-center text-[color:var(--muted)] text-sm">
+                         No hay movimientos registrados
+                      </div>
+                   ) : (
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-sm text-left min-w-[600px]">
+                           <thead className="bg-[color:var(--ghost-hover-bg)] text-xs uppercase font-semibold text-[color:var(--muted)]">
+                              <tr>
+                                 <th className="px-4 py-3">Fecha</th>
+                                 <th className="px-4 py-3">Producto</th>
+                                 <th className="px-4 py-3">Tipo</th>
+                                 <th className="px-4 py-3 text-right">Cantidad</th>
+                                 <th className="px-4 py-3 text-right">Costo Histórico</th>
+                              </tr>
+                           </thead>
+                           <tbody className="divide-y divide-[color:var(--border)]">
+                              {stockMovements.slice().reverse().map(m => (
+                                 <tr key={m.id} className="hover:bg-[color:var(--ghost-hover-bg)] transition-colors">
+                                    <td className="px-4 py-3 whitespace-nowrap text-[color:var(--muted)]">
+                                       {new Date(m.date).toLocaleString('es-AR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}
+                                    </td>
+                                    <td className="px-4 py-3 font-medium">
+                                       {m.productName}
+                                    </td>
+                                    <td className="px-4 py-3">
+                                       <span className={`px-2 py-0.5 rounded-[calc(var(--radius)-12px)] text-[10px] uppercase font-bold tracking-wider ${
+                                          m.type === 'entry' 
+                                             ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400' 
+                                             : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'
+                                       }`}>
+                                          {m.type === 'entry' ? 'Ingreso' : 'Ajuste'}
+                                       </span>
+                                    </td>
+                                    <td className="px-4 py-3 text-right tabular-nums">
+                                       {m.quantity > 0 ? '+' : ''}{m.quantity}
+                                    </td>
+                                    <td className="px-4 py-3 text-right tabular-nums text-[color:var(--muted)]">
+                                       ${(m.costCents / 100).toFixed(2)}
+                                    </td>
+                                 </tr>
+                              ))}
+                           </tbody>
+                        </table>
+                      </div>
                    )}
                 </div>
              </div>
@@ -950,7 +1040,7 @@ export function VentasPage() {
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
            {/* Fiados Stats */}
            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="group relative overflow-hidden rounded-2xl border border-amber-100 bg-white p-6 shadow-sm transition-all hover:shadow-md dark:border-amber-500/20 dark:bg-amber-950/10">
+              <div className="group relative overflow-hidden rounded-[--radius] border border-amber-100 bg-white p-6 shadow-sm transition-all hover:shadow-md dark:border-amber-500/20 dark:bg-amber-950/10">
                  <div className="flex items-start justify-between">
                     <div>
                        <span className="text-xs font-bold uppercase tracking-wider text-amber-600/70 dark:text-amber-400/70">Deuda Total</span>
@@ -958,7 +1048,7 @@ export function VentasPage() {
                           ${(totalPendingDebtCents / 100).toFixed(2)}
                        </div>
                     </div>
-                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-50 text-amber-600 dark:bg-amber-500/20 dark:text-amber-400 group-hover:scale-110 transition-transform">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-[calc(var(--radius)-4px)] bg-amber-50 text-amber-600 dark:bg-amber-500/20 dark:text-amber-400 group-hover:scale-110 transition-transform">
                        <AlertCircle className="h-6 w-6" strokeWidth={2} />
                     </div>
                  </div>
@@ -969,7 +1059,7 @@ export function VentasPage() {
                  </div>
               </div>
 
-              <div className="group relative overflow-hidden rounded-2xl border border-[color:var(--border)] bg-[color:var(--card-bg)] p-6 shadow-sm transition-all hover:shadow-md">
+              <div className="group relative overflow-hidden rounded-[--radius] border border-[color:var(--border)] bg-[color:var(--card-bg)] p-6 shadow-sm transition-all hover:shadow-md">
                  <div className="flex items-start justify-between">
                     <div>
                        <span className="text-xs font-bold uppercase tracking-wider text-[color:var(--muted)]">Clientes Deudores</span>
@@ -977,7 +1067,7 @@ export function VentasPage() {
                           {debts.length}
                        </div>
                     </div>
-                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[color:var(--ghost-hover-bg)] text-[color:var(--muted)] group-hover:scale-110 transition-transform">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-[calc(var(--radius)-4px)] bg-[color:var(--ghost-hover-bg)] text-[color:var(--muted)] group-hover:scale-110 transition-transform">
                        <User className="h-6 w-6" strokeWidth={2} />
                     </div>
                  </div>
@@ -1008,13 +1098,13 @@ export function VentasPage() {
 
            {/* Fiados List */}
            {filteredDebts.length === 0 ? (
-             <div className="p-12 text-center border border-dashed border-[color:var(--border)] rounded-lg text-[color:var(--muted)] text-sm">
+             <div className="p-12 text-center border border-dashed border-[color:var(--border)] rounded-[calc(var(--radius)-8px)] text-[color:var(--muted)] text-sm">
                 No hay deudas pendientes.
              </div>
            ) : (
              <div className="grid grid-cols-1 gap-4">
                 {filteredDebts.map(debt => (
-                   <div key={debt.customerName} className="bg-[color:var(--card-bg)] border border-[color:var(--border)] rounded-lg overflow-hidden">
+                   <div key={debt.customerName} className="bg-[color:var(--card-bg)] border border-[color:var(--border)] rounded-[calc(var(--radius)-8px)] overflow-hidden">
                       <div className="bg-[color:var(--ghost-hover-bg)]/50 px-6 py-4 flex justify-between items-center border-b border-[color:var(--border)]">
                          <div className="flex items-center gap-3">
                             <div className="h-10 w-10 bg-amber-100 text-amber-700 rounded-full flex items-center justify-center font-bold text-lg">

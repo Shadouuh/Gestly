@@ -43,7 +43,7 @@ export function HeroSection({ data }: HeroSectionProps) {
   return (
     <section className="bg-[color:var(--app-bg)] pb-14 pt-7 md:pb-20 md:pt-10">
       <Container>
-        <div className="relative overflow-hidden rounded-[2.75rem] border border-black/10 bg-gradient-to-b from-white to-[#f4f7ff] px-5 py-10 text-black shadow-[0_30px_80px_rgba(0,0,0,0.10)] sm:px-6 sm:py-12 md:px-10 md:py-16">
+        <div className="relative overflow-hidden rounded-[calc(var(--radius)*2)] border border-black/10 bg-gradient-to-b from-white to-[#f4f7ff] px-5 py-10 text-black shadow-[0_30px_80px_rgba(0,0,0,0.10)] sm:px-6 sm:py-12 md:px-10 md:py-16">
           <div className="pointer-events-none absolute inset-0">
             <div className="absolute -left-32 -top-28 h-80 w-80 rounded-full bg-[#0a84ff]/15 blur-3xl" />
             <div className="absolute -bottom-40 -right-28 h-96 w-96 rounded-full bg-[#ff2d55]/12 blur-3xl" />
@@ -156,11 +156,11 @@ export function HeroSection({ data }: HeroSectionProps) {
 
             <div className="relative flex items-center justify-center">
               <div className="relative w-full max-w-[760px]">
-                <div className="animate-float-tilt-slow relative z-10 rounded-[2.75rem] bg-[#0b0b0d] p-3 shadow-[0_28px_80px_rgba(0,0,0,0.28)]">
-                  <div className="overflow-hidden rounded-[2.35rem] bg-white">
+                <div className="animate-float-tilt-slow relative z-10 rounded-[calc(var(--radius)*2)] bg-[#0b0b0d] p-3 shadow-[0_28px_80px_rgba(0,0,0,0.28)]">
+                  <div className="overflow-hidden rounded-[calc(var(--radius)*1.8)] bg-white">
                     <div className="flex items-center justify-between border-b border-black/10 bg-[#f7f7fb] px-5 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#0a84ff]/10 text-[#0a84ff]">
+                        <div className="flex h-9 w-9 items-center justify-center rounded-[calc(var(--radius)_-_4px)] bg-[#0a84ff]/10 text-[#0a84ff]">
                           <Monitor className="h-5 w-5" strokeWidth={1.6} />
                         </div>
                         <div className="text-sm font-semibold tracking-tight text-black">Gestly</div>
@@ -272,7 +272,7 @@ export function HeroSection({ data }: HeroSectionProps) {
                             </div>
 
                             <div className="grid gap-3 md:grid-cols-2">
-                              <div className="rounded-2xl border border-black/10 bg-[#fbfbfe] p-4">
+                              <div className="rounded-[var(--radius)] border border-black/10 bg-[#fbfbfe] p-4">
                                 <div className="mb-3 text-xs font-semibold tracking-tight text-[color:var(--muted)]">
                                   Productos
                                 </div>
@@ -281,7 +281,7 @@ export function HeroSection({ data }: HeroSectionProps) {
                                     <button
                                       key={p}
                                       type="button"
-                                      className="flex w-full items-center justify-between rounded-xl border border-black/10 bg-white px-3 py-3 text-left text-sm tracking-tight text-black/80 hover:bg-black/5"
+                                      className="flex w-full items-center justify-between rounded-[calc(var(--radius)_-_4px)] border border-black/10 bg-white px-3 py-3 text-left text-sm tracking-tight text-black/80 hover:bg-black/5"
                                     >
                                       <span className="truncate">{p}</span>
                                       <span className="text-xs text-[color:var(--muted)]">+{idx + 1}</span>
@@ -290,7 +290,7 @@ export function HeroSection({ data }: HeroSectionProps) {
                                 </div>
                               </div>
 
-                              <div className="rounded-2xl border border-black/10 bg-[#fbfbfe] p-4">
+                              <div className="rounded-[var(--radius)] border border-black/10 bg-[#fbfbfe] p-4">
                                 <div className="mb-3 flex items-center justify-between">
                                   <div className="text-xs font-semibold tracking-tight text-[color:var(--muted)]">
                                     Carrito
@@ -304,7 +304,7 @@ export function HeroSection({ data }: HeroSectionProps) {
                                   ].map((i) => (
                                     <div
                                       key={i.name}
-                                      className="flex items-center justify-between rounded-xl border border-black/10 bg-white px-3 py-3 text-sm tracking-tight"
+                                      className="flex items-center justify-between rounded-[calc(var(--radius)_-_4px)] border border-black/10 bg-white px-3 py-3 text-sm tracking-tight"
                                     >
                                       <div className="min-w-0 text-black/80">
                                         <span className="font-semibold text-black">{i.qty}x</span> {i.name}
@@ -320,13 +320,13 @@ export function HeroSection({ data }: HeroSectionProps) {
                                 <div className="mt-4 grid grid-cols-2 gap-2">
                                   <button
                                     type="button"
-                                    className="h-10 rounded-xl border border-black/15 bg-white text-sm font-medium tracking-tight text-black/80 hover:bg-black/5"
+                                    className="h-10 rounded-[calc(var(--radius)_-_4px)] border border-black/15 bg-white text-sm font-medium tracking-tight text-black/80 hover:bg-black/5"
                                   >
                                     Fiado
                                   </button>
                                   <button
                                     type="button"
-                                    className="h-10 rounded-xl bg-[#0a84ff] text-sm font-semibold tracking-tight text-white hover:bg-[#0a84ff]/90"
+                                    className="h-10 rounded-[calc(var(--radius)_-_4px)] bg-[#0a84ff] text-sm font-semibold tracking-tight text-white hover:bg-[#0a84ff]/90"
                                   >
                                     Cobrar
                                   </button>
