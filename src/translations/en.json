@@ -1,0 +1,287 @@
+{
+  "navbar": {
+    "home": "Home",
+    "pricing": "Pricing",
+    "about": "About",
+    "contact": "Contact",
+    "guide": "Guide",
+    "login": "Log in",
+    "getStarted": "Get Started"
+  },
+  "hero": {
+    "newVersion": "New Version 2.0 Available",
+    "title": "Gestly",
+    "subtitle": "Manage your business",
+    "description": "Stop using notebooks. Simplify your sales, inventory, and customers in one place.",
+    "getStarted": "Get Started",
+    "appStore": "App Store",
+    "activeUsers": "Active Users",
+    "appRating": "App Rating"
+  },
+  "whatIsGestly": {
+    "badge": "Discover Gestly",
+    "title": "What is Gestly?",
+    "description": "Gestly is a multi-platform application for iOS, Android, and PC, allowing you to control all environments of any type of business you have.",
+    "modules": {
+      "catalog": { "title": "Catalog", "desc": "Manage your products and services easily." },
+      "customization": { "title": "Customization", "desc": "Adapt the app to your brand identity." },
+      "sales": { "title": "Sales", "desc": "Register sales in seconds." },
+      "customers": { "title": "Customers", "desc": "Manage tabs and customer profiles." },
+      "employees": { "title": "Employees", "desc": "Access control and performance per user." },
+      "stats": { "title": "Statistics", "desc": "Make decisions based on real data." },
+      "branches": { "title": "Branches", "desc": "Manage multiple branches and their status." }
+    },
+    "configSteps": {
+      "title": "Your business up and running in 4 steps",
+      "subtitle": "Forget about eternal configurations. Gestly guides you step by step.",
+      "steps": {
+        "1": { "title": "Configure your Business", "desc": "Create multiple branches, register employees with specific roles and assign permissions by location." },
+        "2": { "title": "Define your Stock", "desc": "Choose simple control (Yes/No) or complex stock with exact quantities and independent inventory per branch." },
+        "3": { "title": "Quick Load", "desc": "Select your category and use smart templates. Activate the products you sell in each branch and define your initial stock." },
+        "4": { "title": "Start Selling!", "desc": "All set. Register sales, manage tabs and control your cash register from any device." }
+      }
+    },
+    "businessTypes": {
+      "title": "Ideal for any category",
+      "subtitle": "Gestly adapts to the specific needs of your business",
+      "types": {
+        "grocery": "Grocery",
+        "bakery": "Bakery",
+        "clothing": "Clothing",
+        "hardware": "Hardware",
+        "pharmacy": "Pharmacy",
+        "kiosk": "Kiosk",
+        "restaurant": "Restaurant",
+        "electronics": "Electronics",
+        "toys": "Toys",
+        "shoes": "Shoe Store",
+        "bookstore": "Bookstore",
+        "deli": "Deli",
+        "butcher": "Butcher",
+        "poultry": "Poultry Shop"
+      }
+    }
+  },
+  "pricing": {
+    "title": "Simple and Transparent Plans",
+    "subtitle": "Choose the perfect plan for your business size. No hidden fees.",
+    "mostPopular": "Most Popular",
+    "month": "month",
+    "choosePlan": "Choose Plan",
+    "free": {
+      "title": "Gestly Free",
+      "description": "Ideal for testing and starting."
+    },
+    "essential": {
+      "title": "Gestly Essential",
+      "description": "For growing businesses."
+    },
+    "pro": {
+      "title": "Gestly Pro",
+      "description": "Total power for large businesses."
+    },
+    "features": {
+      "all_modules": "All basic modules",
+      "basic_stats": "Basic Statistics",
+      "fixed_customers": "Fixed Customer Registry",
+      "assistant": "Smart Assistant",
+      "ai_stock": "AI Stock Loading",
+      "multi_branch": "Multi-Branch",
+      "employees": "Employee Management",
+      "offline_mode": "Offline Mode",
+      "priority_support": "Priority Support",
+      "advanced_reports": "Advanced Reports"
+    }
+  },
+  "featuresList": {
+    "title": "Empower Your Business",
+    "subtitle": "Explore all features designed for you",
+    "search": "Search feature...",
+    "items": {
+      "multiplatform": { "title": "Multi-platform", "desc": "Access from iOS, Android, or PC." },
+      "stockSimple": { "title": "Simple Stock", "desc": "Quickly control available/out of stock." },
+      "stockComplex": { "title": "Advanced Stock", "desc": "Numeric tracking, detailed in/out logs." },
+      "templates": { "title": "Templates", "desc": "Fast initial setup with predefined templates." },
+      "aiStock": { "title": "AI Stock", "desc": "Upload invoices by taking a photo." },
+      "recipes": { "title": "Recipes", "desc": "Manage ingredients for crafted products." },
+      "multiBranch": { "title": "Multi-branch", "desc": "Manage multiple locations from one account." },
+      "shoppingList": { "title": "Shopping List", "desc": "Automatic replenishment generation." },
+      "credits": { "title": "Tabs/Credits", "desc": "Control customer current accounts." },
+      "employees": { "title": "Employees", "desc": "Permission management and sales tracking." },
+      "stats": { "title": "Statistics", "desc": "Visualize your business performance." },
+      "interface": { "title": "Beautiful Interface", "desc": "Intuitive and customizable design." }
+    }
+  },
+  "features": {
+    "title": "Gestly",
+    "subtitle": "Everything you need to run your business, packaged in a beautiful interface.",
+    "intuitiveUi": {
+      "title": "Intuitive UI",
+      "description": "Designed with simplicity in mind. Navigate through your store's data with ease and clarity."
+    },
+    "securePayments": {
+      "title": "Secure Payments",
+      "description": "Enterprise-grade security for all transactions. Keep your customers' data safe and sound."
+    },
+    "allInOne": {
+      "title": "All-In-One Actions",
+      "description": "Manage inventory, orders, and customer relationships from a single, powerful dashboard."
+    },
+    "globalReach": {
+      "title": "Global Reach",
+      "description": "Accept payments from anywhere in the world with multi-currency support built right in."
+    }
+  },
+  "footer": {
+    "tagline": "Empowering businesses with elegant, powerful tools for the modern web.",
+    "product": "Product",
+    "features": "Features",
+    "pricing": "Pricing",
+    "api": "API",
+    "integrations": "Integrations",
+    "company": "Company",
+    "about": "About",
+    "blog": "Blog",
+    "careers": "Careers",
+    "contact": "Contact",
+    "connect": "Connect",
+    "copyright": "© 2024 Gestly by Lagoom. All rights reserved.",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service"
+  },
+  "contact": {
+    "title": "We are here to help",
+    "subtitle": "Do you have any questions or need support? Contact us.",
+    "email": "ayuda@lagoom.com.ar",
+    "whatsapp": "Contact via WhatsApp",
+    "work": "Work with us"
+  },
+  "guide": {
+    "title": "Learning Center",
+    "subtitle": "Master Gestly with our step-by-step tutorials.",
+    "randomVideo": "Featured Video",
+    "watchNow": "Watch Now",
+    "tutorials": {
+      "createProduct": {
+        "title": "How to create a product",
+        "steps": [
+          "Open the app and go to the 'Catalog' section.",
+          "Tap the '+' button in the bottom corner.",
+          "Enter the name, price, and barcode.",
+          "Save changes."
+        ]
+      },
+      "makeSale": {
+        "title": "Register a sale",
+        "steps": [
+          "Go to the main 'Sales' screen.",
+          "Scan the product or search for it manually.",
+          "Select the quantity and press 'Charge'.",
+          "Choose the payment method and confirm."
+        ]
+      },
+      "addStock": {
+        "title": "Add stock",
+        "steps": [
+          "Go to 'Inventory'.",
+          "Search for the product to update.",
+          "Select 'Stock Entry'.",
+          "Enter the quantity and supplier (optional)."
+        ]
+      }
+    }
+  },
+  "about": {
+    "title": "Our Story",
+    "subtitle": "From a school project to revolutionizing commerce.",
+    "story": {
+      "title": "The Origin",
+      "description": "Gestly was born as a humble school project with a clear vision: to simplify the lives of merchants. What started in a classroom now seeks to expand throughout Argentina and soon to the world."
+    },
+    "mission": {
+      "title": "Our Mission",
+      "description": "We want anyone, regardless of the size of their business, to access professional tools. It is time to leave pen and paper behind."
+    },
+    "lagoom": {
+      "title": "Powered by Lagoom",
+      "description": "Gestly is a product of Lagoom, a company dedicated to custom software development and innovative SaaS solutions.",
+      "cta": "Learn more at lagoom.com.ar"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome Back",
+      "subtitle": "Log in to manage your business",
+      "emailPlaceholder": "Email address",
+      "passwordPlaceholder": "Password",
+      "forgotPassword": "Forgot password?",
+      "submit": "Log In",
+      "orContinueWith": "Or continue with",
+      "noAccount": "Don't have an account?",
+      "register": "Sign Up",
+      "google": "Google",
+      "microsoft": "Microsoft",
+      "phone": "Phone"
+    },
+    "register": {
+      "title": "Create Account",
+      "subtitle": "Start organizing your business today",
+      "namePlaceholder": "Full Name",
+      "emailPlaceholder": "Email address",
+      "passwordPlaceholder": "Password",
+      "confirmPasswordPlaceholder": "Confirm Password",
+      "submit": "Sign Up",
+      "haveAccount": "Already have an account?",
+      "login": "Log In"
+    },
+    "onboarding": {
+      "steps": {
+        "welcome": "Welcome",
+        "business": "Your Business",
+        "preferences": "Preferences",
+        "structure": "Structure",
+        "finish": "Done"
+      },
+      "welcome": {
+        "title": "Hello, {{name}}!",
+        "subtitle": "Let's set up Gestly to perfectly fit your needs. It will only take a few minutes.",
+        "start": "Start Setup"
+      },
+      "business": {
+        "title": "Tell us about your business",
+        "subtitle": "This helps us recommend the best templates.",
+        "rubroLabel": "Category / Industry",
+        "rubroPlaceholder": "Ex. Grocery, Pharmacy, Clothing...",
+        "stockLabel": "How do you prefer to manage stock?",
+        "stockSimple": "Simple (Available / Out of Stock)",
+        "stockComplex": "Advanced (Exact quantities, movements)",
+        "next": "Next",
+        "back": "Back"
+      },
+      "preferences": {
+        "title": "Customize your experience",
+        "subtitle": "Let's make Gestly look the way you like it.",
+        "colorLabel": "Preferred theme color",
+        "petLabel": "What is your favorite pet?",
+        "petPlaceholder": "Security question",
+        "next": "Next",
+        "back": "Back"
+      },
+      "structure": {
+        "title": "Business Structure",
+        "subtitle": "Define how your company will operate.",
+        "multiBranchLabel": "Do you have multiple branches?",
+        "employeesLabel": "Approximate number of employees",
+        "branchNameLabel": "Main branch name",
+        "branchNamePlaceholder": "Ex. Downtown Branch",
+        "next": "Next",
+        "back": "Back"
+      },
+      "finish": {
+        "title": "All Set!",
+        "subtitle": "You have successfully configured your business. Time to start selling.",
+        "goToDashboard": "Go to Dashboard"
+      }
+    }
+  }
+}

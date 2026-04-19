@@ -1,0 +1,770 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "email": "admin@kiosco.com",
+      "password": "admin123",
+      "name": "Juan Pérez",
+      "role": "owner",
+      "businessId": 1,
+      "createdAt": "2024-01-15T10:00:00.000Z"
+    },
+    {
+      "id": 2,
+      "email": "admin@ferreteria.com",
+      "password": "admin123",
+      "name": "María García",
+      "role": "owner",
+      "businessId": 2,
+      "createdAt": "2024-01-16T10:00:00.000Z"
+    },
+    {
+      "id": 3,
+      "email": "admin@carniceria.com",
+      "password": "admin123",
+      "name": "Carlos López",
+      "role": "owner",
+      "businessId": 3,
+      "createdAt": "2024-01-17T10:00:00.000Z"
+    }
+  ],
+  "businesses": [
+    {
+      "id": 1,
+      "name": "Kiosco El Rápido",
+      "templateId": "kiosco",
+      "ownerId": 1,
+      "address": "Av. Corrientes 1234, CABA",
+      "phone": "+54 11 4567-8901",
+      "createdAt": "2024-01-15T10:00:00.000Z"
+    },
+    {
+      "id": 2,
+      "name": "Ferretería Don José",
+      "templateId": "ferreteria",
+      "ownerId": 2,
+      "address": "Calle Rivadavia 567, CABA",
+      "phone": "+54 11 4567-8902",
+      "createdAt": "2024-01-16T10:00:00.000Z"
+    },
+    {
+      "id": 3,
+      "name": "Carnicería La Pampa",
+      "templateId": "carniceria",
+      "ownerId": 3,
+      "address": "Av. San Martín 890, CABA",
+      "phone": "+54 11 4567-8903",
+      "createdAt": "2024-01-17T10:00:00.000Z"
+    }
+  ],
+  "templates": [
+    {
+      "id": "kiosco",
+      "name": "Kiosco",
+      "description": "Plantilla para kioscos y comercios minoristas",
+      "icon": "Store",
+      "color": "text-blue-600 bg-blue-50",
+      "defaultProducts": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+    },
+    {
+      "id": "ferreteria",
+      "name": "Ferretería",
+      "description": "Plantilla para ferreterías y comercios de construcción",
+      "icon": "Hammer",
+      "color": "text-slate-600 bg-slate-50",
+      "defaultProducts": [26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40]
+    },
+    {
+      "id": "carniceria",
+      "name": "Carnicería",
+      "description": "Plantilla para carnicerías y verdulerías",
+      "icon": "Beef",
+      "color": "text-red-600 bg-red-50",
+      "defaultProducts": [16, 17, 18, 19, 20, 21, 22, 23, 24, 25]
+    }
+  ],
+  "products": [
+    {
+      "id": 1,
+      "name": "Coca Cola 500ml",
+      "price": 1200,
+      "category": "gaseosas",
+      "templateId": "kiosco",
+      "image": null,
+      "useIcon": true
+    },
+    {
+      "id": 2,
+      "name": "Cerveza Quilmes 1L",
+      "price": 2500,
+      "category": "cervezas",
+      "templateId": "kiosco",
+      "image": null,
+      "useIcon": true
+    },
+    {
+      "id": 3,
+      "name": "Agua Mineral 2L",
+      "price": 800,
+      "category": "aguas",
+      "templateId": "kiosco",
+      "image": null,
+      "useIcon": true
+    },
+    {
+      "id": 4,
+      "name": "Jugo Naranja 1L",
+      "price": 1500,
+      "category": "jugos",
+      "templateId": "kiosco",
+      "image": null,
+      "useIcon": true
+    },
+    {
+      "id": 5,
+      "name": "Energizante Red Bull",
+      "price": 2200,
+      "category": "energizantes",
+      "templateId": "kiosco",
+      "image": null,
+      "useIcon": true
+    },
+    {
+      "id": 6,
+      "name": "Alfajor Jorgito",
+      "price": 800,
+      "category": "alfajores",
+      "templateId": "kiosco",
+      "image": null,
+      "useIcon": true
+    },
+    {
+      "id": 7,
+      "name": "Chocolate Milka",
+      "price": 2200,
+      "category": "chocolates",
+      "templateId": "kiosco",
+      "image": null,
+      "useIcon": true
+    },
+    {
+      "id": 8,
+      "name": "Galletitas Oreo",
+      "price": 1600,
+      "category": "galletitas",
+      "templateId": "kiosco",
+      "image": null,
+      "useIcon": true
+    },
+    {
+      "id": 9,
+      "name": "Papas Fritas Lays",
+      "price": 1400,
+      "category": "papas-fritas",
+      "templateId": "kiosco",
+      "image": null,
+      "useIcon": true
+    },
+    {
+      "id": 10,
+      "name": "Caramelos Sugus",
+      "price": 600,
+      "category": "caramelos",
+      "templateId": "kiosco",
+      "image": null,
+      "useIcon": true
+    },
+    {
+      "id": 11,
+      "name": "Cigarrillos Marlboro",
+      "price": 3500,
+      "category": "cigarrillos",
+      "templateId": "kiosco",
+      "image": null,
+      "useIcon": true
+    },
+    {
+      "id": 12,
+      "name": "Diario Clarín",
+      "price": 800,
+      "category": "diarios-revistas",
+      "templateId": "kiosco",
+      "image": null,
+      "useIcon": true
+    },
+    {
+      "id": 13,
+      "name": "Pilas AA Duracell x4",
+      "price": 1800,
+      "category": "pilas-baterias",
+      "templateId": "kiosco",
+      "image": null,
+      "useIcon": true
+    },
+    {
+      "id": 14,
+      "name": "Encendedor Bic",
+      "price": 400,
+      "category": "articulos-libreria",
+      "templateId": "kiosco",
+      "image": null,
+      "useIcon": true
+    },
+    {
+      "id": 15,
+      "name": "Helado Palito",
+      "price": 1200,
+      "category": "helados",
+      "templateId": "kiosco",
+      "image": null,
+      "useIcon": true
+    },
+    {
+      "id": 16,
+      "name": "Asado x Kg",
+      "price": 5500,
+      "category": "carnes-rojas",
+      "templateId": "carniceria",
+      "image": null,
+      "useIcon": true
+    },
+    {
+      "id": 17,
+      "name": "Vacío x Kg",
+      "price": 6200,
+      "category": "carnes-rojas",
+      "templateId": "carniceria",
+      "image": null,
+      "useIcon": true
+    },
+    {
+      "id": 18,
+      "name": "Picada x Kg",
+      "price": 4800,
+      "category": "carnes-rojas",
+      "templateId": "carniceria",
+      "image": null,
+      "useIcon": true
+    },
+    {
+      "id": 19,
+      "name": "Costilla x Kg",
+      "price": 4500,
+      "category": "carnes-rojas",
+      "templateId": "carniceria",
+      "image": null,
+      "useIcon": true
+    },
+    {
+      "id": 20,
+      "name": "Pollo Entero x Kg",
+      "price": 2800,
+      "category": "pollo",
+      "templateId": "carniceria",
+      "image": null,
+      "useIcon": true
+    },
+    {
+      "id": 21,
+      "name": "Pechuga x Kg",
+      "price": 3500,
+      "category": "pollo",
+      "templateId": "carniceria",
+      "image": null,
+      "useIcon": true
+    },
+    {
+      "id": 22,
+      "name": "Alitas x Kg",
+      "price": 2200,
+      "category": "pollo",
+      "templateId": "carniceria",
+      "image": null,
+      "useIcon": true
+    },
+    {
+      "id": 23,
+      "name": "Papa x Kg",
+      "price": 800,
+      "category": "verduras",
+      "templateId": "carniceria",
+      "image": null,
+      "useIcon": true
+    },
+    {
+      "id": 24,
+      "name": "Cebolla x Kg",
+      "price": 600,
+      "category": "verduras",
+      "templateId": "carniceria",
+      "image": null,
+      "useIcon": true
+    },
+    {
+      "id": 25,
+      "name": "Tomate x Kg",
+      "price": 1200,
+      "category": "verduras",
+      "templateId": "carniceria",
+      "image": null,
+      "useIcon": true
+    },
+    {
+      "id": 26,
+      "name": "Tornillos Autoperforantes x100",
+      "price": 2500,
+      "category": "tornillos-clavos",
+      "templateId": "ferreteria",
+      "image": null,
+      "useIcon": true
+    },
+    {
+      "id": 27,
+      "name": "Clavos 2\" x Kg",
+      "price": 1800,
+      "category": "tornillos-clavos",
+      "templateId": "ferreteria",
+      "image": null,
+      "useIcon": true
+    },
+    {
+      "id": 28,
+      "name": "Tarugos Plásticos x50",
+      "price": 1200,
+      "category": "tornillos-clavos",
+      "templateId": "ferreteria",
+      "image": null,
+      "useIcon": true
+    },
+    {
+      "id": 29,
+      "name": "Tuercas y Arandelas Set",
+      "price": 1500,
+      "category": "tornillos-clavos",
+      "templateId": "ferreteria",
+      "image": null,
+      "useIcon": true
+    },
+    {
+      "id": 30,
+      "name": "Martillo Carpintero",
+      "price": 12500,
+      "category": "herramientas",
+      "templateId": "ferreteria",
+      "image": null,
+      "useIcon": true
+    },
+    {
+      "id": 31,
+      "name": "Destornillador Set x6",
+      "price": 8500,
+      "category": "herramientas",
+      "templateId": "ferreteria",
+      "image": null,
+      "useIcon": true
+    },
+    {
+      "id": 32,
+      "name": "Alicate Universal 8\"",
+      "price": 9800,
+      "category": "herramientas",
+      "templateId": "ferreteria",
+      "image": null,
+      "useIcon": true
+    },
+    {
+      "id": 33,
+      "name": "Llave Inglesa 12\"",
+      "price": 15500,
+      "category": "herramientas",
+      "templateId": "ferreteria",
+      "image": null,
+      "useIcon": true
+    },
+    {
+      "id": 34,
+      "name": "Sierra Manual",
+      "price": 7500,
+      "category": "herramientas",
+      "templateId": "ferreteria",
+      "image": null,
+      "useIcon": true
+    },
+    {
+      "id": 35,
+      "name": "Pintura Látex Blanca 4L",
+      "price": 18500,
+      "category": "pinturas",
+      "templateId": "ferreteria",
+      "image": null,
+      "useIcon": true
+    },
+    {
+      "id": 36,
+      "name": "Esmalte Sintético 1L",
+      "price": 12800,
+      "category": "pinturas",
+      "templateId": "ferreteria",
+      "image": null,
+      "useIcon": true
+    },
+    {
+      "id": 37,
+      "name": "Rodillo + Bandeja",
+      "price": 3500,
+      "category": "pinturas",
+      "templateId": "ferreteria",
+      "image": null,
+      "useIcon": true
+    },
+    {
+      "id": 38,
+      "name": "Pincel Set x3",
+      "price": 2200,
+      "category": "pinturas",
+      "templateId": "ferreteria",
+      "image": null,
+      "useIcon": true
+    },
+    {
+      "id": 39,
+      "name": "Cable 2x1.5mm x10m",
+      "price": 5500,
+      "category": "electricidad",
+      "templateId": "ferreteria",
+      "image": null,
+      "useIcon": true
+    },
+    {
+      "id": 40,
+      "name": "Enchufe 3 Patas",
+      "price": 1200,
+      "category": "electricidad",
+      "templateId": "ferreteria",
+      "image": null,
+      "useIcon": true
+    }
+  ],
+  "businessProducts": [
+    {
+      "id": 1,
+      "businessId": 1,
+      "productId": 1,
+      "stock": 100,
+      "customPrice": null,
+      "isActive": true
+    },
+    {
+      "id": 2,
+      "businessId": 1,
+      "productId": 2,
+      "stock": 80,
+      "customPrice": null,
+      "isActive": true
+    },
+    {
+      "id": 3,
+      "businessId": 1,
+      "productId": 3,
+      "stock": 150,
+      "customPrice": null,
+      "isActive": true
+    },
+    {
+      "id": 4,
+      "businessId": 1,
+      "productId": 4,
+      "stock": 60,
+      "customPrice": null,
+      "isActive": true
+    },
+    {
+      "id": 5,
+      "businessId": 1,
+      "productId": 5,
+      "stock": 45,
+      "customPrice": null,
+      "isActive": true
+    },
+    {
+      "id": 6,
+      "businessId": 1,
+      "productId": 6,
+      "stock": 90,
+      "customPrice": null,
+      "isActive": true
+    },
+    {
+      "id": 7,
+      "businessId": 1,
+      "productId": 7,
+      "stock": 65,
+      "customPrice": null,
+      "isActive": true
+    },
+    {
+      "id": 8,
+      "businessId": 1,
+      "productId": 8,
+      "stock": 75,
+      "customPrice": null,
+      "isActive": true
+    },
+    {
+      "id": 9,
+      "businessId": 1,
+      "productId": 9,
+      "stock": 85,
+      "customPrice": null,
+      "isActive": true
+    },
+    {
+      "id": 10,
+      "businessId": 1,
+      "productId": 10,
+      "stock": 120,
+      "customPrice": null,
+      "isActive": true
+    },
+    {
+      "id": 11,
+      "businessId": 1,
+      "productId": 11,
+      "stock": 100,
+      "customPrice": null,
+      "isActive": true
+    },
+    {
+      "id": 12,
+      "businessId": 1,
+      "productId": 12,
+      "stock": 30,
+      "customPrice": null,
+      "isActive": true
+    },
+    {
+      "id": 13,
+      "businessId": 1,
+      "productId": 13,
+      "stock": 50,
+      "customPrice": null,
+      "isActive": true
+    },
+    {
+      "id": 14,
+      "businessId": 1,
+      "productId": 14,
+      "stock": 80,
+      "customPrice": null,
+      "isActive": true
+    },
+    {
+      "id": 15,
+      "businessId": 1,
+      "productId": 15,
+      "stock": 40,
+      "customPrice": null,
+      "isActive": true
+    },
+    {
+      "id": 16,
+      "businessId": 2,
+      "productId": 26,
+      "stock": 50,
+      "customPrice": null,
+      "isActive": true
+    },
+    {
+      "id": 17,
+      "businessId": 2,
+      "productId": 27,
+      "stock": 60,
+      "customPrice": null,
+      "isActive": true
+    },
+    {
+      "id": 18,
+      "businessId": 2,
+      "productId": 28,
+      "stock": 70,
+      "customPrice": null,
+      "isActive": true
+    },
+    {
+      "id": 19,
+      "businessId": 2,
+      "productId": 29,
+      "stock": 45,
+      "customPrice": null,
+      "isActive": true
+    },
+    {
+      "id": 20,
+      "businessId": 2,
+      "productId": 30,
+      "stock": 15,
+      "customPrice": null,
+      "isActive": true
+    },
+    {
+      "id": 21,
+      "businessId": 2,
+      "productId": 31,
+      "stock": 20,
+      "customPrice": null,
+      "isActive": true
+    },
+    {
+      "id": 22,
+      "businessId": 2,
+      "productId": 32,
+      "stock": 18,
+      "customPrice": null,
+      "isActive": true
+    },
+    {
+      "id": 23,
+      "businessId": 2,
+      "productId": 33,
+      "stock": 12,
+      "customPrice": null,
+      "isActive": true
+    },
+    {
+      "id": 24,
+      "businessId": 2,
+      "productId": 34,
+      "stock": 10,
+      "customPrice": null,
+      "isActive": true
+    },
+    {
+      "id": 25,
+      "businessId": 2,
+      "productId": 35,
+      "stock": 25,
+      "customPrice": null,
+      "isActive": true
+    },
+    {
+      "id": 26,
+      "businessId": 2,
+      "productId": 36,
+      "stock": 30,
+      "customPrice": null,
+      "isActive": true
+    },
+    {
+      "id": 27,
+      "businessId": 2,
+      "productId": 37,
+      "stock": 40,
+      "customPrice": null,
+      "isActive": true
+    },
+    {
+      "id": 28,
+      "businessId": 2,
+      "productId": 38,
+      "stock": 50,
+      "customPrice": null,
+      "isActive": true
+    },
+    {
+      "id": 29,
+      "businessId": 2,
+      "productId": 39,
+      "stock": 35,
+      "customPrice": null,
+      "isActive": true
+    },
+    {
+      "id": 30,
+      "businessId": 2,
+      "productId": 40,
+      "stock": 60,
+      "customPrice": null,
+      "isActive": true
+    },
+    {
+      "id": 31,
+      "businessId": 3,
+      "productId": 16,
+      "stock": 25,
+      "customPrice": null,
+      "isActive": true
+    },
+    {
+      "id": 32,
+      "businessId": 3,
+      "productId": 17,
+      "stock": 20,
+      "customPrice": null,
+      "isActive": true
+    },
+    {
+      "id": 33,
+      "businessId": 3,
+      "productId": 18,
+      "stock": 30,
+      "customPrice": null,
+      "isActive": true
+    },
+    {
+      "id": 34,
+      "businessId": 3,
+      "productId": 19,
+      "stock": 28,
+      "customPrice": null,
+      "isActive": true
+    },
+    {
+      "id": 35,
+      "businessId": 3,
+      "productId": 20,
+      "stock": 35,
+      "customPrice": null,
+      "isActive": true
+    },
+    {
+      "id": 36,
+      "businessId": 3,
+      "productId": 21,
+      "stock": 30,
+      "customPrice": null,
+      "isActive": true
+    },
+    {
+      "id": 37,
+      "businessId": 3,
+      "productId": 22,
+      "stock": 40,
+      "customPrice": null,
+      "isActive": true
+    },
+    {
+      "id": 38,
+      "businessId": 3,
+      "productId": 23,
+      "stock": 100,
+      "customPrice": null,
+      "isActive": true
+    },
+    {
+      "id": 39,
+      "businessId": 3,
+      "productId": 24,
+      "stock": 80,
+      "customPrice": null,
+      "isActive": true
+    },
+    {
+      "id": 40,
+      "businessId": 3,
+      "productId": 25,
+      "stock": 60,
+      "customPrice": null,
+      "isActive": true
+    }
+  ]
+}
