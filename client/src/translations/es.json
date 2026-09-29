@@ -1,0 +1,558 @@
+{
+  "navbar": {
+    "home": "Inicio",
+    "whatIsGestly": "Qué es Gestly",
+    "pricing": "Precios",
+    "about": "Nosotros",
+    "contact": "Contacto",
+    "guide": "Guía",
+    "login": "Iniciar sesión",
+    "getStarted": "Empezar"
+  },
+  "hero": {
+    "newVersion": "Nueva Versión 2.0 Disponible",
+    "title": "Gestly",
+    "subtitle": "Gestiona tu negocio",
+    "description": "Deja de usar libreta. Simplifica tus ventas, inventario y clientes en un solo lugar.",
+    "getStarted": "Empezar",
+    "appStore": "App Store",
+    "activeUsers": "Usuarios Activos",
+    "appRating": "Valoración App"
+  },
+  "whatIsGestly": {
+    "badge": "Descubre Gestly",
+    "title": "¿Qué es Gestly?",
+    "description": "Gestly es una aplicación multiplataforma para iOS, Android y PC, la cual te permite controlar todos los ambientes de cualquier tipo de negocio que tengas.",
+    "modules": {
+      "catalog": { "title": "Catálogo", "desc": "Gestiona tus productos y servicios fácilmente." },
+      "customization": { "title": "Personalización", "desc": "Adapta la app a la identidad de tu marca." },
+      "sales": { "title": "Ventas", "desc": "Registra ventas en segundos." },
+      "customers": { "title": "Clientes", "desc": "Administra fiados y perfiles de clientes." },
+      "employees": { "title": "Empleados", "desc": "Control de acceso y rendimiento por usuario." },
+      "stats": { "title": "Estadísticas", "desc": "Toma decisiones basadas en datos reales." },
+      "branches": { "title": "Sucursales", "desc": "Administra múltiples sucursales y su estado." }
+    },
+    "configSteps": {
+      "title": "Tu negocio en marcha en 4 pasos",
+      "subtitle": "Olvídate de configuraciones eternas. Gestly te guía paso a paso.",
+      "steps": {
+        "1": { "title": "Configura tu Negocio", "desc": "Crea múltiples sucursales, registra empleados con roles específicos y asigna permisos por local." },
+        "2": { "title": "Define tu Stock", "desc": "Elige control simple (Sí/No) o stock complejo con cantidades exactas e inventario independiente por sucursal." },
+        "3": { "title": "Carga Rápida", "desc": "Selecciona tu rubro y usa plantillas inteligentes. Activa los productos que vendes en cada sucursal y define tu stock inicial." },
+        "4": { "title": "¡A Vender!", "desc": "Todo listo. Registra ventas, gestiona fiados y controla tu caja desde cualquier dispositivo." }
+      }
+    },
+    "businessTypes": {
+      "title": "Ideal para cualquier rubro",
+      "subtitle": "Gestly se adapta a las necesidades específicas de tu negocio",
+      "types": {
+        "grocery": "Almacén",
+        "bakery": "Panadería",
+        "clothing": "Ropa",
+        "hardware": "Ferretería",
+        "pharmacy": "Farmacia",
+        "kiosk": "Kiosco",
+        "restaurant": "Gastronomía",
+        "electronics": "Electrónica",
+        "toys": "Juguetería",
+        "shoes": "Zapatería",
+        "bookstore": "Librería",
+        "deli": "Fiambrería",
+        "butcher": "Carnicería",
+        "poultry": "Pollería"
+      }
+    }
+  },
+  "pricing": {
+    "title": "Planes Simples y Transparentes",
+    "subtitle": "Elige el plan perfecto para el tamaño de tu negocio. Sin comisiones ocultas.",
+    "mostPopular": "Más Popular",
+    "month": "mes",
+    "choosePlan": "Elegir Plan",
+    "free": {
+      "title": "Gestly Free",
+      "description": "Ideal para probar y empezar."
+    },
+    "essential": {
+      "title": "Gestly Essential",
+      "description": "Para negocios en crecimiento."
+    },
+    "pro": {
+      "title": "Gestly Pro",
+      "description": "Poder total para grandes negocios."
+    },
+    "features": {
+      "all_modules": "Todos los módulos básicos",
+      "basic_stats": "Estadísticas Básicas",
+      "fixed_customers": "Registro de Clientes Fijos",
+      "assistant": "Asistente Inteligente",
+      "ai_stock": "Carga de Stock con IA",
+      "multi_branch": "Multi-Sucursal",
+      "employees": "Gestión de Empleados",
+      "offline_mode": "Modo Offline",
+      "priority_support": "Soporte Prioritario",
+      "advanced_reports": "Reportes Avanzados"
+    }
+  },
+  "featuresList": {
+    "title": "Potencia tu Negocio",
+    "subtitle": "Explora todas las funcionalidades diseñadas para ti",
+    "search": "Buscar funcionalidad...",
+    "items": {
+      "multiplatform": { 
+        "title": "Multiplataforma", 
+        "desc": "Acceso total desde iOS, Android o PC.", 
+        "details": "Gestiona tu negocio desde cualquier lugar. Sincronización en tiempo real entre todos tus dispositivos. Empieza una venta en el mostrador y revísala cómodamente desde tu casa.",
+        "benefits": [
+          "Datos siempre sincronizados",
+          "Libertad de dispositivo",
+          "Interfaz adaptativa",
+          "Control remoto total"
+        ],
+        "diagram": {
+          "step1": "App Móvil",
+          "step2": "Nube Segura",
+          "step3": "Panel Web"
+        }
+      },
+      "stockSimple": { 
+        "title": "Stock Sencillo", 
+        "desc": "Controla disponible/agotado rápidamente.", 
+        "details": "Ideal para tiendas que no necesitan contar unidades exactas. Simplemente marca si tienes stock o no con un interruptor. Perfecto para kioscos, negocios de comida rápida o servicios.",
+        "benefits": [
+          "Gestión ultra rápida",
+          "Ideal para alta rotación",
+          "Sin conteos tediosos",
+          "Indicadores visuales claros"
+        ],
+        "diagram": {
+          "step1": "Producto",
+          "step2": "Interruptor",
+          "step3": "Disponible"
+        }
+      },
+      "stockComplex": { 
+        "title": "Stock Avanzado", 
+        "desc": "Control total de inventario y movimientos.", 
+        "details": "Lleva un control milimétrico de cada unidad. Registra entradas, salidas, mermas y ajustes de inventario con un historial completo de movimientos para auditoría.",
+        "benefits": [
+          "Conteo exacto de unidades",
+          "Historial de movimientos",
+          "Control de mermas",
+          "Alertas de bajo stock"
+        ],
+        "diagram": {
+          "step1": "Ingreso",
+          "step2": "Inventario",
+          "step3": "Venta/Salida"
+        }
+      },
+      "templates": { 
+        "title": "Plantillas", 
+        "desc": "Carga inicial rápida con plantillas predefinidas.", 
+        "details": "Empieza en minutos con plantillas pre-cargadas para tu rubro: Farmacia, Ferretería, Ropa, Kiosco, y más. Ahorra horas de configuración inicial seleccionando los productos comunes de tu industria.",
+        "benefits": [
+          "Ahorro de tiempo inicial",
+          "Catálogos pre-cargados",
+          "Personalización flexible",
+          "Arranque inmediato"
+        ],
+        "diagram": {
+          "step1": "Elige Rubro",
+          "step2": "Carga Plantilla",
+          "step3": "Catálogo Listo"
+        }
+      },
+      "aiStock": { 
+        "title": "IA Stock", 
+        "desc": "Carga facturas tomándoles una foto.", 
+        "details": "Olvídate de tipear manualmente. Saca una foto a tu factura de compra y nuestra Inteligencia Artificial detectará productos, precios y cantidades, cargándolos automáticamente al sistema.",
+        "benefits": [
+          "Carga automática",
+          "Reconocimiento inteligente",
+          "Menos errores humanos",
+          "Ahorro de horas de trabajo"
+        ],
+        "diagram": {
+          "step1": "Foto Factura",
+          "step2": "IA Procesa",
+          "step3": "Stock Actualizado"
+        }
+      },
+      "recipes": { 
+        "title": "Recetas", 
+        "desc": "Gestiona ingredientes para productos elaborados.", 
+        "details": "Ideal para gastronomía y manufactura. Define recetas para tus productos finales y el sistema descontará automáticamente los ingredientes del stock cada vez que realices una venta.",
+        "benefits": [
+          "Costos exactos",
+          "Descuento automático",
+          "Control de materia prima",
+          "Cálculo de margen real"
+        ],
+        "diagram": {
+          "step1": "Venta Producto",
+          "step2": "Consulta Receta",
+          "step3": "Descuenta Ingredientes"
+        }
+      },
+      "multiBranch": { 
+        "title": "Multi-sucursal", 
+        "desc": "Gestiona varios locales desde una cuenta.", 
+        "details": "Centraliza la administración de todas tus tiendas. Ve el stock de cada local en tiempo real, transfiere mercadería entre sucursales y obtén reportes consolidados o individuales desde un solo lugar.",
+        "benefits": [
+          "Stock centralizado",
+          "Transferencias simples",
+          "Reportes unificados",
+          "Control total remoto"
+        ],
+        "diagram": {
+          "step1": "Sucursal A",
+          "step2": "Nube Gestly",
+          "step3": "Sucursal B"
+        }
+      },
+      "shoppingList": { 
+        "title": "Lista de Compras", 
+        "desc": "Generación automática de reposición.", 
+        "details": "Gestly analiza tus patrones de venta y stock actual para sugerirte qué comprar y en qué cantidad. Genera listas de compras inteligentes en un clic para no quedarte nunca sin tus productos estrella.",
+        "benefits": [
+          "Reposición inteligente",
+          "Evita quiebres de stock",
+          "Predicción de demanda",
+          "Optimización de capital"
+        ],
+        "diagram": {
+          "step1": "Análisis Ventas",
+          "step2": "Cálculo Stock",
+          "step3": "Lista Sugerida"
+        }
+      },
+      "credits": { 
+        "title": "Fiados y Cuentas", 
+        "desc": "Control de cuentas corrientes de clientes.", 
+        "details": "Lleva un registro impecable de las cuentas corrientes. Establece límites de crédito por cliente, registra pagos parciales y envía recordatorios de deuda y comprobantes por WhatsApp automáticamente.",
+        "benefits": [
+          "Cuentas claras",
+          "Límites de crédito",
+          "Recordatorios WhatsApp",
+          "Mayor fidelización"
+        ],
+        "diagram": {
+          "step1": "Venta Fiado",
+          "step2": "Cuenta Corriente",
+          "step3": "Cobro/Aviso"
+        }
+      },
+      "employees": { 
+        "title": "Control de Personal", 
+        "desc": "Gestión de permisos y seguimiento de ventas.", 
+        "details": "Crea perfiles seguros para tus empleados. Controla exactamente qué pueden ver y hacer (caja, stock, costos), y mide su rendimiento individual con reportes de ventas por vendedor.",
+        "benefits": [
+          "Roles y permisos",
+          "Control de caja",
+          "Auditoría de acciones",
+          "Metas de venta"
+        ],
+        "diagram": {
+          "step1": "Empleado",
+          "step2": "Verifica Permisos",
+          "step3": "Acceso Limitado"
+        }
+      },
+      "stats": { 
+        "title": "Estadísticas", 
+        "desc": "Visualiza el rendimiento de tu negocio.", 
+        "details": "Toma decisiones estratégicas basadas en datos reales. Accede a gráficos intuitivos de ventas por hora, productos más vendidos, ranking de clientes y rentabilidad neta de tu negocio.",
+        "benefits": [
+          "Decisiones informadas",
+          "Gráficos visuales",
+          "Rentabilidad real",
+          "Tendencias de venta"
+        ],
+        "diagram": {
+          "step1": "Datos Operativos",
+          "step2": "Procesamiento",
+          "step3": "Insights Visuales"
+        }
+      },
+      "cashRegister": { 
+        "title": "Caja y Turnos", 
+        "desc": "Apertura, cierre y arqueo de caja.", 
+        "details": "Mantén el control total del flujo de dinero. Realiza aperturas y cierres de caja por turno, registra gastos menores, retiros y evita diferencias de dinero al final del día con arqueos ciegos.",
+        "benefits": [
+          "Arqueo exacto",
+          "Control de gastos",
+          "Cierres por turno",
+          "Historial de caja"
+        ],
+        "diagram": {
+          "step1": "Apertura",
+          "step2": "Movimientos",
+          "step3": "Cierre/Arqueo"
+        }
+      },
+      "discounts": { 
+        "title": "Promociones", 
+        "desc": "Aplica descuentos y ofertas especiales.", 
+        "details": "Potencia tus ventas creando reglas de descuentos automáticos (2x1, % de descuento en segunda unidad, Happy Hour). El sistema aplica la oferta automáticamente al cumplir las condiciones.",
+        "benefits": [
+          "Aumento de ventas",
+          "Fidelización clientes",
+          "Reglas automáticas",
+          "Rotación de stock"
+        ],
+        "diagram": {
+          "step1": "Regla (2x1)",
+          "step2": "Venta Cumple",
+          "step3": "Descuento Auto"
+        }
+      },
+      "alerts": { 
+        "title": "Alertas de Stock", 
+        "desc": "Avisos cuando el inventario es bajo.", 
+        "details": "Nunca más pierdas una venta por falta de mercadería. Configura niveles mínimos de stock y recibe alertas automáticas para saber exactamente cuándo y qué reponer antes de que se agote.",
+        "benefits": [
+          "Stock asegurado",
+          "Avisos configurables",
+          "Reposición a tiempo",
+          "Ventas continuas"
+        ],
+        "diagram": {
+          "step1": "Nivel Mínimo",
+          "step2": "Detección Baja",
+          "step3": "Alerta App"
+        }
+      },
+      "offline": { 
+        "title": "Modo Offline", 
+        "desc": "Sigue vendiendo sin conexión a internet.", 
+        "details": "Tu negocio no se detiene si se corta internet. Gestly sigue operando con normalidad guardando los datos localmente y sincroniza todo automáticamente con la nube apenas recuperas la conexión.",
+        "benefits": [
+          "Venta continua",
+          "Sincronización auto",
+          "Datos seguros",
+          "Sin interrupciones"
+        ],
+        "diagram": {
+          "step1": "Sin Internet",
+          "step2": "Guardado Local",
+          "step3": "Sincronización"
+        }
+      }
+    }
+  },
+  "faq": {
+    "title": "Preguntas Frecuentes",
+    "subtitle": "Resolvemos tus dudas sobre Gestly",
+    "items": {
+      "internet": {
+        "q": "¿Qué pasa si se corta internet a mitad de una venta?",
+        "a": "¡No hay problema! Gestly cuenta con un robusto **Modo Offline**. Puedes seguir registrando ventas, cobrando y gestionando tu stock sin conexión. En cuanto recuperes internet, todo se sincronizará automáticamente con la nube."
+      },
+      "data_loss": {
+        "q": "¿Y si pierdo mi celular o se rompe mi computadora?",
+        "a": "Tus datos están **siempre seguros en la nube**. No guardamos la información solo en tu dispositivo. Si cambias de teléfono o computadora, solo inicias sesión y ahí estará todo tu negocio, tal como lo dejaste."
+      },
+      "paper_records": {
+        "q": "Tengo todas mis ventas en papel, ¿es difícil pasarme a Gestly?",
+        "a": "Para nada. Hemos diseñado Gestly pensando en ti. La interfaz es tan intuitiva que sentirás que ya sabes usarla. Además, puedes ir registrando tus productos a medida que los vendes, no necesitas cargar todo el primer día."
+      },
+      "product_entry": {
+        "q": "Tengo miles de productos, ¡qué tedioso cargarlos uno por uno!",
+        "a": "Te entendemos. Por eso creamos herramientas inteligentes: 1) **Escáner de código de barras** con la cámara. 2) **Importación masiva** desde Excel. 3) **Inteligencia Artificial** que reconoce productos por foto. 4) **Plantillas** pre-cargadas para rubros comunes (Kiosco, Farmacia, Ropa, etc.)."
+      },
+      "usage": {
+        "q": "¿Cómo aprendo a usar la aplicación?",
+        "a": "Gestly es **intuitiva por diseño**. Si sabes usar WhatsApp o Instagram, sabes usar Gestly. De todos modos, incluimos tutoriales paso a paso y un equipo de soporte listo para ayudarte por WhatsApp."
+      },
+      "multi_branch": {
+        "q": "Tengo más de una sucursal, ¿sirve para mí?",
+        "a": "¡Perfecto! Gestly es **Multi-Sucursal nativo**. Puedes ver el stock de todas tus tiendas en tiempo real, transferir mercadería entre ellas y ver reportes unificados o separados por local, todo desde una sola cuenta de administrador."
+      }
+    }
+  },
+  "features": {
+    "title": "Gestly",
+    "subtitle": "Todo lo que necesitas para gestionar tu negocio, en una interfaz hermosa.",
+    "intuitiveUi": {
+      "title": "Interfaz Intuitiva",
+      "description": "Diseñada pensando en la simplicidad. Navega por los datos de tu tienda con facilidad y claridad."
+    },
+    "securePayments": {
+      "title": "Pagos Seguros",
+      "description": "Seguridad de nivel empresarial para todas las transacciones. Mantén los datos de tus clientes seguros."
+    },
+    "allInOne": {
+      "title": "Acciones Todo en Uno",
+      "description": "Gestiona inventario, pedidos y relaciones con clientes desde un único panel potente."
+    },
+    "globalReach": {
+      "title": "Alcance Global",
+      "description": "Acepta pagos desde cualquier parte del mundo con soporte multidivisa integrado."
+    }
+  },
+  "footer": {
+    "tagline": "Empoderando negocios con herramientas elegantes y potentes para la web moderna.",
+    "product": "Producto",
+    "features": "Características",
+    "pricing": "Precios",
+    "api": "API",
+    "integrations": "Integraciones",
+    "company": "Compañía",
+    "about": "Nosotros",
+    "blog": "Blog",
+    "careers": "Carreras",
+    "contact": "Contacto",
+    "connect": "Conectar",
+    "copyright": "© 2024 Gestly por Lagoom. Todos los derechos reservados.",
+    "privacy": "Política de Privacidad",
+    "terms": "Términos de Servicio"
+  },
+  "contact": {
+    "title": "Estamos aquí para ayudarte",
+    "subtitle": "¿Tienes alguna duda o necesitas soporte? Contáctanos.",
+    "email": "ayuda@lagoom.com.ar",
+    "whatsapp": "Contactar por WhatsApp",
+    "work": "Trabaja con nosotros"
+  },
+  "guide": {
+    "title": "Centro de Aprendizaje",
+    "subtitle": "Domina Gestly con nuestros tutoriales paso a paso.",
+    "randomVideo": "Video Destacado",
+    "watchNow": "Ver Ahora",
+    "tutorials": {
+      "createProduct": {
+        "title": "Cómo crear un producto",
+        "steps": [
+          "Abre la app y ve a la sección 'Catálogo'.",
+          "Toca el botón '+' en la esquina inferior.",
+          "Ingresa el nombre, precio y código de barras.",
+          "Guarda los cambios."
+        ]
+      },
+      "makeSale": {
+        "title": "Registrar una venta",
+        "steps": [
+          "Ve a la pantalla principal de 'Ventas'.",
+          "Escanea el producto o búscalo manualmente.",
+          "Selecciona la cantidad y presiona 'Cobrar'.",
+          "Elige el método de pago y confirma."
+        ]
+      },
+      "addStock": {
+        "title": "Cargar stock",
+        "steps": [
+          "Dirígete a 'Inventario'.",
+          "Busca el producto a actualizar.",
+          "Selecciona 'Ingreso de Mercadería'.",
+          "Ingresa la cantidad y el proveedor (opcional)."
+        ]
+      }
+    }
+  },
+  "about": {
+    "title": "Nuestra Historia",
+    "subtitle": "De un proyecto escolar a revolucionar el comercio.",
+    "story": {
+      "title": "El Origen",
+      "description": "Gestly nació como un humilde proyecto de colegio con una visión clara: simplificar la vida de los comerciantes. Lo que comenzó en un aula, hoy busca expandirse por toda Argentina y pronto al mundo."
+    },
+    "mission": {
+      "title": "Nuestra Misión",
+      "description": "Queremos que cualquier persona, sin importar el tamaño de su negocio, pueda acceder a herramientas profesionales. Es hora de dejar el papel y lápiz atrás."
+    },
+    "lagoom": {
+      "title": "Desarrollado por Lagoom",
+      "description": "Gestly es un producto de Lagoom, una empresa dedicada al desarrollo de software a medida y soluciones SaaS innovadoras.",
+      "cta": "Conoce más en lagoom.com.ar"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Bienvenido de nuevo",
+      "subtitle": "Inicia sesión para gestionar tu negocio",
+      "emailPlaceholder": "Correo electrónico",
+      "passwordPlaceholder": "Contraseña",
+      "forgotPassword": "¿Olvidaste tu contraseña?",
+      "submit": "Iniciar Sesión",
+      "orContinueWith": "O continúa con",
+      "noAccount": "¿No tienes una cuenta?",
+      "register": "Regístrate",
+      "google": "Google",
+      "microsoft": "Microsoft",
+      "phone": "Teléfono"
+    },
+    "register": {
+      "title": "Crear Cuenta",
+      "subtitle": "Empieza a organizar tu negocio hoy",
+      "namePlaceholder": "Nombre completo",
+      "emailPlaceholder": "Correo electrónico",
+      "passwordPlaceholder": "Contraseña",
+      "confirmPasswordPlaceholder": "Confirmar contraseña",
+      "submit": "Registrarse",
+      "haveAccount": "¿Ya tienes una cuenta?",
+      "login": "Inicia Sesión"
+    },
+    "onboarding": {
+      "steps": {
+        "welcome": "Bienvenido",
+        "business": "Tu Negocio",
+        "preferences": "Preferencias",
+        "branches": "Sucursales",
+        "employees": "Equipo",
+        "catalog": "Catálogo",
+        "finish": "Listo"
+      },
+      "welcome": {
+        "title": "¡Hola, {{name}}!",
+        "subtitle": "Vamos a configurar Gestly para que se adapte perfectamente a tus necesidades. Solo tomará unos minutos.",
+        "start": "Comenzar Configuración"
+      },
+      "business": {
+        "title": "Cuéntanos sobre tu negocio",
+        "subtitle": "Esto nos ayuda a recomendarte las mejores plantillas.",
+        "rubroLabel": "Rubro / Categoría",
+        "rubroPlaceholder": "Ej. Kiosco, Farmacia, Ropa...",
+        "stockLabel": "¿Cómo prefieres gestionar tu stock?",
+        "stockSimple": "Simple (Disponible / Agotado)",
+        "stockComplex": "Avanzado (Cantidades exactas, movimientos)",
+        "next": "Siguiente",
+        "back": "Atrás"
+      },
+      "preferences": {
+        "title": "Personaliza tu experiencia",
+        "subtitle": "Hagamos que Gestly se vea como a ti te gusta.",
+        "colorLabel": "Color de tema preferido",
+        "petLabel": "¿Cuál es tu mascota favorita?",
+        "petPlaceholder": "Pregunta de seguridad",
+        "next": "Siguiente",
+        "back": "Atrás"
+      },
+      "branches": {
+        "title": "Tus Sucursales",
+        "subtitle": "Define los locales físicos o puntos de venta.",
+        "addLabel": "Añadir Sucursal",
+        "namePlaceholder": "Ej. Sucursal Centro"
+      },
+      "employees": {
+        "title": "Tu Equipo",
+        "subtitle": "Registra a tus colaboradores y asígnalos a las sucursales.",
+        "addLabel": "Añadir Miembro",
+        "namePlaceholder": "Nombre del empleado",
+        "assignLabel": "Asignar a sucursales:"
+      },
+      "catalog": {
+        "title": "Catálogo Inicial",
+        "subtitle": "Selecciona productos predefinidos para tu rubro.",
+        "empty": "No hay plantillas para este rubro, puedes crear productos manualmente después.",
+        "selectAll": "Seleccionar Todo",
+        "deselectAll": "Deseleccionar Todo"
+      },
+      "finish": {
+        "title": "¡Todo listo!",
+        "subtitle": "Has configurado tu negocio exitosamente. Es hora de empezar a vender.",
+        "goToDashboard": "Ir al Panel Principal"
+      }
+    }
+  }
+}
