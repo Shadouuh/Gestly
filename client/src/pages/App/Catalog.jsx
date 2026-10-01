@@ -8,9 +8,10 @@ import {
   Dog, Flower2, Hammer, Car, Smartphone, WashingMachine, Croissant, Cake, Baby,
   GalleryThumbnails, ChevronDown, FileText
 } from 'lucide-react';
-import api from '../../services/api';
+import api, { resolveAssetUrl } from '../../services/api';
 import { getCurrentBusiness } from '../../services/api';
 import ImportFromPhoto from '../../shared/components/ImportFromPhoto';
+import ProductImagePicker from './components/ProductImagePicker';
 import { getProductTotalStock, normalizeProductFromApi } from '../../shared/utils/productNormalization';
 
 const ICON_MAP = { Wine, Beer, Coffee, Milk, Droplets, Sparkles, SprayCan, Scissors, Heart, Pill, Cookie, Candy, Apple, Beef, Snowflake, Home, Shirt, ShoppingBag: ShoppingBagIcon, Dog, Flower2, Hammer, Car, Smartphone, WashingMachine, Package, Tag, Croissant, Cake, Baby };
@@ -471,7 +472,7 @@ const Catalog = () => {
           />
           <div className="relative flex items-center justify-center w-11 h-11">
             {hasImage ? (
-              <img src={product.imageUrl} alt={product.name} className="h-9 w-9 object-contain" />
+              <img src={resolveAssetUrl(product.imageUrl)} alt={product.name} className="h-9 w-9 object-contain" />
             ) : (
               <Icon size={26} strokeWidth={1.3} color={style.solid} />
             )}
@@ -716,7 +717,7 @@ const Catalog = () => {
                       <div className="absolute inset-0 rounded-2xl blur-xl opacity-40" style={{ backgroundColor: toRgba(style.solid, 0.20) }} />
                       <div className="relative flex h-12 w-12 items-center justify-center rounded-2xl bg-white dark:bg-slate-950 ring-4 shadow-sm" style={{ ['--tw-ring-color']: toRgba(style.solid, 0.12) }}>
                         {p.imageUrl ? (
-                          <img src={p.imageUrl} alt={p.name} className="h-full w-full object-contain p-2.5" />
+                          <img src={resolveAssetUrl(p.imageUrl)} alt={p.name} className="h-full w-full object-contain p-2.5" />
                         ) : (
                           <Icon size={22} strokeWidth={1.9} color={style.solid} />
                         )}
@@ -765,7 +766,7 @@ const Catalog = () => {
 
       {showAddModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 dark:bg-black/60 backdrop-blur-sm p-4" onClick={() => setShowAddModal(false)}>
-          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-2xl w-full p-6" onClick={e => e.stopPropagation()}>
+          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-h-[90vh] overflow-y-auto max-w-2xl w-full p-6" onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">Nuevo producto</h2>
               <button onClick={() => setShowAddModal(false)} className="p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-400 dark:text-slate-500"><X size={16} /></button>
@@ -852,13 +853,7 @@ const Catalog = () => {
                       </button>
                     </div>
                   </div>
-                  <div>
-                    <label className="text-[11px] font-bold text-slate-600 dark:text-slate-400 block mb-1">URL de imagen <span className="font-normal opacity-60">(opcional)</span></label>
-                    <div className="relative">
-                      <Camera size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-                      <input value={newProduct.imageUrl} onChange={e => setNewProduct(p => ({ ...p, imageUrl: e.target.value }))} placeholder="https://ejemplo.com/foto.jpg" className="w-full pl-8 pr-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-700/50 text-xs font-medium text-slate-900 dark:text-slate-100 placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-blue-500/15" />
-                    </div>
-                  </div>
+                  <ProductImagePicker name={newProduct.name} value={newProduct.imageUrl} onChange={(imageUrl) => setNewProduct((previous) => ({ ...previous, imageUrl }))} />
                 </>
               ) : (
                 <div className="space-y-4">
@@ -977,7 +972,7 @@ const Catalog = () => {
 
       {showEditModal && editingProduct && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 dark:bg-black/60 backdrop-blur-sm p-4" onClick={() => setShowEditModal(false)}>
-          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-md w-full p-6" onClick={e => e.stopPropagation()}>
+          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-h-[90vh] overflow-y-auto max-w-md w-full p-6" onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-base font-bold text-slate-900 dark:text-slate-100">Editar producto</h2>
               <button onClick={() => setShowEditModal(false)} className="p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-400 dark:text-slate-500"><X size={16} /></button>
@@ -985,7 +980,7 @@ const Catalog = () => {
             <div className="space-y-3">
               {editingProduct.imageUrl && (
                 <div className="relative h-32 rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-700">
-                  <img src={editingProduct.imageUrl} alt="" className="w-full h-full object-cover" />
+                  <img src={resolveAssetUrl(editingProduct.imageUrl)} alt="" className="w-full h-full object-cover" />
                   <div className="absolute bottom-2 left-2 px-2 py-1 rounded-lg bg-black/50 text-white text-[10px] font-medium backdrop-blur-sm flex items-center gap-1"><Camera size={11} /> Vista previa</div>
                 </div>
               )}
@@ -1076,10 +1071,7 @@ const Catalog = () => {
                   </div>
                 )}
               </div>
-              <div>
-                <label className="text-[11px] font-bold text-slate-600 dark:text-slate-400 block mb-1">URL de imagen</label>
-                <input value={editingProduct.imageUrl} onChange={e => setEditingProduct(p => ({ ...p, imageUrl: e.target.value }))} placeholder="https://..." className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-700/50 text-xs font-medium text-slate-900 dark:text-slate-100 placeholder:text-slate-400 outline-none" />
-              </div>
+              <ProductImagePicker name={editingProduct.name} value={editingProduct.imageUrl} onChange={(imageUrl) => setEditingProduct((previous) => ({ ...previous, imageUrl }))} />
               <button onClick={handleEditProduct} disabled={saving} className="w-full py-2.5 rounded-xl bg-blue-600 text-white text-xs font-bold hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2">
                 {saving ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}{saving ? 'Guardando...' : 'Guardar cambios'}
               </button>

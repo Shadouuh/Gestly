@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const API_URL = 'http://localhost:3001';
+export const resolveAssetUrl = (value) => typeof value === 'string' && value.startsWith('/uploads/products/') ? `${API_URL}${value}` : value;
 const IS_DEV = import.meta.env.DEV;
 const API_DEBUG_URL = 'http://127.0.0.1:7778/event';
 const API_DEBUG_SESSION = 'catalog-branch-load';

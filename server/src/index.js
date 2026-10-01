@@ -29,6 +29,7 @@ import ocrRoutes from './routes/ocr.js';
 import customerDebtRoutes from './routes/customerDebts.js';
 import customSectionRoutes from './routes/customSections.js';
 import customNodeRoutes from './routes/customNodes.js';
+import productImageRoutes from './routes/productImages.js';
 
 const app = express();
 const PORT = Number(process.env.PORT || 3001);
@@ -36,6 +37,9 @@ const PORT = Number(process.env.PORT || 3001);
 app.use(cors());
 app.use(express.json());
 app.use(morgan('dev'));
+app.use('/uploads/products', express.static(path.join(__dirname, '..', 'uploads', 'products'), {
+  setHeaders: (res) => res.setHeader('X-Content-Type-Options', 'nosniff'),
+}));
 
 // Auth (no middleware needed)
 app.use('/auth', authRoutes);
@@ -48,6 +52,7 @@ app.use('/businesses', businessRoutes);
 
 // Products
 app.use('/products', productRoutes);
+app.use('/product-images', productImageRoutes);
 
 // Variants
 app.use('/variants', variantRoutes);

@@ -9,7 +9,8 @@
     "start": "node src/index.js",
     "seed": "node src/seed.js",
     "migrate:custom-sections": "node scripts/migrate-custom-sections.js && node scripts/migrate-custom-nodes.js && node scripts/migrate-custom-filters.js",
-    "test:custom-nodes": "node scripts/test-custom-nodes.js"
+    "test:custom-nodes": "node scripts/test-custom-nodes.js",
+    "test:product-images": "node scripts/test-product-images.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
