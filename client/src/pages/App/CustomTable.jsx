@@ -1,5 +1,7 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { Edit3, LayoutGrid, List, Plus, Save, Search, Table2, Trash2, X } from 'lucide-react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
+import { Link } from 'react-router-dom';
+import { Edit3, Info, LayoutGrid, List, Plus, Save, Search, Table2, Trash2, X } from 'lucide-react';
 import api from '../../services/api';
 
 const INPUT = 'w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-900 dark:text-white';
@@ -32,6 +34,92 @@ const formatValue = (value, type) => {
   if (type === 'aggregate') return Number(value).toLocaleString('es-AR', { maximumFractionDigits: 2 });
   return String(value);
 };
+
+const BUILTIN_DESTINATIONS = {
+  sales: { label: 'Ventas y Fiados', path: '/app/ventas' },
+  cash: { label: 'Ventas y Fiados', path: '/app/ventas' },
+  products: { label: 'Mi Catálogo', path: '/app/catalogo' },
+  customers: { label: 'Clientes', path: '/app/clientes' },
+  branches: { label: 'Sucursales', path: '/app/sucursales' },
+  suppliers: { label: 'Proveedores', path: null },
+};
+const BUILTIN_FIELD_NAMES = { status: 'Estado', branch_id: 'Sucursal', payment_method: 'Medio de pago', customer_id: 'Cliente', created_at: 'Fecha', type: 'Tipo', category: 'Categoría' };
+
+const aggregateDetailForRow = (row, column, sourceTable) => {
+  const filters = filtersForColumn(column);
+  if (!filters.length) return 'Suma todos los registros del origen';
+  return filters.map((filter, index) => {
+    const field = sourceTable?.columns.find((candidate) => String(candidate.id) === String(filter.field));
+    const fieldName = field?.name || BUILTIN_FIELD_NAMES[filter.field] || filter.field;
+    const override = row.filters?.[String(column.id)]?.[String(index)];
+    const value = override || (filter.valueMode === 'row' ? 'esta fila' : filter.valueMode === 'column'
+      ? row.values?.[String(filter.columnId)] : filter.value);
+    const operator = filter.operator === 'gte' ? '≥' : filter.operator === 'lte' ? '≤' : '=';
+    return `${fieldName} ${operator} ${value === null || value === undefined || value === '' ? 'sin dato' : value}`;
+  }).join(' · ');
+};
+
+const relatedItemsForRow = (row, columns, availableTables) => columns.flatMap((column) => {
+  const config = column.config;
+  if (!config || !['relation', 'aggregate'].includes(column.dataType)) return [];
+  if (column.dataType === 'relation' && !row.values?.[String(column.id)]) return [];
+  const type = column.dataType === 'relation' ? config.targetType : config.sourceType;
+  const target = type === 'custom'
+    ? availableTables.find((item) => Number(item.id) === Number(column.dataType === 'relation' ? config.targetTableId : config.sourceTableId))
+    : BUILTIN_DESTINATIONS[type];
+  if (!target) return [];
+  const label = type === 'custom' ? target.title : target.label;
+  const path = type === 'custom' ? `/app/secciones/${target.nodeId}?tabla=${target.id}` : target.path;
+  const detail = column.dataType === 'relation' ? row.displayValues?.[column.id] : aggregateDetailForRow(row, column, type === 'custom' ? target : null);
+  return [{ key: column.id, column: column.name, label, path, detail }];
+});
+
+function RowRelationTooltip({ row, columns, availableTables }) {
+  const items = relatedItemsForRow(row, columns, availableTables);
+  const buttonRef = useRef(null);
+  const popoverRef = useRef(null);
+  const closeTimer = useRef(null);
+  const [open, setOpen] = useState(false);
+  const [position, setPosition] = useState({ top: 0, left: 0 });
+
+  useEffect(() => () => clearTimeout(closeTimer.current), []);
+  useEffect(() => {
+    if (!open) return undefined;
+    const reposition = () => {
+      const rect = buttonRef.current?.getBoundingClientRect();
+      if (!rect) return;
+      setPosition({
+        top: rect.bottom + 8 + 220 > window.innerHeight ? Math.max(8, rect.top - 228) : rect.bottom + 8,
+        left: Math.max(8, Math.min(rect.left, window.innerWidth - 312)),
+      });
+    };
+    const onKeyDown = (event) => { if (event.key === 'Escape') setOpen(false); };
+    const onPointerDown = (event) => {
+      if (!buttonRef.current?.contains(event.target) && !popoverRef.current?.contains(event.target)) setOpen(false);
+    };
+    reposition();
+    window.addEventListener('resize', reposition);
+    window.addEventListener('scroll', reposition, true);
+    window.addEventListener('keydown', onKeyDown);
+    document.addEventListener('pointerdown', onPointerDown);
+    return () => {
+      window.removeEventListener('resize', reposition);
+      window.removeEventListener('scroll', reposition, true);
+      window.removeEventListener('keydown', onKeyDown);
+      document.removeEventListener('pointerdown', onPointerDown);
+    };
+  }, [open]);
+
+  const keepOpen = () => clearTimeout(closeTimer.current);
+  const closeSoon = () => { clearTimeout(closeTimer.current); closeTimer.current = setTimeout(() => setOpen(false), 180); };
+  return <>
+    <button ref={buttonRef} type="button" title="Ver relaciones y atajos" aria-label={`Ver relaciones de la fila ${row.id}`} aria-expanded={open} className="rounded-lg p-2 text-indigo-600 hover:bg-indigo-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500 dark:hover:bg-slate-800" onMouseEnter={() => { keepOpen(); setOpen(true); }} onMouseLeave={closeSoon} onFocus={() => setOpen(true)} onClick={() => setOpen(true)}><Info size={16} /></button>
+    {open && createPortal(<div ref={popoverRef} role="dialog" aria-label={`Relaciones de la fila ${row.id}`} className="fixed z-[100] w-[304px] max-w-[calc(100vw-16px)] rounded-xl border border-indigo-100 bg-white p-3 text-left shadow-xl dark:border-slate-700 dark:bg-slate-900" style={position} onMouseEnter={keepOpen} onMouseLeave={closeSoon}>
+      <p className="mb-2 text-xs font-bold text-slate-700 dark:text-slate-200">Relacionado con</p>
+      {items.length ? <ul className="max-h-52 space-y-2 overflow-y-auto">{items.map((item) => <li key={item.key} className="text-xs leading-5 text-slate-600 dark:text-slate-300"><span className="font-semibold">{item.column}</span> → {item.path ? <Link to={item.path} className="font-bold text-indigo-600 underline underline-offset-2 hover:text-indigo-800 dark:text-indigo-300" onClick={() => setOpen(false)}>{item.label}</Link> : <span>{item.label}</span>}{item.detail && <span className="block text-slate-500">{item.detail}</span>}</li>)}</ul> : <p className="text-xs text-slate-500">Esta fila todavía no tiene relaciones.</p>}
+    </div>, document.body)}
+  </>;
+}
 
 const chooseCardFields = (columns) => {
   const text = columns.filter((column) => column.dataType === 'text');
@@ -250,7 +338,7 @@ const CustomTable = ({ tableId }) => {
     catch (requestError) { setError(errorText(requestError)); }
     finally { setBusy(false); }
   };
-  const rowActions = (row) => <div className="flex justify-end gap-2"><button type="button" aria-label="Editar fila" className="rounded-lg p-2 text-indigo-600 hover:bg-indigo-50 dark:hover:bg-slate-800" onClick={() => setEditingRow(row)}><Edit3 size={16} /></button><button type="button" aria-label="Eliminar fila" className="rounded-lg p-2 text-red-500 hover:bg-red-50 disabled:opacity-50 dark:hover:bg-slate-800" disabled={busy} onClick={() => deleteRow(row.id)}><Trash2 size={16} /></button></div>;
+  const rowActions = (row) => <div className="flex justify-end gap-2"><RowRelationTooltip row={row} columns={table.columns} availableTables={availableTables} /><button type="button" aria-label="Editar fila" className="rounded-lg p-2 text-indigo-600 hover:bg-indigo-50 dark:hover:bg-slate-800" onClick={() => setEditingRow(row)}><Edit3 size={16} /></button><button type="button" aria-label="Eliminar fila" className="rounded-lg p-2 text-red-500 hover:bg-red-50 disabled:opacity-50 dark:hover:bg-slate-800" disabled={busy} onClick={() => deleteRow(row.id)}><Trash2 size={16} /></button></div>;
 
   if (loading) return <p className="p-6 text-sm text-slate-500">Cargando tabla...</p>;
   if (!table) return <p role="alert" className="p-6 text-sm text-red-600">{error || 'Tabla no encontrada'}</p>;
