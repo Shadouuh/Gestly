@@ -26,7 +26,9 @@ router.get('/search', async (req, res) => {
   try {
     const url = new URL('https://serpapi.com/search.json');
     url.search = new URLSearchParams({ engine: 'google_images', q: query, api_key: process.env.SERPAPI_API_KEY, hl: 'es', gl: 'ar', safe: 'active' }).toString();
-    const response = await fetch(url, { signal: AbortSignal.timeout(15000) });
+    const response = await fetch(url, { signal: AbortSignal.timeout(45000) });
+    if (response.status === 401 || response.status === 403) return res.status(502).json({ message: 'SerpApi rechazó la clave. SERPAPI_API_KEY debe ser una clave de SerpApi, no de Google Cloud.' });
+    if (response.status === 429) return res.status(502).json({ message: 'Se agotó el límite de búsquedas de SerpApi. Probá más tarde.' });
     if (!response.ok) return res.status(502).json({ message: 'Google Imágenes no respondió. Revisá la clave o intentá nuevamente.' });
     const data = await response.json();
     if (data.error) return res.status(502).json({ message: 'No se pudo buscar. Revisá la configuración de SerpApi.' });

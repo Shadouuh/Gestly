@@ -8,7 +8,7 @@ Para habilitar la búsqueda, agregar en `server/.env`:
 SERPAPI_API_KEY=tu_clave
 ```
 
-Reiniciar `npm run dev`. Se usa [SerpApi Google Images](https://serpapi.com/google-images-api) porque la [API oficial Custom Search JSON](https://developers.google.com/custom-search/v1/overview) ya no acepta nuevos clientes. La clave permanece en el servidor. La búsqueda ofrece hasta cuatro resultados y descarga al servidor sólo la imagen seleccionada; si no hay clave, la subida manual sigue funcionando. La selección se mantiene diez minutos, por lo que si vence hay que buscar de nuevo. Al cancelar el formulario después de subir o elegir una imagen, el archivo ya descargado queda sin asignar; queda pendiente una limpieza de imágenes huérfanas para una etapa posterior.
+La clave debe ser de **SerpApi**, no de Google Cloud; una clave de Google devuelve un error 401 en este proveedor. Reiniciar `npm run dev`. Se usa [SerpApi Google Images](https://serpapi.com/google-images-api) porque la [API oficial Custom Search JSON](https://developers.google.com/custom-search/v1/overview) ya no acepta nuevos clientes. La clave permanece en el servidor. La búsqueda ofrece hasta cuatro resultados y descarga al servidor sólo la imagen seleccionada; si no hay clave, la subida manual sigue funcionando. La selección se mantiene diez minutos, por lo que si vence hay que buscar de nuevo. Al cancelar el formulario después de subir o elegir una imagen, el archivo ya descargado queda sin asignar; queda pendiente una limpieza de imágenes huérfanas para una etapa posterior.
 
 Las imágenes encontradas pueden estar sujetas a derechos de autor. El usuario debe verificar que puede utilizarlas.
 

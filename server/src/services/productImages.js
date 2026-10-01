@@ -55,7 +55,9 @@ const requestImage = async (address, redirects = 0) => {
     const request = https.get(url, {
       timeout: 12000,
       headers: { Accept: 'image/jpeg,image/png,image/webp', 'User-Agent': 'GestlyProductImage/1.0' },
-      lookup: (_hostname, _options, callback) => callback(null, resolved.address, resolved.family),
+      lookup: (_hostname, options, callback) => options.all
+        ? callback(null, [{ address: resolved.address, family: resolved.family }])
+        : callback(null, resolved.address, resolved.family),
     }, async (response) => {
       if ([301, 302, 303, 307, 308].includes(response.statusCode)) {
         response.resume();
