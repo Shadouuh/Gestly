@@ -78,6 +78,30 @@ try {
   const withSales = await call(`/custom-sections/${containerTable}`);
   assert.equal(withSales.rows[0].computed[salesTotal.id], Number(sales.total));
 
+  const from = await call(`/custom-sections/${containerTable}/columns`, 'POST', { name: 'Desde', dataType: 'date' }, 201);
+  const to = await call(`/custom-sections/${containerTable}/columns`, 'POST', { name: 'Hasta', dataType: 'date' }, 201);
+  const datedSales = await call(`/custom-sections/${containerTable}/columns`, 'POST', {
+    name: 'Ventas del período', dataType: 'aggregate', config: {
+      sourceType: 'sales', filters: [
+        { field: 'status', operator: 'eq', valueMode: 'fixed', value: 'paid' },
+        { field: 'created_at', operator: 'gte', valueMode: 'column', columnId: from.id },
+        { field: 'created_at', operator: 'lte', valueMode: 'column', columnId: to.id },
+      ],
+    },
+  }, 201);
+  const dateValues = { [name.id]: 'Contenedor A', [from.id]: '2026-01-01', [to.id]: '2026-12-31' };
+  await call(`/custom-sections/${containerTable}/rows/${container.id}`, 'PATCH', { values: dateValues });
+  const [[paidInRange]] = await db.query("SELECT COALESCE(SUM(total), 0) AS total FROM sales WHERE business_id = ? AND status = 'paid' AND DATE(created_at) >= ? AND DATE(created_at) <= ?", [business.id, '2026-01-01', '2026-12-31']);
+  const datedDetail = await call(`/custom-sections/${containerTable}`);
+  assert.equal(datedDetail.rows[0].computed[datedSales.id], Number(paidInRange.total));
+  await call(`/custom-sections/${containerTable}/rows/${container.id}`, 'PATCH', {
+    values: dateValues, filters: { [datedSales.id]: { 0: 'pending' } },
+  });
+  const [[pendingInRange]] = await db.query("SELECT COALESCE(SUM(total), 0) AS total FROM sales WHERE business_id = ? AND status = 'pending' AND DATE(created_at) >= ? AND DATE(created_at) <= ?", [business.id, '2026-01-01', '2026-12-31']);
+  const overriddenDetail = await call(`/custom-sections/${containerTable}`);
+  assert.equal(overriddenDetail.rows[0].computed[datedSales.id], Number(pendingInRange.total));
+  assert.equal(overriddenDetail.rows[0].filters[datedSales.id]['0'], 'pending');
+
   const expenseTotal = await call(`/custom-sections/${containerTable}/columns`, 'POST', {
     name: 'Gastos de caja', dataType: 'aggregate', config: { sourceType: 'cash', matchMode: 'fixed', filterField: 'type', filterValue: 'expense' },
   }, 201);
@@ -89,7 +113,7 @@ try {
   assert.match(invalid.message, /relacionada/i);
   const protectedDelete = await call(`/custom-sections/${containerTable}/rows/${container.id}`, 'DELETE', undefined, 409);
   assert.match(protectedDelete.message, /relacionada/i);
-  console.log('OK: nodos, varias tablas, relaciones entre nodos y totales personalizados, de ventas y de caja.');
+  console.log('OK: nodos, relaciones y totales con condiciones combinadas, fechas y filtros por fila.');
 } finally {
   for (const id of createdNodeIds.reverse()) {
     await db.query("DELETE FROM custom_nodes WHERE id = ? AND title IN ('Prueba temporal', 'Otro nodo temporal')", [id]);

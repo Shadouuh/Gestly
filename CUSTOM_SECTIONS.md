@@ -1,6 +1,6 @@
 # Secciones y tablas personalizadas
 
-Cada sección del menú es un **nodo** (`custom_nodes`) del negocio activo. Un nodo contiene una o más tablas (`custom_tables`). Cada tabla tiene sus columnas (`custom_columns`) y filas (`custom_rows`). Las filas guardan sus datos en `values_json`, usando el ID de columna como clave. Los datos anteriores se conservan al migrar: cada sección original se transforma en un nodo con su tabla existente.
+Cada sección del menú es un **nodo** (`custom_nodes`) del negocio activo. Un nodo contiene una o más tablas (`custom_tables`). Cada tabla tiene sus columnas (`custom_columns`) y filas (`custom_rows`). Las filas guardan sus datos en `values_json`, usando el ID de columna como clave. Los ajustes de filtros propios de cada fila se guardan en `filters_json`. Los datos anteriores se conservan al migrar: cada sección original se transforma en un nodo con su tabla existente.
 
 ```text
 businesses 1 ── N custom_nodes 1 ── N custom_tables
@@ -23,12 +23,13 @@ Una columna de relación puede apuntar a otra tabla personalizada del mismo nego
 
 Una columna de total puede sumar una columna numérica de otra tabla personalizada, el `total` de ventas o el `amount` de movimientos de caja. El resultado se consulta al abrir la tabla y no se escribe en `values_json`.
 
-Se puede filtrar de cuatro formas:
+Cada total admite hasta seis condiciones combinadas con **Y** (todas deben cumplirse). Cada condición puede tomar su valor de:
 
-- **Todos:** suma el origen completo del negocio.
-- **Valor fijo:** por ejemplo ventas con `status = paid` o caja con `type = expense`.
-- **Comparar con una columna de esta fila:** por ejemplo, `branch_id` del origen igual al ID de sucursal guardado en la fila actual.
-- **Registros relacionados con esta fila:** para tablas personalizadas, suma solamente las filas cuya columna de relación apunta a la fila actual.
+- **Valor fijo:** por ejemplo ventas con `status = paid`.
+- **Columna de esta fila:** por ejemplo fecha de venta desde `Desde` y hasta `Hasta` de la fila actual, o sucursal igual a la sucursal de la fila.
+- **Relación con esta fila:** para tablas personalizadas, suma las filas cuya relación apunta a la fila actual.
+
+Sin condiciones, se suma el origen completo del negocio. Los campos de fecha y numéricos admiten «igual», «desde/mayor o igual» y «hasta/menor o igual». En «Editar fila» se puede desplegar **Personalizar filtros** y sobrescribir el valor de cualquier condición fija o basada en columna solo para esa fila; en blanco usa la regla general. Así cada fila puede consultar un período, estado u otro criterio distinto sin duplicar columnas de total. Los filtros antiguos de una sola condición siguen funcionando.
 
 Las ventas anuladas no se incluyen en los totales. Estos cálculos son informativos; no emiten facturas ni modifican stock o registros de origen.
 

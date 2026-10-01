@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import pool from '../config/db.js';
 import { authMiddleware } from '../middleware/auth.js';
-import { parseConfig, populateComputed, referenceExists, relationOptions, validateConfig } from '../services/customFields.js';
+import { normalizeRowFilterOverrides, parseConfig, populateComputed, referenceExists, relationOptions, validateConfig } from '../services/customFields.js';
 
 const router = Router();
 router.use(authMiddleware);
@@ -124,13 +124,14 @@ router.get('/:tableId', async (req, res) => {
       [tableId]
     );
     const [rows] = await pool.query(
-      'SELECT id, values_json AS `values`, created_at AS createdAt, updated_at AS updatedAt FROM custom_rows WHERE table_id = ? ORDER BY id DESC',
+      'SELECT id, values_json AS `values`, filters_json AS filters, created_at AS createdAt, updated_at AS updatedAt FROM custom_rows WHERE table_id = ? ORDER BY id DESC',
       [tableId]
     );
     const parsedColumns = columns.map((column) => ({ ...column, config: parseConfig(column.config) }));
     const parsedRows = rows.map((row) => ({
       ...row,
       values: typeof row.values === 'string' ? JSON.parse(row.values) : row.values,
+      filters: parseConfig(row.filters) || {},
     }));
     await populateComputed(pool, businessId, tableId, parsedColumns, parsedRows);
     res.json({ ...table, columns: parsedColumns, rows: parsedRows });
@@ -211,10 +212,11 @@ router.post('/:tableId/rows', async (req, res) => {
     const columns = rawColumns.map((column) => ({ ...column, config: parseConfig(column.config) }));
     if (columns.length === 0) return res.status(400).json({ message: 'Agregá una columna antes de insertar filas' });
     const values = await normalizeValues(req.body?.values, columns, businessId);
-    const [result] = await pool.query('INSERT INTO custom_rows (table_id, values_json) VALUES (?, ?)', [tableId, JSON.stringify(values)]);
-    res.status(201).json({ id: result.insertId, values });
+    const filters = normalizeRowFilterOverrides(req.body?.filters, columns);
+    const [result] = await pool.query('INSERT INTO custom_rows (table_id, values_json, filters_json) VALUES (?, ?, ?)', [tableId, JSON.stringify(values), JSON.stringify(filters)]);
+    res.status(201).json({ id: result.insertId, values, filters });
   } catch (error) {
-    if (error.message && /inválid|columna|objeto|largo|relacionada|automáticamente/i.test(error.message)) {
+    if (error.message && /inválid|columna|objeto|largo|relacionada|automáticamente|filtro|total de fila/i.test(error.message)) {
       return res.status(400).json({ message: error.message });
     }
     console.error('customSections add row:', error);
@@ -232,11 +234,12 @@ router.patch('/:tableId/rows/:rowId', async (req, res) => {
     const [rawColumns] = await pool.query('SELECT id, name, data_type AS dataType, config_json AS config FROM custom_columns WHERE table_id = ?', [tableId]);
     const columns = rawColumns.map((column) => ({ ...column, config: parseConfig(column.config) }));
     const values = await normalizeValues(req.body?.values, columns, businessId);
-    const [result] = await pool.query('UPDATE custom_rows SET values_json = ? WHERE id = ? AND table_id = ?', [JSON.stringify(values), rowId, tableId]);
+    const filters = normalizeRowFilterOverrides(req.body?.filters, columns);
+    const [result] = await pool.query('UPDATE custom_rows SET values_json = ?, filters_json = ? WHERE id = ? AND table_id = ?', [JSON.stringify(values), JSON.stringify(filters), rowId, tableId]);
     if (!result.affectedRows) return res.status(404).json({ message: 'Fila no encontrada' });
-    res.json({ id: rowId, values });
+    res.json({ id: rowId, values, filters });
   } catch (error) {
-    if (error.message && /inválid|columna|objeto|largo|relacionada|automáticamente/i.test(error.message)) {
+    if (error.message && /inválid|columna|objeto|largo|relacionada|automáticamente|filtro|total de fila/i.test(error.message)) {
       return res.status(400).json({ message: error.message });
     }
     console.error('customSections update row:', error);
