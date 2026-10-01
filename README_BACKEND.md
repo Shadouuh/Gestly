@@ -18,13 +18,16 @@
 # 1. Crear la base de datos
 mysql -u root < gestly_schema.sql
 
-# 2. Instalar dependencias del servidor
-cd server && npm install && cd ..
+# 2. Configurar el acceso a MySQL (opcional si se usan los valores por defecto)
+copy server\\.env.example server\\.env
 
-# 3. Sembrar datos de prueba
+# 3. Instalar dependencias
+npm ci
+
+# 4. Sembrar datos de prueba
 npm run seed
 
-# 4. Iniciar servidor
+# 5. Iniciar servidor
 npm run dev         # Cliente (Vite) + Servidor (Express) concurrentemente
 ```
 

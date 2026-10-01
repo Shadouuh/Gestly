@@ -25,7 +25,9 @@ import {
   ArrowRight,
   DollarSign,
   ArrowDownCircle,
-  AlertTriangle
+  AlertTriangle,
+  Plus,
+  Table2
 } from 'lucide-react';
 import logo from '../../../assets/images/landing/Gestly.png';
 import { GUIDE_QUICK_LINKS, GUIDE_STEPS } from '../Guide';
@@ -51,6 +53,7 @@ const AppLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [customSections, setCustomSections] = useState([]);
   
   const [selectedBranch, setSelectedBranch] = useState('all');
   const [branches, setBranches] = useState([{ id: 'all', name: 'Todas las sucursales' }]);
@@ -119,6 +122,15 @@ const AppLayout = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
+
+  useEffect(() => {
+    if (!getCurrentBusiness()?.id) return;
+    let cancelled = false;
+    api.get('/custom-sections')
+      .then(({ data }) => { if (!cancelled) setCustomSections(Array.isArray(data) ? data : []); })
+      .catch(() => { if (!cancelled) setCustomSections([]); });
+    return () => { cancelled = true; };
+  }, [location.pathname]);
 
   useEffect(() => {
     const container = document.querySelector('.app-shell-page');
@@ -472,6 +484,30 @@ const AppLayout = () => {
                 </NavLink>
               );
             })}
+            <div className="pt-3 mt-3 border-t" style={{ borderColor: 'var(--sidebar-border)' }}>
+              {isSidebarOpen && <p className="px-3 pb-2 text-[10px] font-black uppercase tracking-wider" style={{ color: 'var(--text-secondary)' }}>Mis secciones</p>}
+              {customSections.map((section) => (
+                <NavLink
+                  key={section.id}
+                  to={`/app/secciones/${section.id}`}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  title={!isSidebarOpen ? section.title : undefined}
+                  className={({ isActive }) => `flex items-center gap-2.5 rounded-xl py-2.5 transition-colors ${isSidebarOpen ? 'px-3' : 'justify-center'} ${isActive ? 'sidebar-nav-item-active font-bold' : 'sidebar-nav-item font-medium'}`}
+                >
+                  <Table2 size={19} className="shrink-0" />
+                  {isSidebarOpen && <span className="truncate text-[13px]">{section.title}</span>}
+                </NavLink>
+              ))}
+              <NavLink
+                to="/app/secciones/nueva"
+                onClick={() => setIsMobileMenuOpen(false)}
+                title="Crear sección"
+                className={({ isActive }) => `flex items-center gap-2.5 rounded-xl py-2.5 transition-colors ${isSidebarOpen ? 'px-3' : 'justify-center'} ${isActive ? 'sidebar-nav-item-active font-bold' : 'sidebar-nav-item font-medium'}`}
+              >
+                <Plus size={19} className="shrink-0" />
+                {isSidebarOpen && <span className="text-[13px]">Agregar sección</span>}
+              </NavLink>
+            </div>
           </div>
         </div>
 

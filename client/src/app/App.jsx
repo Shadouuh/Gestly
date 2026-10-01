@@ -29,6 +29,7 @@ import Branches from '../pages/App/Branches';
 import ShoppingList from '../pages/App/ShoppingList';
 import AppGuide from '../pages/App/Guide';
 import Settings from '../pages/App/Settings';
+import CustomSection from '../pages/App/CustomSection';
 
 import ScrollToTop from '../shared/components/ScrollToTop';
 import ScrollToTopButton from '../shared/components/ScrollToTopButton';
@@ -89,6 +90,8 @@ function App() {
           <Route path="compras" element={<ShoppingList />} />
           <Route path="guia" element={<AppGuide />} />
           <Route path="configuracion" element={<Settings />} />
+          <Route path="secciones/nueva" element={<CustomSection />} />
+          <Route path="secciones/:sectionId" element={<CustomSection />} />
         </Route>
 
         {/* Admin Routes */}
