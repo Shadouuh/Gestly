@@ -8,7 +8,8 @@
     "dev:ocr": "node scripts/free-port.js 8765 python && ocr-engine\\venv\\Scripts\\python.exe -S ocr-engine\\preprocess_server.py",
     "start": "node src/index.js",
     "seed": "node src/seed.js",
-    "migrate:custom-sections": "node scripts/migrate-custom-sections.js"
+    "migrate:custom-sections": "node scripts/migrate-custom-sections.js && node scripts/migrate-custom-nodes.js",
+    "test:custom-nodes": "node scripts/test-custom-nodes.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",

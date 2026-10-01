@@ -126,7 +126,7 @@ const AppLayout = () => {
   useEffect(() => {
     if (!getCurrentBusiness()?.id) return;
     let cancelled = false;
-    api.get('/custom-sections')
+    api.get('/custom-nodes')
       .then(({ data }) => { if (!cancelled) setCustomSections(Array.isArray(data) ? data : []); })
       .catch(() => { if (!cancelled) setCustomSections([]); });
     return () => { cancelled = true; };

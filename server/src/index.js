@@ -28,6 +28,7 @@ import adminRoutes from './routes/admin.js';
 import ocrRoutes from './routes/ocr.js';
 import customerDebtRoutes from './routes/customerDebts.js';
 import customSectionRoutes from './routes/customSections.js';
+import customNodeRoutes from './routes/customNodes.js';
 
 const app = express();
 const PORT = Number(process.env.PORT || 3001);
@@ -96,6 +97,7 @@ app.use('/ocr', ocrRoutes);
 // Customer Debts (Fiado)
 app.use('/customerDebts', customerDebtRoutes);
 app.use('/custom-sections', customSectionRoutes);
+app.use('/custom-nodes', customNodeRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
