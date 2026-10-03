@@ -1,504 +1,213 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Urbanist:ital,wght@0,100..900;1,100..900&family=Inter:wght@100..900&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ===== Base Light Theme ===== */
-:root {
-  --color-primary: #3b82f6;
-  --color-primary-hover: #2563eb;
-  --sidebar-bg: #ffffff;
-  --sidebar-hover: #f1f5f9;
-  --sidebar-active: #3b82f6;
-  --sidebar-active-text: #ffffff;
-  --sidebar-border: #e2e8f0;
-  --sidebar-text: #64748b;
-  --content-bg: #f8fafc;
-  --card-bg: #ffffff;
-  --card-border: #e2e8f0;
-  --text-primary: #0f172a;
-  --text-secondary: #64748b;
-  --border-color: #e2e8f0;
-  --input-bg: #f8fafc;
+/* ─────────────────────────────────────────
+   Lagoom — Design System
+   Fuentes: public/fonts/ (locales) + Google Fonts (fallback)
+   Tailwind v3 compatible
+   ───────────────────────────────────────── */
+
+/* ── @font-face from public/fonts/ ── */
+@font-face {
+  font-family: "Urbanist";
+  src: url("/fonts/Urbanist.ttf") format("truetype");
+  font-weight: 100 900;
+  font-display: swap;
 }
 
-/* ===== Dark - True black ===== */
-.dark[data-theme="dark"] {
-  --color-primary: #3b82f6;
-  --color-primary-hover: #60a5fa;
-  --sidebar-bg: #0a0a0a;
-  --sidebar-hover: #1a1a1a;
-  --sidebar-active: #3b82f6;
-  --sidebar-active-text: #ffffff;
-  --sidebar-border: #222222;
-  --sidebar-text: #a3a3a3;
-  --content-bg: #0a0a0a;
-  --card-bg: #141414;
-  --card-border: #222222;
-  --text-primary: #fafafa;
-  --text-secondary: #a3a3a3;
-  --border-color: #222222;
-  --input-bg: #141414;
+@font-face {
+  font-family: "Geist";
+  src: url("/fonts/Geist.ttf") format("truetype");
+  font-weight: 100 900;
+  font-display: swap;
 }
 
-/* ===== Dark Común - neutral grays ===== */
-.dark[data-theme="dark-com"] {
-  --color-primary: #60a5fa;
-  --color-primary-hover: #93bbfd;
-  --sidebar-bg: #111827;
-  --sidebar-hover: #1e293b;
-  --sidebar-active: #3b82f6;
-  --sidebar-active-text: #ffffff;
-  --sidebar-border: #1e293b;
-  --sidebar-text: #94a3b8;
-  --content-bg: #0f172a;
-  --card-bg: #1e293b;
-  --card-border: #334155;
-  --text-primary: #f1f5f9;
-  --text-secondary: #94a3b8;
-  --border-color: #1e293b;
-  --input-bg: #0f172a;
-}
-
-/* ===== Mixed - dark sidebar, light content ===== */
-.dark[data-theme="mixed"] {
-  --color-primary: #3b82f6;
-  --color-primary-hover: #60a5fa;
-  --sidebar-bg: #0B1120;
-  --sidebar-hover: #1a2540;
-  --sidebar-active: #3b82f6;
-  --sidebar-active-text: #ffffff;
-  --sidebar-border: #1e293b;
-  --sidebar-text: #94a3b8;
-  --content-bg: #f8fafc;
-  --card-bg: #ffffff;
-  --card-border: #e2e8f0;
-  --text-primary: #0f172a;
-  --text-secondary: #64748b;
-  --border-color: #e2e8f0;
-  --input-bg: #f1f5f9;
-}
-
-/* Force light mode inside mixed content area */
-.dark[data-theme="mixed"] .mixed-content *,
-.dark[data-theme="mixed"] .mixed-content *::before,
-.dark[data-theme="mixed"] .mixed-content *::after {
-  --tw-bg-opacity: 1 !important;
-  --tw-text-opacity: 1 !important;
-  --tw-border-opacity: 1 !important;
-}
-
-.dark[data-theme="mixed"] .mixed-content {
-  color: #0f172a !important;
-  background-color: #f8fafc !important;
-}
-
-.dark[data-theme="mixed"] .mixed-content .bg-white,
-.dark[data-theme="mixed"] .mixed-content [class*="bg-white"] {
-  background-color: #ffffff !important;
-}
-
-.dark[data-theme="mixed"] .mixed-content .bg-slate-50,
-.dark[data-theme="mixed"] .mixed-content .bg-slate-50\/80,
-.dark[data-theme="mixed"] .mixed-content .bg-slate-50\/30,
-.dark[data-theme="mixed"] .mixed-content [class*="bg-slate-50"] {
-  background-color: #f8fafc !important;
-}
-
-.dark[data-theme="mixed"] .mixed-content .bg-slate-900,
-.dark[data-theme="mixed"] .mixed-content [class*="bg-slate-900"] {
-  background-color: #ffffff !important;
-  color: #0f172a !important;
-}
-
-.dark[data-theme="mixed"] .mixed-content .dark\:bg-slate-900,
-.dark[data-theme="mixed"] .mixed-content .dark\:bg-slate-800,
-.dark[data-theme="mixed"] .mixed-content .dark\:bg-slate-950,
-.dark[data-theme="mixed"] .mixed-content [class*="dark:bg-slate-9"] {
-  background-color: #ffffff !important;
-  color: #0f172a !important;
-}
-
-.dark[data-theme="mixed"] .mixed-content .text-white,
-.dark[data-theme="mixed"] .mixed-content .dark\:text-white,
-.dark[data-theme="mixed"] .mixed-content [class*="dark:text-white"] {
-  color: #0f172a !important;
-}
-
-.dark[data-theme="mixed"] .mixed-content .text-slate-900,
-.dark[data-theme="mixed"] .mixed-content [class*="text-slate-900"] {
-  color: #0f172a !important;
-}
-
-.dark[data-theme="mixed"] .mixed-content .border-slate-800,
-.dark[data-theme="mixed"] .mixed-content .dark\:border-slate-800,
-.dark[data-theme="mixed"] .mixed-content [class*="dark:border-slate-8"] {
-  border-color: #e2e8f0 !important;
-}
-
-.dark[data-theme="mixed"] .mixed-content .border-slate-200\/80,
-.dark[data-theme="mixed"] .mixed-content [class*="border-slate-200"] {
-  border-color: #e2e8f0 !important;
-}
-
-.dark[data-theme="mixed"] .mixed-content .hover\:bg-slate-800:hover,
-.dark[data-theme="mixed"] .mixed-content .dark\:hover\:bg-slate-800:hover {
-  background-color: #f1f5f9 !important;
-}
-
-.dark[data-theme="mixed"] .mixed-content .hover\:bg-slate-100:hover {
-  background-color: #f1f5f9 !important;
-}
-
-.dark[data-theme="mixed"] .mixed-content .shadow-slate-900\/20 {
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
-}
-
-/* ===== Dark theme content overrides ===== */
-.dark[data-theme="dark"] .dark-content,
-.dark[data-theme="dark-com"] .dark-content {
-  --card-bg: var(--card-bg);
-  --card-border: var(--card-border);
-  --text-primary: var(--text-primary);
-  --text-secondary: var(--text-secondary);
-  --input-bg: var(--input-bg);
-  --border-color: var(--border-color);
-}
-
-.dark[data-theme="dark"] .dark-content .bg-white,
-.dark[data-theme="dark"] .dark-content [class*="bg-white"] {
-  background-color: var(--card-bg) !important;
-}
-
-.dark[data-theme="dark-com"] .dark-content .bg-white,
-.dark[data-theme="dark-com"] .dark-content [class*="bg-white"] {
-  background-color: var(--card-bg) !important;
-}
-
-.dark[data-theme="dark"] .dark-content .bg-slate-50,
-.dark[data-theme="dark"] .dark-content [class*="bg-slate-50"] {
-  background-color: var(--card-bg) !important;
-}
-
-.dark[data-theme="dark-com"] .dark-content .bg-slate-50,
-.dark[data-theme="dark-com"] .dark-content [class*="bg-slate-50"] {
-  background-color: var(--card-bg) !important;
-}
-
-.dark[data-theme="dark"] .dark-content .border-slate-200,
-.dark[data-theme="dark"] .dark-content [class*="border-slate-200"] {
-  border-color: var(--card-border) !important;
-}
-
-.dark[data-theme="dark-com"] .dark-content .border-slate-200,
-.dark[data-theme="dark-com"] .dark-content [class*="border-slate-200"] {
-  border-color: var(--card-border) !important;
-}
-
-/* ===== Sidebar Active Tab - Simple Elegant Design ===== */
-.sidebar-nav-item {
-  position: relative;
-}
-
-.sidebar-nav-item-active {
-  position: relative;
-  z-index: 10;
-  background: linear-gradient(90deg, var(--sidebar-active) 0%, transparent 100%) !important;
-  background-size: 200% 100% !important;
-  background-position: left center !important;
-  color: var(--sidebar-active-text) !important;
-}
-
-.sidebar-nav-item-active * {
-  color: var(--sidebar-active-text) !important;
-}
-
-/* Vertical accent bar on the left */
-.sidebar-nav-item-active::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 3px;
-  height: 60%;
-  background: var(--color-primary);
-  border-radius: 0 4px 4px 0;
-  z-index: 20;
-}
-
-.sidebar-nav-item-active-collapsed {
-  background: transparent !important;
-}
-
-.sidebar-nav-item-active-collapsed::before {
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 60%;
-  height: 3px;
-  top: auto;
-  bottom: 0;
-  border-radius: 4px 4px 0 0;
-}
-
-/* ===== Accent: Purple (Lavender - softer) ===== */
-[data-accent="purple"] {
-  --color-primary: #a78bfa;
-  --color-primary-hover: #8b5cf6;
-  --sidebar-active: #a78bfa;
-  --sidebar-active-text: #ffffff;
-}
-.dark[data-accent="purple"] {
-  --color-primary: #a78bfa;
-  --color-primary-hover: #c4b5fd;
-  --sidebar-active: #a78bfa;
-  --sidebar-active-text: #ffffff;
-}
-
-/* ===== Accent: Blue ===== */
-[data-accent="blue"] {
-  --color-primary: #3b82f6;
-  --color-primary-hover: #2563eb;
-  --sidebar-active: #3b82f6;
-  --sidebar-active-text: #ffffff;
-}
-.dark[data-accent="blue"] {
-  --color-primary: #60a5fa;
-  --color-primary-hover: #93bbfd;
-  --sidebar-active: #60a5fa;
-  --sidebar-active-text: #ffffff;
-}
-
-/* ===== Accent: Emerald ===== */
-[data-accent="emerald"] {
-  --color-primary: #34d399;
-  --color-primary-hover: #10b981;
-  --sidebar-active: #34d399;
-  --sidebar-active-text: #ffffff;
-}
-.dark[data-accent="emerald"] {
-  --color-primary: #34d399;
-  --color-primary-hover: #6ee7b7;
-  --sidebar-active: #34d399;
-  --sidebar-active-text: #ffffff;
-}
-
-/* ===== Accent: Rose ===== */
-[data-accent="rose"] {
-  --color-primary: #fb7185;
-  --color-primary-hover: #f43f5e;
-  --sidebar-active: #fb7185;
-  --sidebar-active-text: #ffffff;
-}
-.dark[data-accent="rose"] {
-  --color-primary: #fb7185;
-  --color-primary-hover: #fda4af;
-  --sidebar-active: #fb7185;
-  --sidebar-active-text: #ffffff;
-}
-
-/* ===== Accent: Amber ===== */
-[data-accent="amber"] {
-  --color-primary: #fbbf24;
-  --color-primary-hover: #f59e0b;
-  --sidebar-active: #fbbf24;
-  --sidebar-active-text: #ffffff;
-}
-.dark[data-accent="amber"] {
-  --color-primary: #fbbf24;
-  --color-primary-hover: #fcd34d;
-  --sidebar-active: #fbbf24;
-  --sidebar-active-text: #ffffff;
-}
-
-html {
-  font-size: 16px;
-}
-
-body {
-  @apply font-sans antialiased;
-  background-color: var(--content-bg);
-  color: var(--text-primary);
-}
-
-/* Custom Scrollbar */
-.custom-scrollbar::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: var(--border-color);
-  border-radius: 999px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: var(--text-secondary);
-}
-
-/* Animations */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes scaleIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
-}
-
-@keyframes slideInRight {
-  from { opacity: 0; transform: translateX(30px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-
-@keyframes slideInLeft {
-  from { opacity: 0; transform: translateX(-30px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-
-@keyframes float {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-20px); }
-  100% { transform: translateY(0px); }
-}
-
-@keyframes moveDiagonal {
-  0% { background-position: 0 0; }
-  100% { background-position: 100% 100%; }
-}
-
-@keyframes confetti {
-  0% { opacity: 1; transform: translateY(0) rotate(0deg) scale(1); }
-  100% { opacity: 0; transform: translateY(-120px) rotate(720deg) scale(0); }
-}
-
-.animate-fadeIn { animation: fadeIn 0.6s ease-out forwards; }
-.animate-fadeInUp { animation: fadeInUp 0.8s ease-out forwards; }
-.animate-slideUp { animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-.animate-scaleIn { animation: scaleIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-.animate-slideInRight { animation: slideInRight 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-.animate-slideInLeft { animation: slideInLeft 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-
-.delay-100 { animation-delay: 100ms; }
-.delay-200 { animation-delay: 200ms; }
-.delay-300 { animation-delay: 300ms; }
-.delay-500 { animation-delay: 500ms; }
-.delay-700 { animation-delay: 700ms; }
-
-/* App shell */
-@keyframes appFadeUp {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes appSlideIn {
-  from { opacity: 0; transform: translateX(-8px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-
-.app-shell-page {
-  font-size: 0.8125rem;
-  line-height: 1.45;
-}
-
-@media (min-width: 640px) {
-  .app-shell-page {
-    font-size: 0.875rem;
-  }
-}
-
-.app-enter {
-  animation: appFadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-.app-enter-delay-1 { animation-delay: 60ms; }
-.app-enter-delay-2 { animation-delay: 120ms; }
-.app-enter-delay-3 { animation-delay: 180ms; }
-
-.app-card {
-  border-radius: 0.75rem;
-  border: 1px solid var(--card-border);
-  background-color: var(--card-bg);
-  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.03);
-}
-
-.app-card-hover {
-  border-radius: 0.75rem;
-  border: 1px solid var(--card-border);
-  background-color: var(--card-bg);
-  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.03);
-  transition: all 0.2s;
-}
-
-.app-card-hover:hover {
-  border-color: var(--color-primary);
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
-}
-
-.app-page-title {
-  font-size: 1.125rem;
+@font-face {
+  font-family: "Poppins";
+  src: url("/fonts/Poppins-Bold.ttf") format("truetype");
   font-weight: 700;
-  letter-spacing: -0.025em;
-  color: var(--text-primary);
+  font-display: swap;
 }
 
-.app-page-subtitle {
-  font-size: 0.75rem;
-  color: var(--text-secondary);
+:root {
+  /* Solo Urbanist, Geist y Poppins (local + Google fallback) */
+  --font-poppins: "Poppins", "Urbanist", sans-serif;
+  --font-montserrat: "Poppins", "Urbanist", sans-serif;
+  --font-mona: "Geist", "Urbanist", sans-serif;
+  --font-urbanist: "Urbanist", sans-serif;
+  --font-dm: "Geist", "Urbanist", sans-serif;
+  --font-geist: "Geist", "Urbanist", sans-serif;
+
+  --font-display: "Geist", "Urbanist", sans-serif;
+  --font-body: "Urbanist", sans-serif;
+  --font-accent: "Poppins", "Urbanist", sans-serif;
+  --font-heading: "Poppins", "Urbanist", sans-serif;
+
+  --color-lagoom-50: #f8f8f9;
+  --color-lagoom-100: #f0f0f2;
+  --color-lagoom-200: #e4e4e7;
+  --color-lagoom-300: #d4d4d8;
+  --color-lagoom-900: #18181b;
+  --color-lagoom-950: #09090b;
+
+  /* ── Compat con App/Admin existentes (mapeado a Lagoom) ── */
+  --color-primary: #18181b;
+  --color-primary-hover: #09090b;
+  --sidebar-bg: #ffffff;
+  --sidebar-hover: #f0f0f2;
+  --sidebar-active: #18181b;
+  --sidebar-active-text: #ffffff;
+  --sidebar-border: #e4e4e7;
+  --sidebar-text: #71717a;
+  --content-bg: #ffffff;
+  --card-bg: #ffffff;
+  --card-border: #e4e4e7;
+  --text-primary: #09090b;
+  --text-secondary: #71717a;
+  --border-color: #e4e4e7;
+  --input-bg: #f8f8f9;
 }
 
-.app-kpi-value {
-  font-size: 1.25rem;
-  font-weight: 900;
-  letter-spacing: -0.025em;
-}
+/* ── Base: todo usa Urbanist por defecto ── */
+@layer base {
+  * {
+    @apply border-zinc-200;
+  }
 
-@media (min-width: 640px) {
-  .app-kpi-value {
-    font-size: 1.5rem;
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-synthesis: none;
+    scroll-behavior: smooth;
+    scrollbar-gutter: stable;
+    scroll-padding-top: 80px;
+  }
+
+  body {
+    font-family: "Urbanist", sans-serif;
+    @apply bg-white text-zinc-900 antialiased;
+    line-height: 1.65;
+    letter-spacing: -0.005em;
+  }
+
+  h1, h2, h3 {
+    font-family: "Poppins", "Urbanist", sans-serif;
+    letter-spacing: -0.03em;
+    font-weight: 700;
+    line-height: 1.08;
+  }
+
+  h4, h5, h6 {
+    font-family: "Poppins", "Urbanist", sans-serif;
+    letter-spacing: -0.02em;
+    font-weight: 600;
+  }
+
+  p, span, li, a, label, td, th, figcaption, cite, small, strong, em, blockquote, pre, code {
+    font-family: "Urbanist", sans-serif;
   }
 }
 
-.app-icon-box {
-  display: flex;
-  height: 2rem;
-  width: 2rem;
-  flex-shrink: 0;
-  align-items: center;
-  justify-content: center;
-  border-radius: 0.5rem;
+/* ── Utilities (equivalente @utility de v4, en v3 como clases) ── */
+@layer utilities {
+  .font-poppins {
+    font-family: "Poppins", "Urbanist", sans-serif;
+  }
+  .font-montserrat {
+    font-family: "Poppins", "Urbanist", sans-serif;
+  }
+  .font-mona {
+    font-family: "Geist", "Urbanist", sans-serif;
+  }
+  .font-urbanist {
+    font-family: "Urbanist", sans-serif;
+  }
+  .font-dm {
+    font-family: "Geist", "Urbanist", sans-serif;
+  }
+  .font-geist {
+    font-family: "Geist", "Urbanist", sans-serif;
+  }
+  .font-display {
+    font-family: "Geist", "Urbanist", sans-serif;
+  }
+  .text-balance {
+    text-wrap: balance;
+  }
+  .smooth {
+    transition: all 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+  }
 }
 
-@keyframes barGrow {
-  from { transform: scaleY(0); transform-origin: bottom; }
-  to { transform: scaleY(1); transform-origin: bottom; }
+/* ── Service expandable cards (dark section) ── */
+.service-row {
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+}
+.service-row:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+.service-row[data-expanded="true"] {
+  background: rgba(255, 255, 255, 0.08);
+}
+.service-detail-panel {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.5s cubic-bezier(0.32, 0.72, 0, 1),
+    opacity 0.4s ease,
+    padding 0.4s ease;
+  padding: 0 24px;
+}
+.service-row[data-expanded="true"] .service-detail-panel {
+  max-height: 300px;
+  opacity: 1;
+  padding: 16px 24px 20px;
+}
+.service-row[data-expanded="true"] .service-chevron {
+  transform: rotate(180deg);
+}
+.service-chevron {
+  transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+}
+.service-row[data-expanded="true"] .service-icon-wrap {
+  background: #8b5cf6;
+  color: white;
+}
+.service-icon-wrap {
+  transition: all 0.3s ease;
 }
 
-@keyframes slideIn {
-  from { width: 0; }
-  to { width: var(--slide-width, 100%); }
+.diagonal-line {
+  position: absolute;
+  width: 200%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.3), transparent);
+  transform: rotate(-12deg);
+  pointer-events: none;
 }
 
-.animate-barGrow { animation: barGrow 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-.animate-slideIn { animation: slideIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-
-@keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
-  50% { box-shadow: 0 0 0 6px rgba(59, 130, 246, 0); }
+/* Focus visible */
+*:focus-visible {
+  @apply outline-none ring-2 ring-zinc-900 ring-offset-2 ring-offset-white;
 }
 
-.animate-pulse-glow { animation: pulse-glow 2s infinite; }
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-zinc-300 rounded-full;
+}
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+::selection {
+  @apply bg-zinc-900 text-white;
+}

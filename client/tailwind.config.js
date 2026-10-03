@@ -8,10 +8,29 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Plus Jakarta Sans', 'sans-serif'],
-        display: ['Urbanist', 'sans-serif'],
+        sans: ['Urbanist', 'Inter', 'system-ui', 'sans-serif'],
+        display: ['Geist', 'Urbanist', 'sans-serif'],
+        body: ['Urbanist', 'sans-serif'],
+        heading: ['Poppins', 'Urbanist', 'sans-serif'],
+        accent: ['Poppins', 'Urbanist', 'sans-serif'],
+        poppins: ['Poppins', 'Urbanist', 'sans-serif'],
+        montserrat: ['Poppins', 'Urbanist', 'sans-serif'],
+        mona: ['Geist', 'Urbanist', 'sans-serif'],
+        urbanist: ['Urbanist', 'sans-serif'],
+        dm: ['Geist', 'Urbanist', 'sans-serif'],
+        geist: ['Geist', 'Urbanist', 'sans-serif'],
+        jakarta: ['Urbanist', 'Inter', 'sans-serif'],
+        mono: ['Geist', 'ui-monospace', 'monospace'],
       },
       colors: {
+        lagoom: {
+          50: '#f8f8f9',
+          100: '#f0f0f2',
+          200: '#e4e4e7',
+          300: '#d4d4d8',
+          900: '#18181b',
+          950: '#09090b',
+        },
         primary: {
           50: '#f8fafc',
           100: '#f1f5f9',

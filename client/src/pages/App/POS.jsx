@@ -58,7 +58,7 @@ import {
   Cake,
   Baby
 } from 'lucide-react';
-import { getCategoryById } from '../Admin/config/productCategories';
+import { getCategoryById, productCategories } from '../Admin/config/productCategories';
 import { getCurrentBusiness, getCurrentUser, getCashRegisterStatus } from '../../services/api';
 import { useNotification } from '../../shared/components/Notification/NotificationContext';
 import api from '../../services/api';
@@ -616,6 +616,27 @@ const POS = () => {
     };
   };
 
+  const categoryOptions = useMemo(() => {
+    const counts = {};
+    products.forEach(p => { if (p.categoryId) counts[p.categoryId] = (counts[p.categoryId] || 0) + 1; });
+    return categories.map((catId) => {
+      if (catId === 'all') {
+        return { id: 'all', name: 'Todos', icon: LayoutGrid, hex: '#0f172a', count: products.length };
+      }
+      const cfg = getCategoryById(catId);
+      const sample = products.find(p => String(p.categoryId) === String(catId));
+      const hex = cfg?.color ? getCategoryHex(cfg.color) : getCategoryHex(sample?.categoryColor || '');
+      const IconComp = cfg?.icon || (sample ? getIconComponent(sample.categoryIcon) : Tag);
+      return {
+        id: catId,
+        name: cfg?.name || categoryMap[catId] || catId,
+        icon: IconComp || Tag,
+        hex,
+        count: counts[catId] || 0,
+      };
+    });
+  }, [categories, products, categoryMap]);
+
   return (
     <div className="h-full flex flex-col lg:flex-row bg-slate-50/50 dark:bg-slate-950 relative overflow-hidden">
       
@@ -833,44 +854,63 @@ const POS = () => {
             </div>
           </div>
 
-          {/* Filters Panel */}
-          <div className={`overflow-hidden transition-all duration-300 ease-in-out ${isFiltersOpen ? 'max-h-80 opacity-100 mt-3 pt-3 border-t border-slate-100 dark:border-slate-800' : 'max-h-0 opacity-0'}`}>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <h3 className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2">Categoría</h3>
-                <div className="flex flex-wrap gap-1.5">
-                  {categories.map(cat => (
-                    <button
-                      key={cat}
-                      onClick={() => setSelectedCategory(cat)}
-                      className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-colors ${
-                        selectedCategory === cat 
-                          ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900' 
-                          : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'
-                      }`}
-                    >
-                      {cat === 'all' ? 'Todas' : categoryMap[cat] || cat}
-                    </button>
-                  ))}
-                </div>
+          {/* Filters Panel — estilo rail como referencia */}
+          <div className={`overflow-hidden transition-all duration-300 ease-in-out ${isFiltersOpen ? 'max-h-[26rem] opacity-100 mt-3 pt-3 border-t border-slate-100 dark:border-slate-800' : 'max-h-0 opacity-0'}`}>
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-wider">Categorías</h3>
+                <span className="text-[10px] font-bold text-slate-400">{categoryOptions.length - 1} categorías</span>
               </div>
-              <div>
-                <h3 className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2">Precio máximo</h3>
-                <div className="flex flex-wrap gap-1.5">
-                  {[{v:'all',l:'Sin límite'},{v:1000,l:'$1.000'},{v:2000,l:'$2.000'},{v:5000,l:'$5.000'},{v:10000,l:'$10.000'}].map(opt => (
+              <div className="flex gap-2 overflow-x-auto pb-2 pt-0.5 px-0.5 custom-scrollbar snap-x">
+                {categoryOptions.map((cat) => {
+                  const isActive = String(selectedCategory) === String(cat.id);
+                  const CatIcon = cat.icon;
+                  return (
                     <button
-                      key={opt.v}
-                      onClick={() => setMaxPrice(opt.v)}
-                      className={`px-2.5 py-1 rounded-md text-[11px] font-bold transition-colors ${
-                        maxPrice === opt.v 
-                          ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900' 
-                          : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'
+                      key={cat.id}
+                      onClick={() => setSelectedCategory(cat.id)}
+                      className={`snap-start shrink-0 w-[76px] flex flex-col items-center gap-1.5 rounded-2xl border px-2 py-2.5 transition-all duration-200 active:scale-95 ${
+                        isActive
+                          ? 'bg-slate-900 border-slate-900 shadow-lg shadow-slate-900/20 dark:bg-white dark:border-white dark:shadow-white/10'
+                          : 'bg-white border-slate-200 hover:border-slate-300 hover:shadow-md dark:bg-slate-800 dark:border-slate-700 dark:hover:border-slate-600'
                       }`}
                     >
-                      {opt.l}
+                      <span
+                        className="w-9 h-9 rounded-xl flex items-center justify-center transition-colors"
+                        style={isActive
+                          ? { backgroundColor: 'rgba(255,255,255,0.15)' }
+                          : { backgroundColor: toRgba(cat.hex, 0.14) }
+                        }
+                      >
+                        <CatIcon size={19} strokeWidth={2} color={isActive ? '#fff' : cat.hex} className={isActive && cat.id === 'all' ? 'dark:!text-slate-900' : ''} />
+                      </span>
+                      <span className={`text-[10px] font-bold leading-tight text-center line-clamp-2 min-h-[1.7rem] ${isActive ? 'text-white dark:text-slate-900' : 'text-slate-600 dark:text-slate-300'}`}>
+                        {cat.name}
+                      </span>
+                      <span className={`text-[9px] font-semibold tabular-nums ${isActive ? 'text-white/60 dark:text-slate-500' : 'text-slate-400 dark:text-slate-500'}`}>
+                        {cat.id === 'all' ? `${cat.count}` : `${cat.count}`}
+                      </span>
                     </button>
-                  ))}
-                </div>
+                  );
+                })}
+              </div>
+            </div>
+            <div className="mt-2">
+              <h3 className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2">Precio máximo</h3>
+              <div className="flex flex-wrap gap-1.5">
+                {[{v:'all',l:'Sin límite'},{v:1000,l:'$1.000'},{v:2000,l:'$2.000'},{v:5000,l:'$5.000'},{v:10000,l:'$10.000'}].map(opt => (
+                  <button
+                    key={opt.v}
+                    onClick={() => setMaxPrice(opt.v)}
+                    className={`px-3 py-1.5 rounded-full text-[11px] font-bold transition-colors border ${
+                      maxPrice === opt.v 
+                        ? 'bg-slate-900 text-white border-slate-900 dark:bg-white dark:text-slate-900 dark:border-white' 
+                        : 'bg-white dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'
+                    }`}
+                  >
+                    {opt.l}
+                  </button>
+                ))}
               </div>
             </div>
             <div className="mt-3 flex justify-end">
@@ -884,8 +924,18 @@ const POS = () => {
           </div>
         </div>
 
-        {/* Products */}
-        <div className="flex-1 overflow-y-auto custom-scrollbar p-3 lg:p-4 pb-20 lg:pb-4">
+        {/* Products — encabezado estilo referencia + cards */}
+        <div className="flex-1 overflow-y-auto custom-scrollbar p-3 lg:p-4 pb-20 lg:pb-4 bg-[#f8f9fb] dark:bg-slate-950">
+          <div className="flex items-center justify-between mb-3 px-0.5">
+            <p className="text-[13px] text-slate-900 dark:text-white">
+              <span className="font-bold">Productos</span>{' '}
+              <span className="font-medium text-slate-400 text-[11px]">{filteredProducts.length} productos</span>
+            </p>
+            <div className="flex items-center gap-2">
+              <span className="hidden sm:inline text-[11px] font-semibold text-slate-500 dark:text-slate-400">Más vendidos</span>
+              <span className="sm:hidden text-[11px] font-bold text-slate-400">{cartItemsCount > 0 ? `${cartItemsCount} en carrito` : ''}</span>
+            </div>
+          </div>
           {productsLoading ? (
             <div className="flex flex-col items-center justify-center h-full text-slate-400 dark:text-slate-500 gap-3">
               <Package size={40} strokeWidth={1} className="opacity-40 animate-pulse" />
@@ -900,66 +950,64 @@ const POS = () => {
               </button>
             </div>
           ) : viewMode === 'grid' ? (
-            <div className="grid grid-cols-[repeat(auto-fill,minmax(130px,1fr))] gap-2.5">
+            <div className="grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-3">
               {filteredProducts.map(product => {
                 const meta = resolveCategoryMeta(product);
                 const Icon = meta.icon;
                 const inCart = cart.find(c => c.id === product.id);
+                const lowStock = (product.stock || 0) <= 0;
+                const midStock = (product.stock || 0) <= 20;
 
                 return (
                   <div
                     key={product.id}
                     onClick={() => addToCart(product)}
-                    className="group relative flex flex-col items-center rounded-2xl border border-slate-200 bg-white dark:border-slate-700/80 dark:bg-slate-900 px-3 py-5 transition-all duration-200 hover:shadow-md hover:border-slate-300 dark:hover:border-slate-600 active:scale-[0.98] cursor-pointer text-center"
+                    className={`group relative flex flex-col rounded-2xl border bg-white dark:bg-slate-900 p-3 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_12px_28px_-12px_rgba(0,0,0,0.18)] active:scale-[0.98] cursor-pointer text-left ${
+                      inCart
+                        ? 'border-slate-900 dark:border-white shadow-md'
+                        : 'border-slate-200/80 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.08)]'
+                    }`}
                   >
                     {inCart && (
-                      <div className="absolute left-2 top-2 z-20 flex h-4 min-w-[16px] items-center justify-center rounded-full px-1 text-[7px] font-bold text-white" style={{ backgroundColor: meta.hex }}>
-                        {inCart.quantity}
+                      <div className="absolute left-2.5 top-2.5 z-10 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-slate-900 dark:bg-white px-1.5 text-[10px] font-black text-white dark:text-slate-900 shadow">
+                        {typeof inCart.quantity === 'number' && !Number.isInteger(inCart.quantity) ? inCart.quantity.toFixed(2) : inCart.quantity}
                       </div>
                     )}
-                    <button
-                      className="absolute right-2 top-2 z-20 flex h-5 w-5 items-center justify-center rounded-md text-slate-300 dark:text-slate-600 transition-colors hover:text-slate-500 dark:hover:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
-                    >
-                      <Plus size={11} strokeWidth={2.4} />
-                    </button>
-                    <div className="relative mb-2.5">
-                      <div
-                        className="absolute inset-0 -m-1.5 rounded-full"
-                        style={{ backgroundColor: toRgba(meta.hex, 0.15) }}
-                      />
-                      <div className="relative flex items-center justify-center w-11 h-11">
-                        {product.image ? (
-                          <img src={product.image} alt={product.name} className="h-9 w-9 object-contain" />
-                        ) : (
-                          <Icon size={26} strokeWidth={1.3} color={meta.hex} />
-                        )}
-                      </div>
+                    {(product.unit === '100g' || product.unit === 'kg' || product.unit === 'g') && (
+                      <span className="absolute right-2.5 top-2.5 z-10 text-[9px] font-black px-1.5 py-0.5 rounded-md bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300">
+                        Peso
+                      </span>
+                    )}
+                    <div className="h-[76px] flex items-center justify-center mb-1.5 pt-1">
+                      {product.image ? (
+                        <img src={product.image} alt={product.name} className="h-[64px] w-[64px] object-contain drop-shadow-sm transition-transform duration-200 group-hover:scale-105" loading="lazy" />
+                      ) : (
+                        <span
+                          className="w-[58px] h-[58px] rounded-2xl flex items-center justify-center transition-transform duration-200 group-hover:scale-105"
+                          style={{ backgroundColor: toRgba(meta.hex, 0.12) }}
+                        >
+                          <Icon size={30} strokeWidth={1.6} color={meta.hex} />
+                        </span>
+                      )}
                     </div>
-                    <h3 className="text-[11px] font-semibold leading-snug text-slate-800 dark:text-slate-200 line-clamp-2 min-h-[1.8rem]">
+                    <h3 className="text-[12px] font-semibold leading-[1.25] text-slate-800 dark:text-slate-100 line-clamp-2 min-h-[2rem]">
                       {product.name}
                     </h3>
-                    <span className="mt-0.5 text-[8px] font-medium text-slate-400 dark:text-slate-500">
-                      {meta.name}
-                    </span>
-                    <div className="mt-auto pt-2.5">
-                      <span className="text-[13px] font-bold text-slate-900 dark:text-white">
-                        ${product.price.toLocaleString()}
-                      </span>
+                    <p className="mt-1 text-[13px] font-extrabold tracking-tight text-slate-900 dark:text-white">
+                      ${product.price.toLocaleString()}
                       {product.unit && (
-                        <span className="ml-0.5 text-[7px] font-medium text-slate-400 dark:text-slate-500">
+                        <span className="ml-1 text-[10px] font-semibold text-slate-400">
                           /{product.unit === '100g' ? '100g' : product.unit}
                         </span>
                       )}
-                    </div>
-                    <div className="mt-1 flex items-center justify-center gap-1">
-                      {(product.unit === '100g' || product.unit === 'kg' || product.unit === 'g') && (
-                        <span className="text-[7px] font-bold px-1 py-0.5 rounded bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400">
-                          Peso
-                        </span>
-                      )}
-                      <span className={`w-1.5 h-1.5 rounded-full ${product.stock <= 0 ? 'bg-red-400' : product.stock <= 20 ? 'bg-amber-400' : 'bg-emerald-400'}`} />
-                      <span className="text-[8px] text-slate-400 dark:text-slate-500">
-                        {product.stock} uds
+                    </p>
+                    <div className="mt-1.5 flex items-center justify-between">
+                      <span className="flex items-center gap-1.5 text-[10px] font-medium text-slate-400 dark:text-slate-500">
+                        <span className={`w-1.5 h-1.5 rounded-full ${lowStock ? 'bg-red-500' : midStock ? 'bg-amber-400' : 'bg-emerald-500'}`} />
+                        {product.stock} en stock
+                      </span>
+                      <span className={`w-6 h-6 rounded-full flex items-center justify-center transition-colors ${inCart ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900' : 'bg-slate-100 text-slate-500 group-hover:bg-slate-900 group-hover:text-white dark:bg-slate-800 dark:text-slate-300 dark:group-hover:bg-white dark:group-hover:text-slate-900'}`}>
+                        <Plus size={14} strokeWidth={2.6} />
                       </span>
                     </div>
                   </div>
